@@ -4,20 +4,24 @@
     <title>Jawla Tracker</title>
     <meta charset='utf-8' />
   </head>
-  <body>
+  <body ng-app="jawlaTracker" ng-controller="jawlaTrackerCtrl">
     <p>Google Sheets API Quickstart</p>
 
     <!--Add buttons to initiate auth sequence and sign out-->
-    <button id="authorize-button" style="display: none;">Authorize</button>
-    <button id="signout-button" style="display: none;">Sign Out</button>
+    <button ng-if="!isSignedIn" ng-click="login()">Authorize</button>
+    <button ng-if="isSignedIn" ng-click="logout()">Logout</button>
 
-    <pre id="content"></pre>
+    <ul>
+      <li ng-repeat="sheetRow in sheetRows track by $index">
+        <span ng-if="sheetRow[0]">1</span>
+        <span ng-if="!sheetRow[0]">0</span>
+        {{ sheetRow[1] }} {{ sheetRow[2] }} {{ sheetRow[3] }} {{ sheetRow[4] }} {{ sheetRow[5] }} {{ sheetRow[6] }}
+      </li>
+    </ul>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script type="text/javascript" src="assets/jawlaTracker.js"></script>
-    <script async defer src="https://apis.google.com/js/api.js"
-      onload="this.onload=function(){};handleClientLoad()"
-      onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script>
+    <script async defer src="https://apis.google.com/js/api.js?onload=init"></script>
 
   </body>
 </html>
