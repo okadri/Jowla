@@ -43,9 +43,19 @@
           <div class="checkbox" ng-click="toggleStatus($index)">
             <label>
               <input type="checkbox" ng-checked="person.isVisited">
-              {{ person.firstName }} {{ person.lastName }}: {{ person.address }}
+              {{ person.firstName }} {{ person.lastName }}
+              <br />
+              <small class="text-muted" ng-show="person.lastVisited">
+                Last visited: {{ person.lastVisited }}
+              </small>
             </label>
           </div>
+        </td>
+        <td>
+          <a ng-href="https://www.google.com/maps/place/{{ person.address }}" target="_blank">
+            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+            {{ person.address }}
+          </a>
         </td>
       </tr>
     </table>
@@ -57,6 +67,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
   <script type="text/javascript" src="assets/jawlaTracker.js"></script>
   <script async defer src="https://apis.google.com/js/api.js?onload=init"></script>
+
+  <!-- momentJs -->
+  <script type="text/javascript" src="assets/moment.min.js"></script>
 
   <!-- jQuery CDN -->
   <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="

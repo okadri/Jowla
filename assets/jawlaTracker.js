@@ -27,7 +27,7 @@ angular
                         $scope.people = rows.map(function (row) {
                             return {
                                 isVisited: !!row[0],
-                                lastVisited: row[0],
+                                lastVisited: row[0] ? moment(row[0]).format('LL') : '',
                                 firstName: row[1],
                                 lastName: row[2],
                                 address: row[3] + ', ' + row[4] + ', ' + row[5] + ' ' + row[6]
@@ -38,9 +38,7 @@ angular
             });
 
             $scope.toggleStatus = function (index) {
-                gapiService.toggleStatus(index, $scope.people[index].isVisited).then(function(){
-                    $scope.people[index].isVisited = !$scope.people[index].isVisited;
-                });
+                gapiService.toggleStatus(index, $scope.people[index].isVisited);
             };
 
         }])
