@@ -27,7 +27,7 @@ angular
                         $scope.people = rows.map(function (row) {
                             return {
                                 isVisited: !!row[0],
-                                lastVisited: row[0] ? moment(row[0]).format('LL') : '',
+                                lastVisited: row[0] ? moment(row[0]).format('LL') : 'Never',
                                 firstName: row[1],
                                 lastName: row[2],
                                 address: row[3] + ', ' + row[4] + ', ' + row[5] + ' ' + row[6]
@@ -38,7 +38,10 @@ angular
             });
 
             $scope.toggleStatus = function (index) {
-                gapiService.toggleStatus(index, $scope.people[index].isVisited);
+                gapiService.toggleStatus(index, $scope.people[index].isVisited).then(function(updatedStatus){
+                    $scope.people[index].isVisited = updatedStatus.isVisited;
+                    $scope.people[index].lastVisited = updatedStatus.lastVisited ? moment(updatedStatus.lastVisited).format('LL') : 'Never';
+                })
             };
 
         }])
@@ -107,7 +110,10 @@ angular
                 valueInputOption: 'USER_ENTERED',
                 values: [[newValue]]
             }).then(function (response) {
-                deferred.resolve();
+                deferred.resolve({
+                    isVisited: !currentVisitStatus,
+                    lastVisited: newValue
+                });
             });
 
             return deferred.promise;
