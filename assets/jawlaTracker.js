@@ -23,12 +23,25 @@ angular
             $scope.$on('google:authenticated', function (event, isSignedIn) {
                 $timeout(function () {
                     $scope.isSignedIn = isSignedIn;
-                    gapiService.getSheetRows().then(function(rows) {
-                        $scope.sheetRows = rows;
+                    gapiService.getSheetRows().then(function (rows) {
+                        $scope.people = rows.map(function (row) {
+                            return {
+                                isVisited: !!row[0],
+                                lastVisited: row[0],
+                                firstName: row[1],
+                                lastName: row[2],
+                                address: row[3] + ', ' + row[4] + ', ' + row[5] + ' ' + row[6]
+                            }
+                        });
                     });
                 });
             });
 
+            $scope.toggleStatus = function (index) {
+                gapiService.toggleStatus(index, $scope.people[index].isVisited).then(function(){
+                    $scope.people[index].isVisited = !$scope.people[index].isVisited;
+                });
+            };
 
         }])
 
@@ -73,7 +86,7 @@ angular
 
         this.getSheetRows = function () {
             var deferred = $q.defer();
-            
+
             gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: SS_ID,
                 range: 'List!A2:G',
@@ -84,62 +97,21 @@ angular
             });
 
             return deferred.promise;
-        }
+        };
+
+        this.toggleStatus = function (index, currentVisitStatus) {
+            var deferred = $q.defer();
+
+            var newValue = currentVisitStatus ? '' : new Date();
+            gapi.client.sheets.spreadsheets.values.update({
+                spreadsheetId: SS_ID,
+                range: 'List!A' + (index + 2),
+                valueInputOption: 'USER_ENTERED',
+                values: [[newValue]]
+            }).then(function (response) {
+                deferred.resolve();
+            });
+
+            return deferred.promise;
+        };
     }]);
-
-
-
-// /**
-//  * Append a pre element to the body containing the given message
-//  * as its text node. Used to display the results of the API call.
-//  *
-//  * @param {string} message Text to be placed in pre element.
-//  */
-// function appendPre(message) {
-//     var pre = document.getElementById('content');
-//     var entry = document.createElement("P");
-//     entry.innerHTML = message;
-//     pre.appendChild(entry);
-// }
-
-// /**
-//  * Print the names and majors of students in a sample spreadsheet:
-//  * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-//  */
-// function listMajors() {
-//     gapi.client.sheets.spreadsheets.values.get({
-//         spreadsheetId: SS_ID,
-//         range: 'List!A2:G',
-//     }).then(function (response) {
-//         var range = response.result;
-//         if (range.values.length > 0) {
-//             for (i = 0; i < range.values.length; i++) {
-//                 var row = range.values[i];
-//                 var rowNum = (i + 2);
-//                 var checked = row[0] ? 'checked' : '';
-//                 var checkBox = "<input type='checkbox' onclick='toggleEntry(" + rowNum + ",\"" + row[0] + "\")' " + checked + "> ";
-//                 appendPre(checkBox + row[1] + ' ' + row[2] + ', ' + row[3] + ' ' + row[4] + ' ' + row[5] + ' ' + row[6]);
-//             }
-//         } else {
-//             appendPre('No data found.');
-//         }
-//     }, function (response) {
-//         appendPre('Error: ' + response.result.error.message);
-//     });
-// }
-
-// /**
-//  * Update the first cell in the row
-//  * Adds time stamp if empty, empty if has content
-//  */
-// function toggleEntry(rowNum, value) {
-//     var newValue = value ? '' : new Date();
-//     gapi.client.sheets.spreadsheets.values.update({
-//         spreadsheetId: SS_ID,
-//         range: 'List!A' + rowNum,
-//         valueInputOption: 'USER_ENTERED',
-//         values: [[newValue]]
-//     }).then(function (response) {
-//         console.log(response);
-//     });
-// }

@@ -12,10 +12,9 @@
     <button ng-if="isSignedIn" ng-click="logout()">Logout</button>
 
     <ul>
-      <li ng-repeat="sheetRow in sheetRows track by $index">
-        <span ng-if="sheetRow[0]">1</span>
-        <span ng-if="!sheetRow[0]">0</span>
-        {{ sheetRow[1] }} {{ sheetRow[2] }} {{ sheetRow[3] }} {{ sheetRow[4] }} {{ sheetRow[5] }} {{ sheetRow[6] }}
+      <li ng-repeat="person in people track by $index">
+        <span ng-click="toggleStatus($index)">{{person.isVisited}}</span>
+        - {{ person.firstName }} {{ person.lastName }}: {{ person.address }}
       </li>
     </ul>
 
