@@ -38,6 +38,8 @@
 
     <button class="btn btn-default" ng-if="isSignedIn == false" ng-click="login()">Authorize</button>
 
+    <div id="map" class="col-sm-12" style="height: 300px;"></div>
+
     <table class="table" ng-if="isSignedIn">
       <tr ng-repeat="person in people track by $index">
         <td>
@@ -67,7 +69,8 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
   <script type="text/javascript" src="assets/jawlaTracker.js"></script>
-  <script async defer src="https://apis.google.com/js/api.js?onload=init"></script>
+  <script async defer src="https://apis.google.com/js/api.js?onload=initGapi"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoypDyjlv3tAiQwk_Pq5y8eYI6zoQcC5g&callback=initMap"></script>
 
   <!-- momentJs -->
   <script type="text/javascript" src="assets/moment.min.js"></script>

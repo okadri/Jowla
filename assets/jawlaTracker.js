@@ -1,12 +1,16 @@
-var init = function () {
+var initGapi = function () {
     window.initGapi();
-}
+};
+
+var initMap = function () {
+    window.initMap();
+};
 
 angular
     .module('jawlaTracker', [])
 
-    .controller('jawlaTrackerCtrl', ['$scope', '$window', '$rootScope', '$timeout', 'gapiService',
-        function ($scope, $window, $rootScope, $timeout, gapiService) {
+    .controller('jawlaTrackerCtrl', ['$scope', '$window', '$rootScope', '$timeout', 'gapiService', 'mapService',
+        function ($scope, $window, $rootScope, $timeout, gapiService, mapService) {
 
             $scope.login = function () {
                 gapiService.signIn();
@@ -18,6 +22,10 @@ angular
 
             $window.initGapi = function () {
                 gapiService.initGapi();
+            };
+
+            $window.initMap = function () {
+                mapService.initMap();
             };
 
             $scope.$on('google:authenticated', function (event, isSignedIn) {
@@ -38,7 +46,7 @@ angular
             });
 
             $scope.toggleStatus = function (index) {
-                gapiService.toggleStatus(index, $scope.people[index].isVisited).then(function(updatedStatus){
+                gapiService.toggleStatus(index, $scope.people[index].isVisited).then(function (updatedStatus) {
                     $scope.people[index].isVisited = updatedStatus.isVisited;
                     $scope.people[index].lastVisited = updatedStatus.lastVisited ? moment(updatedStatus.lastVisited).format('LL') : 'Never';
                 })
@@ -118,4 +126,40 @@ angular
 
             return deferred.promise;
         };
+    }])
+
+    .service('mapService', [function () {
+
+        this.initMap = function () {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 37.9245639, lng: -122.356405 },
+                zoom: 15
+            });
+            var infoWindow = new google.maps.InfoWindow({ map: map });
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent('Location found.');
+                    map.setCenter(pos);
+                }, function () {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
+        }
     }]);
