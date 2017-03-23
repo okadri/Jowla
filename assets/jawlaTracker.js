@@ -11,6 +11,8 @@ angular
 
     .controller('jawlaTrackerCtrl', ['$scope', '$window', '$rootScope', '$timeout', 'gapiService', 'mapService',
         function ($scope, $window, $rootScope, $timeout, gapiService, mapService) {
+            $scope.people = [];
+            $scope.mapIsReady = false;
 
             $scope.login = function () {
                 gapiService.signIn();
@@ -25,7 +27,10 @@ angular
             };
 
             $window.initMap = function () {
-                mapService.initMap();
+                $scope.mapIsReady = true;
+                if ($scope.people.length > 0) {
+                    mapService.initMap($scope.people);
+                }
             };
 
             $scope.$on('google:authenticated', function (event, isSignedIn) {
@@ -41,6 +46,10 @@ angular
                                 address: row[3] + ', ' + row[4] + ', ' + row[5] + ' ' + row[6]
                             }
                         });
+
+                        if ($scope.mapIsReady) {
+                            mapService.initMap($scope.people);
+                        }
                     });
                 });
             });
@@ -128,21 +137,77 @@ angular
         };
     }])
 
-    .service('mapService', [function () {
+    .service('mapService', ['$q', function ($q) {
 
-        this.initMap = function () {
-            geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ 'address': "vallejo, ca" }, function (results, status) {
-                var mapCenter = { lat: 37.9245639, lng: -122.356405 };
+        this.initMap = function (people) {
+            var deferred = $q.defer();
 
-                if (status == google.maps.GeocoderStatus.OK) {
-                    mapCenter = results[0].geometry.location;
-                }
+            if (people instanceof Array === false) {
+                return deferred.reject("Passed value is not an array");
+            }
 
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    center: mapCenter,
-                    zoom: 12
-                });
+            var bounds = new google.maps.LatLngBounds();
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12
             });
+
+            this.getMarkers(people).then( function (markers) {
+                // Loop through our array of markers & place each one on the map  
+                for( i = 0; i < markers.length; i++ ) {
+                    var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+                    bounds.extend(position);
+                    marker = new google.maps.Marker({
+                        position: position,
+                        map: map,
+                        title: markers[i][0]
+                    });
+                    
+                    // Automatically center the map fitting all markers on the screen
+                    map.fitBounds(bounds);
+                }
+            });
+
+            // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
+            var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+                this.setZoom(14);
+                deferred.resolve("Map initialized");
+               google.maps.event.removeListener(boundsListener);
+            });
+        };
+
+        this.getMarkers = function (people) {
+
+            var deferred = $q.defer();
+            var markers = [];
+
+            if (people instanceof Array === false) {
+                return deferred.reject("Passed value is not an array");
+            }
+
+            geocoder = new google.maps.Geocoder();
+            people.forEach(function (person, index) {
+                setTimeout(function() {
+                    geocoder.geocode({ 'address': person.address }, function (results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var location = results[0].geometry.location;
+                            markers.push([
+                                person.firstName + ' ' + person.lastName,
+                                location.lat(),
+                                location.lng()
+                            ]);
+                        } else {
+                            console.log(status);
+                        }
+
+                        if (index === people.length - 1) {
+                            console.log(markers);
+                            deferred.resolve(markers);
+                        }
+                    });
+                }, 1000 * index);
+            });
+
+            return deferred.promise;
         }
     }]);
