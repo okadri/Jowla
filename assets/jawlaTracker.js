@@ -14,7 +14,11 @@ var getPersonFromRow = function (row) {
 
     var metaArr = row[0].split('##');
     var metaIsValid = (metaArr.length === 4);
-    var visitHistory = metaIsValid ? metaArr[0].split('@@') : [];
+    var visitHistory = !metaIsValid ? [] :
+        metaArr[0].split('@@')
+            .filter(function(s) { return s.length; })
+            .map(function(s) { return new Date(s) })
+            .sort(function(a,b) { return b - a; });
 
     return {
         visitHistory: visitHistory,
@@ -144,7 +148,7 @@ angular
             var deferred = $q.defer();
 
             var updatedPerson = angular.copy(person);
-            updatedPerson.visitHistory.push(new Date());
+            updatedPerson.visitHistory.unshift(new Date());
 
             gapi.client.sheets.spreadsheets.values.update({
                 spreadsheetId: SS_ID,

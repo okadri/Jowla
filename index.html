@@ -38,23 +38,18 @@
 
     <button class="btn btn-default" ng-if="isSignedIn == false" ng-click="login()">Authorize</button>
 
-    <div id="map" class="col-sm-12" style="height: 600px;"></div>
+    <div id="map" class="col-sm-12" style="height: 300px;"></div>
 
     <table class="table" ng-if="isSignedIn">
       <tr ng-repeat="person in people track by $index">
         <td>
-          <div class="checkbox" ng-click="toggleStatus($index)">
-            <label>
-              <input type="checkbox" ng-checked="person.isVisited">
-              {{ person.firstName }} {{ person.lastName }}
-              <br />
-              <small class="text-muted" ng-show="person.lastVisited">
-                Last visited: {{ person.lastVisited }}
-              </small>
-            </label>
-          </div>
+          {{ person.firstName }} {{ person.lastName }}
+          <span class="glyphicon glyphicon-plus-sign" ng-click="addVisit($index)"></span><br />
+          <ul class="visit-history" ng-show="person.visitHistory.length">
+            <li ng-repeat="visit in person.visitHistory track by $index" ng-bind="visit | date:shortDate"></li>
+          </ul>
         </td>
-        <td>
+        <td class="text-right">
           <a ng-href="https://www.google.com/maps/place/{{ person.address }}" target="_blank">
             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
             {{ person.address }}
@@ -71,9 +66,6 @@
   <script type="text/javascript" src="assets/jawlaTracker.js"></script>
   <script async defer src="https://apis.google.com/js/api.js?onload=initGapi"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoypDyjlv3tAiQwk_Pq5y8eYI6zoQcC5g&callback=initMap"></script>
-
-  <!-- momentJs -->
-  <script type="text/javascript" src="assets/moment.min.js"></script>
 
   <!-- jQuery CDN -->
   <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
