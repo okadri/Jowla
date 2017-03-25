@@ -1,9 +1,5 @@
 app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
-    var SS_ID = '1lcXvxSW6BH3OIa2leTuxP_M1XKxzRnPu2I2f645BsxE';
-
     this.initGapi = function () {
-        // Client ID and API key from the Developer Console
-        var CLIENT_ID = '273724384440-85de3san0p08tod1gn9lnlicropdhqau.apps.googleusercontent.com';
         var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
         var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
 
@@ -12,7 +8,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
         function initClient() {
             gapi.client.init({
                 discoveryDocs: DISCOVERY_DOCS,
-                clientId: CLIENT_ID,
+                clientId: GAPI_CLIENT_ID,
                 scope: SCOPES
             }).then(function () {
                 // Listen for sign-in state changes.
