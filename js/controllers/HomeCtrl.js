@@ -1,5 +1,5 @@
-app.controller('HomeCtrl', ['$scope', '$window', '$rootScope', '$timeout', 'gapiService', 'mapService',
-    function ($scope, $window, $rootScope, $timeout, gapiService, mapService) {
+app.controller('HomeCtrl', ['$scope', '$window', '$rootScope', '$timeout', 'Person', 'gapiService', 'mapService',
+    function ($scope, $window, $rootScope, $timeout, Person, gapiService, mapService) {
         $scope.people = [];
         $scope.mapIsReady = false;
 
@@ -27,7 +27,7 @@ app.controller('HomeCtrl', ['$scope', '$window', '$rootScope', '$timeout', 'gapi
                 $scope.isSignedIn = isSignedIn;
                 gapiService.getSheetRows().then(function (rows) {
                     $scope.people = rows.map(function (row) {
-                        return getPersonFromRow(row);
+                        return new Person(row);
                     });
 
                     if ($scope.mapIsReady) {

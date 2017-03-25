@@ -1,35 +1,42 @@
-// TODO: convert to a prototype and prototype functions
-var getPersonFromRow = function (row) {
-    if (row instanceof Array === false || typeof row[0] !== 'string') {
-        console.error("Object passed is not a valid row", row);
-        return {};
-    }
+app.factory('Person', [function () {
+	function Person(personRowData) {
+		if (personRowData) {
+			this.setData(personRowData);
+		}
+	};
+	Person.prototype = {
+		setData: function (personRowData) {
+            if (personRowData instanceof Array === false || typeof personRowData[0] !== 'string') {
+                console.error("Object passed is not a valid row", personRowData);
+                return {};
+            }
 
-    var metaArr = row[0].split('##');
-    var metaIsValid = (metaArr.length === 4);
-    var visitHistory = !metaIsValid ? [] :
-        metaArr[0].split('@@')
-            .filter(function(s) { return s.length; })
-            .map(function(s) { return new Date(s) })
-            .sort(function(a,b) { return b - a; });
+            var metaArr = personRowData[0].split('##');
+            var metaIsValid = (metaArr.length === 4);
+            var visitHistory = !metaIsValid ? [] :
+                metaArr[0].split('@@')
+                    .filter(function(s) { return s.length; })
+                    .map(function(s) { return new Date(s) })
+                    .sort(function(a,b) { return b - a; });
 
-    return {
-        visitHistory: visitHistory,
-        firstName: row[1],
-        lastName: row[2],
-        address: row[3] + ', ' + row[4] + ', ' + row[5] + ' ' + row[6],
-        notes: metaIsValid ? metaArr[1] : '',
-        addressLat: metaIsValid ? parseFloat(metaArr[2]) : undefined,
-        addressLng: metaIsValid ? parseFloat(metaArr[3]) : undefined
-    }
-};
-
-var getMetaString = function (person) {
-    return [
-        person.visitHistory.join('@@'),
-        person.notes,
-        person.addressLat,
-        person.addressLng,
-    ].join('##');
-};
-
+			angular.extend(this, {
+                visitHistory: visitHistory,
+                firstName: personRowData[1],
+                lastName: personRowData[2],
+                address: personRowData[3] + ', ' + personRowData[4] + ', ' + personRowData[5] + ' ' + personRowData[6],
+                notes: metaIsValid ? metaArr[1] : '',
+                addressLat: metaIsValid ? parseFloat(metaArr[2]) : undefined,
+                addressLng: metaIsValid ? parseFloat(metaArr[3]) : undefined
+            });
+		},
+		getMetaString: function () {
+            return [
+                this.visitHistory.join('@@'),
+                this.notes,
+                this.addressLat,
+                this.addressLng,
+            ].join('##');
+		}
+	};
+	return Person;
+}]);

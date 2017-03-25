@@ -62,7 +62,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
             spreadsheetId: SS_ID,
             range: 'List!A' + (index + 2),
             valueInputOption: 'USER_ENTERED',
-            values: [[getMetaString(updatedPerson)]]
+            values: [[updatedPerson.getMetaString()]]
         }).then(function (response) {
             deferred.resolve(updatedPerson);
         });
@@ -81,7 +81,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
             spreadsheetId: SS_ID,
             range: 'List!A' + (index + 2),
             valueInputOption: 'USER_ENTERED',
-            values: [[getMetaString(updatedPerson)]]
+            values: [[updatedPerson.getMetaString()]]
         }).then(function (response) {
             deferred.resolve(updatedPerson);
         });
