@@ -11,9 +11,12 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     var length = action.payload.rows ? action.payload.rows.length : 0;
                     for (var i = 0; i < length; i++) {
                         var rowData = action.payload.rows[i];
-                        people.list[i] = new Person(rowData);
+                        people.list[i] = new Person(rowData, i);
                         people.ids.push(i);
                     }
+                    return people;
+                case ADD_VISIT:
+                    people.list[action.payload.updatedPerson.id] = action.payload.updatedPerson;
                     return people;
                 default:
                     return people;
@@ -22,10 +25,12 @@ app.service('stateService', function ($rootScope, $log, Person) {
         _uiReducers: function (action, ui) {
             switch (action.type) {
                 case UPDATE_SIGNIN_STATUS:
-                    ui = {
-                        isSignedIn: false
-                    };
+                    ui = ui || {};
                     ui.isSignedIn = action.payload.isSignedIn;
+                    return ui;
+                case MAP_READY:
+                    ui = ui || {};
+                    ui.mapIsReady = true;
                     return ui;
                 default:
                     return ui;

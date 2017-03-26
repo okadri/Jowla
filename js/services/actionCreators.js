@@ -20,12 +20,17 @@ app.service('actionCreators', ['stateService', 'gapiService', 'mapService',
                         };
                         stateService.reduce(action);
 
-                        if (isSignedIn) {
-                            self.getSheetRows();
-                        }
+                        // Update data
+                        self.getSheetRows();
                     }
 
                 });
+            },
+            signIn: function () {
+                gapiService.signIn();
+            },
+            signOut: function () {
+                gapiService.signOut();
             },
             getSheetRows: function () {
                 gapiService.getSheetRows().then(function (rows) {
@@ -34,6 +39,37 @@ app.service('actionCreators', ['stateService', 'gapiService', 'mapService',
                         payload: {
                             rows: rows
                         }
+                    };
+                    stateService.reduce(action);
+                });
+            },
+            addVisit: function (person) {
+                gapiService.addVisit(person).then(function (updatedPerson) {
+                    var action = {
+                        type: ADD_VISIT,
+                        payload: {
+                            updatedPerson: updatedPerson
+                        }
+                    };
+                    stateService.reduce(action);
+                });
+            },
+            setMapReady: function () {
+                var self = this;
+
+                var action = {
+                    type: MAP_READY,
+                    payload: {}
+                };
+                stateService.reduce(action);
+            },
+            populateMap: function (people) {
+                if (!people) { return; }
+
+                mapService.populateMap(people).then(function () {
+                    var action = {
+                        type: POPULATE_MAP,
+                        payload: {}
                     };
                     stateService.reduce(action);
                 });

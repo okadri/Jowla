@@ -1,41 +1,40 @@
-app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', 'Person', 'actionCreators', 'gapiService', 'mapService',
-    function ($rootScope, $scope, $window, $timeout, Person, actionCreators, gapiService, mapService) {
-        $scope.people = [];
+app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', 'Person', 'actionCreators',
+    function ($rootScope, $scope, $window, $timeout, Person, actionCreators) {
         $scope.mapIsReady = false;
-        $scope.view = {};
+        $scope.view = {
+            state: {}
+        };
 
         $scope.login = function () {
-            gapiService.signIn();
+            actionCreators.signIn();
         };
 
         $scope.logout = function () {
-            gapiService.signOut();
-        };
-
-        $window.initGapi = function () {
-            actionCreators.initGapi();
+            actionCreators.signOut();
         };
 
         $scope.addVisit = function (personIdx) {
-            gapiService.addVisit(personIdx, $scope.people[personIdx]).then(function (updatedPerson) {
-                $scope.people[personIdx] = updatedPerson;
-            })
+            actionCreators.addVisit($scope.view.state.people.list[personIdx]);
         };
 
         // State changes listener
 		$rootScope.$on('stateChanged', function (event, data) {
-                $scope.view.state = data.state;
-                console.log($scope.view.state);
+            $scope.view.state = data.state;
 
-                if ($scope.mapIsReady) {
-                    mapService.initMap($scope.people);
-                }
+            if ($scope.view.state.ui.mapIsReady && data.action.type == GET_SHEET_ROWS) {
+                actionCreators.populateMap($scope.view.state.people);
+            }
 		});
 
+        // Deferred Initializations
+        $window.initGapi = function () {
+            actionCreators.initGapi();
+        };
+
         $window.initMap = function () {
-            $scope.mapIsReady = true;
-            if ($scope.people.length > 0) {
-                mapService.initMap($scope.people);
+            actionCreators.setMapReady();
+            if ($scope.view.state.people && $scope.view.state.people.ids.length > 0) {
+                actionCreators.populateMap($scope.view.state.people);
             }
         };
 

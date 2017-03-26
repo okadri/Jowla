@@ -17,3 +17,6 @@ document.body.appendChild(script);
 // Constant Variables
 var UPDATE_SIGNIN_STATUS = 'UPDATE_SIGNIN_STATUS';
 var GET_SHEET_ROWS = 'GET_SHEET_ROWS';
+var ADD_VISIT = 'ADD_VISIT';
+var MAP_READY = 'MAP_READY';
+var POPULATE_MAP = 'POPULATE_MAP';

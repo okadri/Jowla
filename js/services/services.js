@@ -42,7 +42,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
         return deferred.promise;
     };
 
-    this.addVisit = function (index, person) {
+    this.addVisit = function (person) {
         var deferred = $q.defer();
 
         var updatedPerson = angular.copy(person);
@@ -50,7 +50,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
 
         gapi.client.sheets.spreadsheets.values.update({
             spreadsheetId: SS_ID,
-            range: 'List!A' + (index + 2),
+            range: 'List!A' + (person.id + 2),
             valueInputOption: 'USER_ENTERED',
             values: [[updatedPerson.getMetaString()]]
         }).then(function (response) {
@@ -82,10 +82,10 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
 
 app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
 
-    this.initMap = function (people) {
+    this.populateMap = function (people) {
         var deferred = $q.defer();
 
-        if (people instanceof Array === false) {
+        if (people.ids instanceof Array === false) {
             return deferred.reject("Passed value is not an array");
         }
 
@@ -113,10 +113,11 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
 
         // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
         var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function (event) {
-            this.setZoom(14);
-            deferred.resolve("Map initialized");
+            deferred.resolve("Map populated");
             google.maps.event.removeListener(boundsListener);
         });
+
+        return deferred.promise;
     };
 
     this.getMarkers = function (people) {
@@ -124,7 +125,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
         var deferred = $q.defer();
         var markers = [];
 
-        if (people instanceof Array === false) {
+        if (people.ids instanceof Array === false) {
             return deferred.reject("Passed value is not an array");
         }
 
@@ -133,7 +134,8 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
         var delayedIdx = 0;
         var validMarkers = 0;
 
-        people.forEach(function (person, index) {
+        people.ids.forEach(function (personId, index) {
+            var person = people.list[personId];
             if (person.addressLat && person.addressLng) {
                 validMarkers++;
 
@@ -143,7 +145,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                     person.addressLng
                 ]);
 
-                if (validMarkers === people.length) {
+                if (validMarkers === people.ids.length) {
                     deferred.resolve(markers);
                 }
             } else {
@@ -161,7 +163,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                             ]);
                         }
 
-                        if (validMarkers === people.length) {
+                        if (validMarkers === people.ids.length) {
                             deferred.resolve(markers);
                         }
                     });

@@ -1,11 +1,11 @@
 app.factory('Person', [function () {
-	function Person(personRowData) {
-		if (personRowData) {
-			this.setData(personRowData);
+	function Person(personRowData, id) {
+		if (personRowData && Number.isInteger(id)) {
+			this.setData(personRowData, id);
 		}
 	};
 	Person.prototype = {
-		setData: function (personRowData) {
+		setData: function (personRowData, id) {
             if (personRowData instanceof Array === false || typeof personRowData[0] !== 'string') {
                 console.error("Object passed is not a valid row", personRowData);
                 return {};
@@ -20,6 +20,7 @@ app.factory('Person', [function () {
                     .sort(function(a,b) { return b - a; });
 
 			angular.extend(this, {
+                id: id,
                 visitHistory: visitHistory,
                 firstName: personRowData[1],
                 lastName: personRowData[2],
