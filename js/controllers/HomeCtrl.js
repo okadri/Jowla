@@ -1,7 +1,8 @@
-app.controller('HomeCtrl', ['$scope', '$window', '$rootScope', '$timeout', 'Person', 'gapiService', 'mapService',
-    function ($scope, $window, $rootScope, $timeout, Person, gapiService, mapService) {
+app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', 'Person', 'actionCreators', 'gapiService', 'mapService',
+    function ($rootScope, $scope, $window, $timeout, Person, actionCreators, gapiService, mapService) {
         $scope.people = [];
         $scope.mapIsReady = false;
+        $scope.view = {};
 
         $scope.login = function () {
             gapiService.signIn();
@@ -12,35 +13,30 @@ app.controller('HomeCtrl', ['$scope', '$window', '$rootScope', '$timeout', 'Pers
         };
 
         $window.initGapi = function () {
-            gapiService.initGapi();
+            actionCreators.initGapi();
         };
+
+        $scope.addVisit = function (personIdx) {
+            gapiService.addVisit(personIdx, $scope.people[personIdx]).then(function (updatedPerson) {
+                $scope.people[personIdx] = updatedPerson;
+            })
+        };
+
+        // State changes listener
+		$rootScope.$on('stateChanged', function (event, data) {
+                $scope.view.state = data.state;
+                console.log($scope.view.state);
+
+                if ($scope.mapIsReady) {
+                    mapService.initMap($scope.people);
+                }
+		});
 
         $window.initMap = function () {
             $scope.mapIsReady = true;
             if ($scope.people.length > 0) {
                 mapService.initMap($scope.people);
             }
-        };
-
-        $scope.$on('google:authenticated', function (event, isSignedIn) {
-            $timeout(function () {
-                $scope.isSignedIn = isSignedIn;
-                gapiService.getSheetRows().then(function (rows) {
-                    $scope.people = rows.map(function (row) {
-                        return new Person(row);
-                    });
-
-                    if ($scope.mapIsReady) {
-                        mapService.initMap($scope.people);
-                    }
-                });
-            });
-        });
-
-        $scope.addVisit = function (personIdx) {
-            gapiService.addVisit(personIdx, $scope.people[personIdx]).then(function (updatedPerson) {
-                $scope.people[personIdx] = updatedPerson;
-            })
         };
 
     }])

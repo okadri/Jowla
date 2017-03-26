@@ -1,5 +1,6 @@
 app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
     this.initGapi = function () {
+        var deferred = $q.defer();
         var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
         var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
 
@@ -11,18 +12,11 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
                 clientId: GAPI_CLIENT_ID,
                 scope: SCOPES
             }).then(function () {
-                // Listen for sign-in state changes.
-                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-                // Handle the initial sign-in state.
-                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+                deferred.resolve(gapi.auth2.getAuthInstance().isSignedIn.get());
             });
         }
 
-        function updateSigninStatus(isSignedIn) {
-            $rootScope.$broadcast("google:authenticated", isSignedIn);
-        }
-
+        return deferred.promise;
     };
 
     this.signIn = function () {
