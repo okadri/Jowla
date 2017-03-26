@@ -30,14 +30,18 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
     this.getSheetRows = function () {
         var deferred = $q.defer();
 
-        gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: SS_ID,
-            range: 'List!A2:G',
-        }).then(function (response) {
-            deferred.resolve(response.result.values);
-        }, function (response) {
-            deferred.reject(response.result.error);
-        });
+        if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+            gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: SS_ID,
+                range: 'List!A2:G',
+            }).then(function (response) {
+                deferred.resolve(response.result.values);
+            }, function (response) {
+                deferred.reject(response.result.error);
+            });
+        } else {
+            deferred.reject("Not signed in");
+        }
 
         return deferred.promise;
     };

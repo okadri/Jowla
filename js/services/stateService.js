@@ -32,6 +32,9 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     ui = ui || {};
                     ui.mapIsReady = true;
                     return ui;
+                case POPULATE_MAP:
+                    ui.mapIsPopulated = true;
+                    return ui;
                 default:
                     return ui;
             }
