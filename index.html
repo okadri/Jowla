@@ -34,31 +34,43 @@
     </div>
   </nav>
 
-  <div class="container jawla-list-container">
+  <div class="main-container">
+    <button class="btn btn-default btn-block" ng-if="view.state.ui.isSignedIn == false" ng-click="login()">Authorize</button>
 
-    <button class="btn btn-default" ng-if="view.state.ui.isSignedIn == false" ng-click="login()">Authorize</button>
+    <div class="jawla-toolbar-container" ng-if="view.state.ui.isSignedIn">
+      <div class="btn-group pull-right toolbar" role="group">
+        <button type="button" class="btn btn-default" ng-click="switchDisplayMode()">
+          <span class="glyphicon glyphicon-map-marker" ng-show="view.state.ui.displayMode == 'list'"></span>
+          <span class="glyphicon glyphicon-list" ng-show="view.state.ui.displayMode == 'map'"></span>
+        </button>
+      </div>
+    </div>
 
-    <div id="map" class="col-sm-12" style="height: 300px;"></div>
+    <div class="jawla-list-container" ng-if="view.state.ui.displayMode == 'list'">
+      <table class="table">
+        <tr ng-repeat="personId in view.state.people.ids track by personId">
+          <td>
+            {{ view.state.people.list[personId].firstName }} {{ view.state.people.list[personId].lastName }}
+            <span class="glyphicon glyphicon-plus-sign" ng-click="addVisit(personId)"></span><br />
+            <ul class="visit-history" ng-show="view.state.people.list[personId].visitHistory.length">
+              <li ng-repeat="visit in view.state.people.list[personId].visitHistory track by $index" ng-bind="visit | date:shortDate"></li>
+            </ul>
+          </td>
+          <td class="text-right">
+            <a ng-href="https://www.google.com/maps/place/{{ view.state.people.list[personId].address }}" target="_blank">
+              <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+              {{ view.state.people.list[personId].address }}
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
 
-    <table class="table" ng-if="view.state.ui.isSignedIn">
-      <tr ng-repeat="personId in view.state.people.ids track by personId">
-        <td>
-          {{ view.state.people.list[personId].firstName }} {{ view.state.people.list[personId].lastName }}
-          <span class="glyphicon glyphicon-plus-sign" ng-click="addVisit(personId)"></span><br />
-          <ul class="visit-history" ng-show="view.state.people.list[personId].visitHistory.length">
-            <li ng-repeat="visit in view.state.people.list[personId].visitHistory track by $index" ng-bind="visit | date:shortDate"></li>
-          </ul>
-        </td>
-        <td class="text-right">
-          <a ng-href="https://www.google.com/maps/place/{{ view.state.people.list[personId].address }}" target="_blank">
-            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-            {{ view.state.people.list[personId].address }}
-          </a>
-        </td>
-      </tr>
-    </table>
+    <div class="jawla-map-container" ng-if="view.state.ui.displayMode == 'map'">
+      <div id="map" class="col-sm-12" style="height: 300px;"></div>
+    </div>
   </div>
-  <!-- /.container -->
+  <!-- /.main-container -->
 
   <!-- Angular -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>

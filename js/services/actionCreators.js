@@ -54,6 +54,13 @@ app.service('actionCreators', ['stateService', 'gapiService', 'mapService',
                     stateService.reduce(action);
                 });
             },
+            switchDisplayMode: function (people) {
+                var action = {
+                    type: SWITCH_DISPLAY_MODE,
+                    payload: {}
+                };
+                stateService.reduce(action);
+            },
             setMapReady: function () {
                 var self = this;
 

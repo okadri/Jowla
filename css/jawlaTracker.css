@@ -2,6 +2,13 @@ body {
   padding-top: 50px;
 }
 
-.jawla-list-container {
-  padding: 40px 15px;
+.main-container {
+  padding: 40px 0;
+}
+
+.jawla-toolbar-container, .jawla-list-container {
+  padding: 20px;
+}
+
+.jawla-map-container {
 }

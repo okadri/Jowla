@@ -17,12 +17,20 @@ app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', 'Pers
             actionCreators.addVisit($scope.view.state.people.list[personIdx]);
         };
 
+        $scope.switchDisplayMode = function () {
+            actionCreators.switchDisplayMode();
+        };
+
         // State changes listener
 		$rootScope.$on('stateChanged', function (event, data) {
             $scope.view.state = data.state;
 
-            if ($scope.view.state.ui.mapIsReady && data.action.type == GET_SHEET_ROWS) {
-                actionCreators.populateMap($scope.view.state.people);
+            if ($scope.view.state.ui.mapIsReady &&
+            data.action.type == SWITCH_DISPLAY_MODE &&
+            $scope.view.state.ui.displayMode == DISPLAY_MODE.MAP) {
+                $timeout(function() {
+                    actionCreators.populateMap($scope.view.state.people);
+                });
             }
 		});
 
@@ -33,9 +41,6 @@ app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', 'Pers
 
         $window.initMap = function () {
             actionCreators.setMapReady();
-            if ($scope.view.state.people && $scope.view.state.people.ids.length > 0) {
-                actionCreators.populateMap($scope.view.state.people);
-            }
         };
 
     }])

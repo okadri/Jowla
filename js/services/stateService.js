@@ -23,17 +23,26 @@ app.service('stateService', function ($rootScope, $log, Person) {
             }
         },
         _uiReducers: function (action, ui) {
+            var defaultUi = {
+                displayMode: DISPLAY_MODE.LIST,
+                isSignedIn: false,
+                mapIsReady: false,
+                mapIsPopulated: false
+            }
             switch (action.type) {
                 case UPDATE_SIGNIN_STATUS:
-                    ui = ui || {};
+                    ui = ui || defaultUi;
                     ui.isSignedIn = action.payload.isSignedIn;
                     return ui;
                 case MAP_READY:
-                    ui = ui || {};
+                    ui = ui || defaultUi;
                     ui.mapIsReady = true;
                     return ui;
                 case POPULATE_MAP:
                     ui.mapIsPopulated = true;
+                    return ui;
+                case SWITCH_DISPLAY_MODE:
+                    ui.displayMode = (ui.displayMode == DISPLAY_MODE.LIST) ? DISPLAY_MODE.MAP : DISPLAY_MODE.LIST;
                     return ui;
                 default:
                     return ui;
