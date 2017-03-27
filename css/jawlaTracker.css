@@ -2,8 +2,12 @@ body {
   padding-top: 50px;
 }
 
+.navbar-nav {
+  margin-right: 1em; 
+}
+
 .main-container {
-  padding: 40px 0;
+  padding: 0;
 }
 
 .jawla-toolbar-container, .jawla-list-container {
