@@ -1,5 +1,5 @@
-app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', 'Person', 'actionCreators',
-    function ($rootScope, $scope, $window, $timeout, Person, actionCreators) {
+app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', '$routeParams', 'actionCreators',
+    function ($rootScope, $scope, $window, $timeout, $routeParams, actionCreators) {
         $scope.mapIsReady = false;
         $scope.view = {
             state: {}
@@ -36,7 +36,10 @@ app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', 'Pers
 
         // Deferred Initializations
         $window.initGapi = function () {
-            actionCreators.initGapi();
+            // Wait for the digest cycle to make sure the route params are set
+            $timeout(function() {
+                actionCreators.initGapi($routeParams.sheetId);
+            });
         };
 
         $window.initMap = function () {

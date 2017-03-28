@@ -1,10 +1,10 @@
 app.service('actionCreators', ['stateService', 'gapiService', 'mapService',
     function (stateService, gapiService, mapService) {
         return {
-            initGapi: function () {
+            initGapi: function (sheetId) {
                 var self = this;
 
-                gapiService.initGapi().then(function (isSignedIn) {
+                gapiService.initGapi(sheetId).then(function (isSignedIn) {
                     // Listen for sign-in state changes.
                     gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 

@@ -1,6 +1,10 @@
 app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
-    this.initGapi = function () {
+    var self = this;
+
+    self.sheetId = null;
+    self.initGapi = function (sheetId) {
         var deferred = $q.defer();
+        self.sheetId = sheetId;
         var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
         var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
 
@@ -19,20 +23,20 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
         return deferred.promise;
     };
 
-    this.signIn = function () {
+    self.signIn = function () {
         gapi.auth2.getAuthInstance().signIn();
     };
 
-    this.signOut = function () {
+    self.signOut = function () {
         gapi.auth2.getAuthInstance().signOut();
     };
 
-    this.getSheetRows = function () {
+    self.getSheetRows = function () {
         var deferred = $q.defer();
 
         if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
             gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: SS_ID,
+                spreadsheetId: self.sheetId,
                 range: 'List!A2:G',
             }).then(function (response) {
                 deferred.resolve(response.result.values);
@@ -46,14 +50,14 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
         return deferred.promise;
     };
 
-    this.addVisit = function (person) {
+    self.addVisit = function (person) {
         var deferred = $q.defer();
 
         var updatedPerson = angular.copy(person);
         updatedPerson.visitHistory.unshift(new Date());
 
         gapi.client.sheets.spreadsheets.values.update({
-            spreadsheetId: SS_ID,
+            spreadsheetId: self.sheetId,
             range: 'List!A' + (person.id + 2),
             valueInputOption: 'USER_ENTERED',
             values: [[updatedPerson.getMetaString()]]
@@ -64,7 +68,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
         return deferred.promise;
     };
 
-    this.addCoordinates = function (index, person, location) {
+    self.addCoordinates = function (index, person, location) {
         var deferred = $q.defer();
 
         var updatedPerson = angular.copy(person);
@@ -72,7 +76,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
         updatedPerson.addressLng = location.lng();
 
         gapi.client.sheets.spreadsheets.values.update({
-            spreadsheetId: SS_ID,
+            spreadsheetId: self.sheetId,
             range: 'List!A' + (index + 2),
             valueInputOption: 'USER_ENTERED',
             values: [[updatedPerson.getMetaString()]]
