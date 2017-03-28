@@ -1,4 +1,18 @@
 app.service('stateService', function ($rootScope, $log, Person) {
+    function sortPeople (people) {
+        people.ids.sort(function (id1, id2) {
+            var lastVisit1 = people.list[id1].visitHistory.length ? people.list[id1].visitHistory[0] : 0;
+            var lastVisit2 = people.list[id2].visitHistory.length ? people.list[id2].visitHistory[0] : 0;
+            if (lastVisit1 < lastVisit2) {
+                return -1;
+            } else if (lastVisit1 > lastVisit2) {
+                return 1;
+            }
+            return 0;
+        });
+        return people;
+    }
+
     return {
         _state: {},
         _personReducers: function (action, people) {
@@ -14,10 +28,10 @@ app.service('stateService', function ($rootScope, $log, Person) {
                         people.list[i] = new Person(rowData, i);
                         people.ids.push(i);
                     }
-                    return people;
+                    return sortPeople(people);
                 case ADD_VISIT:
                     people.list[action.payload.updatedPerson.id] = action.payload.updatedPerson;
-                    return people;
+                    return sortPeople(people);
                 default:
                     return people;
             }
