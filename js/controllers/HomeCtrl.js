@@ -34,9 +34,5 @@ app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', '$rou
             }
 		});
 
-        actionCreators.initGapi($routeParams.sheetId);
-
-        actionCreators.setMapReady();
-
-    }])
+    }]);
 

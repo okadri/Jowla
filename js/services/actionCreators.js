@@ -1,8 +1,9 @@
-app.service('actionCreators', ['stateService', 'gapiService', 'mapService',
-    function (stateService, gapiService, mapService) {
+app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService',
+    function ($q, stateService, gapiService, mapService) {
         return {
             initGapi: function (sheetId) {
                 var self = this;
+                var deferred = $q.defer();
 
                 gapiService.initGapi(sheetId).then(function (isSignedIn) {
                     // Listen for sign-in state changes.
@@ -12,6 +13,7 @@ app.service('actionCreators', ['stateService', 'gapiService', 'mapService',
                     updateSigninStatus(isSignedIn);
 
                     function updateSigninStatus(isSignedIn) {
+                        deferred.resolve();
                         var action = {
                             type: UPDATE_SIGNIN_STATUS,
                             payload: {
@@ -23,8 +25,9 @@ app.service('actionCreators', ['stateService', 'gapiService', 'mapService',
                         // Update data
                         self.getSheetRows();
                     }
-
                 });
+
+                return deferred.promise;
             },
             signIn: function () {
                 gapiService.signIn();
@@ -62,13 +65,18 @@ app.service('actionCreators', ['stateService', 'gapiService', 'mapService',
                 stateService.reduce(action);
             },
             setMapReady: function () {
+                var deferred = $q.defer();
+
                 mapService.injectMapApi().then(function () {
+                    deferred.resolve();
                     var action = {
                         type: MAP_READY,
                         payload: {}
                     };
                     stateService.reduce(action);
                 });
+
+                return deferred.promise;
             },
             populateMap: function (people) {
                 if (!people) { return; }
