@@ -1,7 +1,6 @@
 app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
     var self = this;
 
-    self.sheetId = null;
     self.injectGapi = function () {
         var deferred = $q.defer();
 
@@ -18,7 +17,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
     }
     self.initGapi = function (sheetId) {
         var deferred = $q.defer();
-        self.sheetId = sheetId;
+        SPREAD_SHEET_ID = sheetId;
         var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
         var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
 
@@ -50,7 +49,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
 
         if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
             gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: self.sheetId,
+                spreadsheetId: SPREAD_SHEET_ID,
                 range: 'List!A2:G',
             }).then(function (response) {
                 deferred.resolve(response.result.values);
@@ -71,7 +70,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
         updatedPerson.visitHistory.unshift(new Date());
 
         gapi.client.sheets.spreadsheets.values.update({
-            spreadsheetId: self.sheetId,
+            spreadsheetId: SPREAD_SHEET_ID,
             range: 'List!A' + (person.id + 2),
             valueInputOption: 'USER_ENTERED',
             values: [[updatedPerson.getMetaString()]]
@@ -90,7 +89,7 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
         updatedPerson.addressLng = location.lng();
 
         gapi.client.sheets.spreadsheets.values.update({
-            spreadsheetId: self.sheetId,
+            spreadsheetId: SPREAD_SHEET_ID,
             range: 'List!A' + (index + 2),
             valueInputOption: 'USER_ENTERED',
             values: [[updatedPerson.getMetaString()]]
@@ -129,7 +128,8 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
         var bounds = new google.maps.LatLngBounds();
 
         var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 12
+            zoom: 12,
+            maxZoom: 15
         });
 
         this.getMarkers(people).then(function (markers) {
@@ -145,17 +145,19 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                     title: markers[i].person.fullName
                 });
 
-                // Allow each marker to have an info window    
-                google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                    return function() {
-                        infoWindow.setContent(
-                            '<b>' + markers[i].person.fullName + '</b><br>' +
-                            markers[i].person.address + '<br>' +
-                            '<a href="#/test">More...</a>'
-                        );
-                        infoWindow.open(map, marker);
-                    }
-                })(marker, i));
+                // Allow each marker to have an info window (only if more than one marker on map)
+                if (markers.length > 1) { 
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infoWindow.setContent(
+                                '<b>' + markers[i].person.fullName + '</b><br>' +
+                                markers[i].person.address + '<br>' +
+                                '<a href="#/p/' + markers[i].person.id + '/' + SPREAD_SHEET_ID + '">More...</a>'
+                            );
+                            infoWindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
 
                 // Automatically center the map fitting all markers on the screen
                 map.fitBounds(bounds);

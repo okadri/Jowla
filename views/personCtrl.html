@@ -1,0 +1,34 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header pull-left">
+        <a class="navbar-brand" href="/">Jawla Tracker</a>
+        </div>
+        <div class="navbar-header pull-right">
+            <ul class="nav navbar-nav pull-left">
+                <li><a ng-if="view.state.ui.isSignedIn" ng-click="logout()" class="glyphicon glyphicon-log-out"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="main-container">
+    <button class="btn btn-default btn-block" ng-if="view.state.ui.isSignedIn == false" ng-click="login()">Authorize</button>
+
+    <div class="jawla-map-container">
+        <div id="map" class="col-sm-12" style="height: calc(50vh - 55px);"></div>
+    </div>
+
+    <div class="jawla-person-container">
+        {{ view.state.people.list[personId].firstName }} {{ view.state.people.list[personId].lastName }}
+        <span class="glyphicon glyphicon-plus-sign" ng-click="addVisit(personId)"></span><br />
+        <ul class="visit-history" ng-show="view.state.people.list[personId].visitHistory.length">
+            <li ng-repeat="visit in view.state.people.list[personId].visitHistory track by $index" ng-bind="visit | date:shortDate"></li>
+        </ul>
+        <a ng-href="https://www.google.com/maps/place/{{ view.state.people.list[personId].address }}" target="_blank">
+            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+            {{ view.state.people.list[personId].address }}
+        </a>
+    </div>
+
+</div>
+<!-- /.main-container -->
