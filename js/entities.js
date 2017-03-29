@@ -24,6 +24,7 @@ app.factory('Person', [function () {
                 visitHistory: visitHistory,
                 firstName: personRowData[1],
                 lastName: personRowData[2],
+                fullName: personRowData[1] + ' ' + personRowData[2],
                 address: personRowData[3] + ', ' + personRowData[4] + ', ' + personRowData[5] + ' ' + personRowData[6],
                 notes: metaIsValid ? metaArr[1] : '',
                 addressLat: metaIsValid ? parseFloat(metaArr[2]) : undefined,

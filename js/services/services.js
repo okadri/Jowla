@@ -133,15 +133,29 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
         });
 
         this.getMarkers(people).then(function (markers) {
+            var infoWindow = new google.maps.InfoWindow(), marker, i;
+
             // Loop through our array of markers & place each one on the map  
             for (i = 0; i < markers.length; i++) {
-                var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+                var position = new google.maps.LatLng(markers[i].lat, markers[i].lng);
                 bounds.extend(position);
                 marker = new google.maps.Marker({
                     position: position,
                     map: map,
-                    title: markers[i][0]
+                    title: markers[i].person.fullName
                 });
+
+                // Allow each marker to have an info window    
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        infoWindow.setContent(
+                            '<b>' + markers[i].person.fullName + '</b><br>' +
+                            markers[i].person.address + '<br>' +
+                            '<a href="#/test">More...</a>'
+                        );
+                        infoWindow.open(map, marker);
+                    }
+                })(marker, i));
 
                 // Automatically center the map fitting all markers on the screen
                 map.fitBounds(bounds);
@@ -176,11 +190,11 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
             if (person.addressLat && person.addressLng) {
                 validMarkers++;
 
-                markers.push([
-                    person.firstName + ' ' + person.lastName,
-                    person.addressLat,
-                    person.addressLng
-                ]);
+                markers.push({
+                    person: person,
+                    lat: person.addressLat,
+                    lng: person.addressLng
+                });
 
                 if (validMarkers === people.ids.length) {
                     deferred.resolve(markers);
@@ -193,11 +207,11 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             var location = results[0].geometry.location;
                             gapiService.addCoordinates(index, person, location);
-                            markers.push([
-                                person.firstName + ' ' + person.lastName,
-                                location.lat(),
-                                location.lng()
-                            ]);
+                            markers.push({
+                                person: person,
+                                lat: location.lat(),
+                                lng: location.lng()
+                            });
                         }
 
                         if (validMarkers === people.ids.length) {
