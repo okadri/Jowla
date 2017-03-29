@@ -2,23 +2,37 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
     var self = this;
 
     self.sheetId = null;
+    self.injectGapi = function () {
+        var deferred = $q.defer();
+
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.async = true;
+        script.onload = function(){
+            deferred.resolve("Google API loaded");
+        };
+        script.src = 'https://apis.google.com/js/api.js';
+        document.body.appendChild(script);
+
+        return deferred.promise;
+    }
     self.initGapi = function (sheetId) {
         var deferred = $q.defer();
         self.sheetId = sheetId;
         var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
         var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
 
-        gapi.load('client:auth2', initClient);
-
-        function initClient() {
-            gapi.client.init({
-                discoveryDocs: DISCOVERY_DOCS,
-                clientId: GAPI_CLIENT_ID,
-                scope: SCOPES
-            }).then(function () {
-                deferred.resolve(gapi.auth2.getAuthInstance().isSignedIn.get());
+        self.injectGapi().then(function() {
+            gapi.load('client:auth2', function() {
+                gapi.client.init({
+                    discoveryDocs: DISCOVERY_DOCS,
+                    clientId: GAPI_CLIENT_ID,
+                    scope: SCOPES
+                }).then(function () {
+                    deferred.resolve(gapi.auth2.getAuthInstance().isSignedIn.get());
+                });
             });
-        }
+        });
 
         return deferred.promise;
     };
@@ -89,6 +103,21 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
 }]);
 
 app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
+
+    this.injectMapApi = function () {
+        var deferred = $q.defer();
+
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.async = true;
+        script.onload = function(){
+            deferred.resolve("Maps API Loaded");
+        };
+        script.src = 'https://maps.googleapis.com/maps/api/js?v=3&key=' + GOOGLE_MAP_KEY;
+        document.body.appendChild(script);
+
+        return deferred.promise;
+    };
 
     this.populateMap = function (people) {
         var deferred = $q.defer();

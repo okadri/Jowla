@@ -62,13 +62,13 @@ app.service('actionCreators', ['stateService', 'gapiService', 'mapService',
                 stateService.reduce(action);
             },
             setMapReady: function () {
-                var self = this;
-
-                var action = {
-                    type: MAP_READY,
-                    payload: {}
-                };
-                stateService.reduce(action);
+                mapService.injectMapApi().then(function () {
+                    var action = {
+                        type: MAP_READY,
+                        payload: {}
+                    };
+                    stateService.reduce(action);
+                });
             },
             populateMap: function (people) {
                 if (!people) { return; }

@@ -34,17 +34,9 @@ app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', '$rou
             }
 		});
 
-        // Deferred Initializations
-        $window.initGapi = function () {
-            // Wait for the digest cycle to make sure the route params are set
-            $timeout(function() {
-                actionCreators.initGapi($routeParams.sheetId);
-            });
-        };
+        actionCreators.initGapi($routeParams.sheetId);
 
-        $window.initMap = function () {
-            actionCreators.setMapReady();
-        };
+        actionCreators.setMapReady();
 
     }])
 
