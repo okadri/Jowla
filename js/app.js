@@ -7,9 +7,7 @@ app.config(function ($routeProvider) {
             controller: 'HomeCtrl',
             resolve : {
                 initApis : function(actionCreators,$route) {
-                    return actionCreators.initGapi($route.current.params.sheetId).then(function() {
-                        return actionCreators.setMapReady();
-                    });
+                    return actionCreators.initialize($route.current.params.sheetId);
                 }
             }
         })
@@ -18,9 +16,7 @@ app.config(function ($routeProvider) {
             controller: 'PersonCtrl',
             resolve : {
                 initApis : function(actionCreators,$route) {
-                    return actionCreators.initGapi($route.current.params.sheetId).then(function() {
-                        return actionCreators.setMapReady();
-                    });
+                    return actionCreators.initialize($route.current.params.sheetId);
                 }
             }
         })

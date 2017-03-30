@@ -81,6 +81,9 @@ app.service('stateService', function ($rootScope, $log, Person) {
 
             $log.debug("State updated:");
             $log.debug(scope._state, action.type);
+        },
+        getState: function() {
+            return this._state;
         }
     };
 });

@@ -1,30 +1,50 @@
 app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService',
     function ($q, stateService, gapiService, mapService) {
         return {
-            initGapi: function (sheetId) {
+            initialize: function (sheetId) {
                 var self = this;
                 var deferred = $q.defer();
 
-                gapiService.initGapi(sheetId).then(function (isSignedIn) {
-                    // Listen for sign-in state changes.
-                    gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+                // 1. Start with map api, since the map needs to be ready to be populated with the sheet data later
+                mapService.injectMapApi().then(function () {
+                    var action = {
+                        type: MAP_READY,
+                        payload: {}
+                    };
+                    stateService.reduce(action);
 
-                    // Handle the initial sign-in state.
-                    updateSigninStatus(isSignedIn);
+                    // 2. Initialize GApi to grab sheet data
+                    gapiService.initGapi(sheetId).then(function (isSignedIn) {
+                        // Listen for sign-in state changes.
+                        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
-                    function updateSigninStatus(isSignedIn) {
-                        deferred.resolve();
-                        var action = {
-                            type: UPDATE_SIGNIN_STATUS,
-                            payload: {
-                                isSignedIn: isSignedIn
-                            }
-                        };
-                        stateService.reduce(action);
+                        // Handle the initial sign-in state.
+                        updateSigninStatus(isSignedIn);
 
-                        // Update data
-                        self.getSheetRows();
-                    }
+                        function updateSigninStatus(isSignedIn) {
+                            var action = {
+                                type: UPDATE_SIGNIN_STATUS,
+                                payload: {
+                                    isSignedIn: isSignedIn
+                                }
+                            };
+                            stateService.reduce(action);
+                        }
+
+                        // 3. Finally, get the sheet data
+                        gapiService.getSheetRows().then(function (rows) {
+                            deferred.resolve();
+
+                            var action = {
+                                type: GET_SHEET_ROWS,
+                                payload: {
+                                    rows: rows
+                                }
+                            };
+                            stateService.reduce(action);
+                        });
+
+                    });
                 });
 
                 return deferred.promise;
@@ -34,6 +54,9 @@ app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService'
             },
             signOut: function () {
                 gapiService.signOut();
+            },
+            getState: function() {
+                return stateService.getState();
             },
             getSheetRows: function () {
                 gapiService.getSheetRows().then(function (rows) {
@@ -63,20 +86,6 @@ app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService'
                     payload: {}
                 };
                 stateService.reduce(action);
-            },
-            setMapReady: function () {
-                var deferred = $q.defer();
-
-                mapService.injectMapApi().then(function () {
-                    deferred.resolve();
-                    var action = {
-                        type: MAP_READY,
-                        payload: {}
-                    };
-                    stateService.reduce(action);
-                });
-
-                return deferred.promise;
             },
             populateMap: function (people) {
                 if (!people) { return; }

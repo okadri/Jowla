@@ -1,8 +1,7 @@
 app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', '$routeParams', 'actionCreators',
     function ($rootScope, $scope, $window, $timeout, $routeParams, actionCreators) {
-        $scope.mapIsReady = false;
         $scope.view = {
-            state: {}
+            state: actionCreators.getState()
         };
 
         $scope.login = function () {
