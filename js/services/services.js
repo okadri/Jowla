@@ -1,4 +1,4 @@
-app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
+app.service('gapiService', ['$q', function ($q) {
     var self = this;
 
     self.injectedOnce = false;

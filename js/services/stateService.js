@@ -16,12 +16,13 @@ app.service('stateService', function ($rootScope, $log, Person) {
     return {
         _state: {},
         _personReducers: function (action, people) {
+            var defaultPeople = {
+                ids: [],
+                list: {}
+            };
             switch (action.type) {
                 case GET_SHEET_ROWS:
-                    people = {
-                        ids: [],
-                        list: {}
-                    };
+                    people = defaultPeople;
                     var length = action.payload.rows ? action.payload.rows.length : 0;
                     for (var i = 0; i < length; i++) {
                         var rowData = action.payload.rows[i];
@@ -32,8 +33,13 @@ app.service('stateService', function ($rootScope, $log, Person) {
                 case ADD_VISIT:
                     people.list[action.payload.updatedPerson.id] = action.payload.updatedPerson;
                     return sortPeople(people);
-                default:
+                case UPDATE_SIGNIN_STATUS:
+                    if (action.payload.isSignedIn == false) {
+                        people = defaultPeople;
+                    }
                     return people;
+                default:
+                    return people || defaultPeople;
             }
         },
         _uiReducers: function (action, ui) {
@@ -61,7 +67,7 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     ui.displayMode = (ui.displayMode == DISPLAY_MODE.LIST) ? DISPLAY_MODE.MAP : DISPLAY_MODE.LIST;
                     return ui;
                 default:
-                    return ui;
+                    return ui || defaultUi;
             }
         },
         reduce: function (action) {
@@ -76,7 +82,7 @@ app.service('stateService', function ($rootScope, $log, Person) {
             newState.ui = scope._uiReducers(action, scope._state.ui);
 
             scope._state = newState;
-            $rootScope.$emit('stateChanged', {
+            $rootScope.$broadcast('stateChanged', {
                 state: scope._state,
                 action: action
             });

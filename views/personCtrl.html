@@ -12,27 +12,32 @@
 </nav>
 
 <div class="main-container">
-    <button class="btn btn-default btn-block" ng-if="view.state.ui.isSignedIn == false" ng-click="login()">Authorize</button>
-
-    <div class="jawla-map-container">
-        <div id="map" class="col-sm-12" style="height: calc(40vh - 55px);"></div>
+    <div ng-if="view.state.ui.isSignedIn == false">
+        <button class="btn btn-primary btn-block btn-lg btn-sharp" ng-click="login()">
+            Login with Google
+        </button>
     </div>
 
-    <div class="jawla-person-container">
-        <a ng-href="https://www.google.com/maps/place/{{ view.state.people.list[personId].address }}"
-        target="_blank" class="btn btn-info btn-block btn-sharp">
-            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-            Navigate to {{ view.state.people.list[personId].fullName }}
-        </a>
-        <div class="col-sm-12">
-            <h1 class="page-header text-center">{{ view.state.people.list[personId].fullName }}</h1>
-            <p class="text-muted text-center">{{ view.state.people.list[personId].address }}</p>
-            <span class="glyphicon glyphicon-plus-sign" ng-click="addVisit(personId)"></span><br />
-            <ul class="visit-history" ng-show="view.state.people.list[personId].visitHistory.length">
-                <li ng-repeat="visit in view.state.people.list[personId].visitHistory track by $index" ng-bind="visit | date:shortDate"></li>
-            </ul>
+    <div ng-if="view.state.ui.isSignedIn">
+        <div class="jawla-map-container">
+            <div id="map" class="col-sm-12" style="height: calc(40vh - 55px);"></div>
+        </div>
+
+        <div class="jawla-person-container">
+            <a ng-href="https://www.google.com/maps/place/{{ view.state.people.list[personId].address }}"
+            target="_blank" class="btn btn-info btn-block btn-sharp">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                Navigate to {{ view.state.people.list[personId].fullName }}
+            </a>
+            <div class="col-sm-12">
+                <h1 class="page-header text-center">{{ view.state.people.list[personId].fullName }}</h1>
+                <p class="text-muted text-center">{{ view.state.people.list[personId].address }}</p>
+                <span class="glyphicon glyphicon-plus-sign" ng-click="addVisit(personId)"></span><br />
+                <ul class="visit-history" ng-show="view.state.people.list[personId].visitHistory.length">
+                    <li ng-repeat="visit in view.state.people.list[personId].visitHistory track by $index" ng-bind="visit | date:shortDate"></li>
+                </ul>
+            </div>
         </div>
     </div>
-
 </div>
 <!-- /.main-container -->

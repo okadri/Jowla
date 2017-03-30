@@ -30,21 +30,24 @@ app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService'
                                 }
                             };
                             stateService.reduce(action);
+
+                            // 3. Finally, get the sheet data
+                            if (isSignedIn) {
+                                gapiService.getSheetRows().then(function (rows) {
+                                    deferred.resolve("Successful login and data retieval");
+
+                                    var action = {
+                                        type: GET_SHEET_ROWS,
+                                        payload: {
+                                            rows: rows
+                                        }
+                                    };
+                                    stateService.reduce(action);
+                                });
+                            } else {
+                                deferred.resolve("Login failed");
+                            }
                         }
-
-                        // 3. Finally, get the sheet data
-                        gapiService.getSheetRows().then(function (rows) {
-                            deferred.resolve();
-
-                            var action = {
-                                type: GET_SHEET_ROWS,
-                                payload: {
-                                    rows: rows
-                                }
-                            };
-                            stateService.reduce(action);
-                        });
-
                     });
                 });
 
