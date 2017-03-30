@@ -4,6 +4,13 @@ app.controller('HomeCtrl', ['$rootScope', '$scope', '$window', '$timeout', '$rou
             state: actionCreators.getState()
         };
 
+        // TODO: Consider moving to a directive
+        if($scope.view.state.ui.displayMode == DISPLAY_MODE.MAP) {
+            $timeout(function() {
+                actionCreators.populateMap($scope.view.state.people);
+            });
+        }
+
         $scope.login = function () {
             actionCreators.signIn();
         };

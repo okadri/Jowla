@@ -16,3 +16,7 @@ body {
 
 .jawla-map-container {
 }
+
+.btn-sharp {
+  border-radius: 0;
+}

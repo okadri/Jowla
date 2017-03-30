@@ -25,7 +25,8 @@ app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService'
                             var action = {
                                 type: UPDATE_SIGNIN_STATUS,
                                 payload: {
-                                    isSignedIn: isSignedIn
+                                    isSignedIn: isSignedIn,
+                                    sheetId: sheetId
                                 }
                             };
                             stateService.reduce(action);
