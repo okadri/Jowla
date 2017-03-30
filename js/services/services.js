@@ -1,17 +1,23 @@
 app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
     var self = this;
 
+    self.injectedOnce = false;
     self.injectGapi = function () {
         var deferred = $q.defer();
 
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.async = true;
-        script.onload = function(){
-            deferred.resolve("Google API loaded");
-        };
-        script.src = 'https://apis.google.com/js/api.js';
-        document.body.appendChild(script);
+        if (self.injectedOnce) {
+            deferred.resolve("Maps API Loaded");
+        } else {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.async = true;
+            script.onload = function(){
+                deferred.resolve("Google API loaded");
+            };
+            script.src = 'https://apis.google.com/js/api.js';
+            document.body.appendChild(script);
+            self.injectedOnce = true;
+        }
 
         return deferred.promise;
     }
@@ -102,23 +108,31 @@ app.service('gapiService', ['$rootScope', '$q', function ($rootScope, $q) {
 }]);
 
 app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
+    var self = this;
 
-    this.injectMapApi = function () {
+    self.injectedOnce = false;
+    self.injectMapApi = function () {
         var deferred = $q.defer();
 
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.async = true;
-        script.onload = function(){
+        if (self.injectedOnce) {
             deferred.resolve("Maps API Loaded");
-        };
-        script.src = 'https://maps.googleapis.com/maps/api/js?v=3&key=' + GOOGLE_MAP_KEY;
-        document.body.appendChild(script);
+        } else {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.async = true;
+            script.onload = function(){
+                deferred.resolve("Maps API Loaded");
+            };
+            script.src = 'https://maps.googleapis.com/maps/api/js?v=3&key=' + GOOGLE_MAP_KEY;
+            document.body.appendChild(script);
+            self.injectedOnce = true;
+        }
+
 
         return deferred.promise;
     };
 
-    this.populateMap = function (people) {
+    self.populateMap = function (people) {
         var deferred = $q.defer();
 
         if (people.ids instanceof Array === false) {
@@ -132,7 +146,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
             maxZoom: 15
         });
 
-        this.getMarkers(people).then(function (markers) {
+        self.getMarkers(people).then(function (markers) {
             var infoWindow = new google.maps.InfoWindow(), marker, i;
 
             // Loop through our array of markers & place each one on the map  
@@ -152,7 +166,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                             infoWindow.setContent(
                                 '<b>' + markers[i].person.fullName + '</b><br>' +
                                 markers[i].person.address + '<br>' +
-                                '<a href="#/p/' + markers[i].person.id + '/' + SPREAD_SHEET_ID + '">More...</a>'
+                                '<a href="#/' + SPREAD_SHEET_ID + '/p/' + markers[i].person.id + '">More...</a>'
                             );
                             infoWindow.open(map, marker);
                         }
@@ -173,7 +187,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
         return deferred.promise;
     };
 
-    this.getMarkers = function (people) {
+    self.getMarkers = function (people) {
 
         var deferred = $q.defer();
         var markers = [];

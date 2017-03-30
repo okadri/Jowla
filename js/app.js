@@ -13,7 +13,7 @@ app.config(function ($routeProvider) {
                 }
             }
         })
-        .when('/p/:personId/:sheetId', {
+        .when('/:sheetId/p/:personId', {
             templateUrl: 'views/personCtrl.html',
             controller: 'PersonCtrl',
             resolve : {

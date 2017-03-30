@@ -13,7 +13,7 @@ app.controller('PersonCtrl', ['$rootScope', '$scope', '$timeout', '$routeParams'
 		$rootScope.$on('stateChanged', function (event, data) {
             $scope.view.state = data.state;
 
-            if ($scope.view.state.ui.mapIsReady && data.action.type !== POPULATE_MAP) {
+            if ($scope.view.state.ui.mapIsReady && data.action.type === GET_SHEET_ROWS) {
                 $timeout(function() {
                     var people = angular.copy($scope.view.state.people);
                     people.ids = [$scope.personId]; // Limit map markers to just the current person
