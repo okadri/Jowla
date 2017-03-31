@@ -27,21 +27,15 @@
     </div>
 
     <div ng-if="view.state.ui.isSignedIn">
-        <div class="jawla-list-container" ng-if="view.state.ui.displayMode == 'list'">
-            <table class="table">
-                <tr ng-repeat="personId in view.state.people.ids track by personId">
+        <div class="jawla-table-container" ng-if="view.state.ui.displayMode == 'list'">
+            <table class="table table-striped table-jawla">
+                <tr ng-repeat="personId in view.state.people.ids track by personId" ng-click="goToPerson(personId)">
                     <td>
-                    {{ view.state.people.list[personId].firstName }} {{ view.state.people.list[personId].lastName }}
-                    <span class="glyphicon glyphicon-plus-sign" ng-click="addVisit(personId)"></span><br />
-                    <ul class="visit-history" ng-show="view.state.people.list[personId].visitHistory.length">
-                        <li ng-repeat="visit in view.state.people.list[personId].visitHistory track by $index" ng-bind="visit | date:shortDate"></li>
-                    </ul>
-                    </td>
-                    <td class="text-right">
-                    <a ng-href="https://www.google.com/maps/place/{{ view.state.people.list[personId].address }}" target="_blank">
+                    {{ view.state.people.list[personId].firstName }} {{ view.state.people.list[personId].lastName }}<br />
+                    <small class="text-muted">
                         <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                         {{ view.state.people.list[personId].address }}
-                    </a>
+                    </small>
                     </td>
                 </tr>
             </table>

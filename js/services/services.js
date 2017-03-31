@@ -166,7 +166,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                             infoWindow.setContent(
                                 '<b>' + markers[i].person.fullName + '</b><br>' +
                                 markers[i].person.address + '<br>' +
-                                '<a href="#/' + SPREAD_SHEET_ID + '/p/' + markers[i].person.id + '">More...</a>'
+                                '<a href="#/' + SPREAD_SHEET_ID + '/p/' + markers[i].person.id + '">View more details...</a>'
                             );
                             infoWindow.open(map, marker);
                         }

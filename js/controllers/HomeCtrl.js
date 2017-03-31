@@ -1,5 +1,5 @@
-app.controller('HomeCtrl', ['$scope', '$window', '$timeout', '$routeParams', 'actionCreators',
-    function ($scope, $window, $timeout, $routeParams, actionCreators) {
+app.controller('HomeCtrl', ['$scope', '$window', '$timeout', '$routeParams', '$location', 'actionCreators',
+    function ($scope, $window, $timeout, $routeParams, $location, actionCreators) {
         $scope.view = {
             state: actionCreators.getState()
         };
@@ -19,8 +19,8 @@ app.controller('HomeCtrl', ['$scope', '$window', '$timeout', '$routeParams', 'ac
             actionCreators.signOut();
         };
 
-        $scope.addVisit = function (personIdx) {
-            actionCreators.addVisit($scope.view.state.people.list[personIdx]);
+        $scope.goToPerson = function (personId) {
+            $location.path('/' + $scope.view.state.ui.sheetId + '/p/' + personId);
         };
 
         $scope.switchDisplayMode = function () {

@@ -10,11 +10,16 @@ body {
   padding: 0;
 }
 
-.jawla-toolbar-container, .jawla-list-container {
+.jawla-toolbar-container {
   padding: 20px;
 }
 
-.jawla-map-container {
+table.table-jawla tr {
+  cursor: pointer;
+}
+
+table.table-jawla tr:hover td {
+  background-color: #ebebeb;
 }
 
 .btn-sharp {
