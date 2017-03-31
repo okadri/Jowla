@@ -55,6 +55,7 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     ui = ui || defaultUi;
                     ui.isSignedIn = action.payload.isSignedIn;
                     ui.sheetId = action.payload.sheetId;
+                    ui.displayMode = DISPLAY_MODE.LIST;
                     return ui;
                 case MAP_READY:
                     ui = ui || defaultUi;
