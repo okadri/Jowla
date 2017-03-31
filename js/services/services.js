@@ -132,7 +132,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
         return deferred.promise;
     };
 
-    self.populateMap = function (people) {
+    self.populateMap = function (people, showPopups) {
         var deferred = $q.defer();
 
         if (people.ids instanceof Array === false) {
@@ -160,7 +160,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                 });
 
                 // Allow each marker to have an info window (only if more than one marker on map)
-                if (markers.length > 1) { 
+                if (showPopups) { 
                     google.maps.event.addListener(marker, 'click', (function(marker, i) {
                         return function() {
                             infoWindow.setContent(
@@ -206,11 +206,14 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
             if (person.addressLat && person.addressLng) {
                 validMarkers++;
 
-                markers.push({
-                    person: person,
-                    lat: person.addressLat,
-                    lng: person.addressLng
-                });
+                if (!person.isFiltered) {
+                    // Only display markers that match search term
+                    markers.push({
+                        person: person,
+                        lat: person.addressLat,
+                        lng: person.addressLng
+                    });
+                }
 
                 if (validMarkers === people.ids.length) {
                     deferred.resolve(markers);
@@ -223,11 +226,14 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             var location = results[0].geometry.location;
                             gapiService.addCoordinates(index, person, location);
-                            markers.push({
-                                person: person,
-                                lat: location.lat(),
-                                lng: location.lng()
-                            });
+                            if (!person.isFiltered) {
+                                // Only display markers that match search term
+                                markers.push({
+                                    person: person,
+                                    lat: location.lat(),
+                                    lng: location.lng()
+                                });
+                            }
                         }
 
                         if (validMarkers === people.ids.length) {

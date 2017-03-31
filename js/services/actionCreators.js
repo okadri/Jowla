@@ -91,10 +91,19 @@ app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService'
                 };
                 stateService.reduce(action);
             },
-            populateMap: function (people) {
+            filterPeople: function (searchTerm) {
+                var action = {
+                    type: FILTER_PEOPLE,
+                    payload: {
+                        searchTerm: searchTerm
+                    }
+                };
+                stateService.reduce(action);
+            },
+            populateMap: function (people, showPopups) {
                 if (!people) { return; }
 
-                mapService.populateMap(people).then(function () {
+                mapService.populateMap(people, showPopups).then(function () {
                     var action = {
                         type: POPULATE_MAP,
                         payload: {}

@@ -4,12 +4,18 @@
         <a class="navbar-brand" ng-href="/#/{{ view.state.ui.sheetId }}">Jawla Tracker</a>
         </div>
         <div class="navbar-header pull-right">
+        <ul class="nav navbar-nav pull-left">
+            <li>
+                <input type="text" class="form-control" placeholder="Search" ng-model="view.searchTerm"
+                    ng-model-options="{ debounce: 500 }" ng-change="search()">
+            </li>
+        </ul>
         <ul class="nav navbar-nav pull-left" ng-if="view.state.ui.isSignedIn">
             <li>
-            <a ng-click="switchDisplayMode()">
-                <span class="glyphicon glyphicon-map-marker" ng-show="view.state.ui.displayMode == 'list'"></span>
-                <span class="glyphicon glyphicon-list" ng-show="view.state.ui.displayMode == 'map'"></span>
-            </a>
+                <a ng-click="switchDisplayMode()">
+                    <span class="glyphicon glyphicon-map-marker" ng-show="view.state.ui.displayMode == 'list'"></span>
+                    <span class="glyphicon glyphicon-list" ng-show="view.state.ui.displayMode == 'map'"></span>
+                </a>
             </li>
         </ul>
         <ul class="nav navbar-nav pull-left">
@@ -29,7 +35,8 @@
     <div ng-if="view.state.ui.isSignedIn">
         <div class="jawla-table-container" ng-if="view.state.ui.displayMode == 'list'">
             <table class="table table-striped table-jawla">
-                <tr ng-repeat="personId in view.state.people.ids track by personId" ng-click="goToPerson(personId)">
+                <tr ng-repeat="personId in view.state.people.ids track by personId"
+                    ng-if="!view.state.people.list[personId].isFiltered" ng-click="goToPerson(personId)">
                     <td>
                     {{ view.state.people.list[personId].firstName }} {{ view.state.people.list[personId].lastName }}<br />
                     <small class="text-muted">

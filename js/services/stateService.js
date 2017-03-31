@@ -1,11 +1,20 @@
 app.service('stateService', function ($rootScope, $log, Person) {
     function sortPeople (people) {
         people.ids.sort(function (id1, id2) {
+            // By lastVisit
             var lastVisit1 = people.list[id1].visitHistory.length ? people.list[id1].visitHistory[0] : 0;
             var lastVisit2 = people.list[id2].visitHistory.length ? people.list[id2].visitHistory[0] : 0;
             if (lastVisit1 < lastVisit2) {
                 return -1;
             } else if (lastVisit1 > lastVisit2) {
+                return 1;
+            }
+            // By fullName
+            var fullName1 = people.list[id1].fullName;
+            var fullName2 = people.list[id2].fullName;
+            if (fullName1 < fullName2) {
+                return -1;
+            } else if (fullName1 > fullName2) {
                 return 1;
             }
             return 0;
@@ -32,6 +41,18 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     return sortPeople(people);
                 case ADD_VISIT:
                     people.list[action.payload.updatedPerson.id] = action.payload.updatedPerson;
+                    return sortPeople(people);
+                case FILTER_PEOPLE:
+                    var searchTerm = action.payload.searchTerm;
+                    var searchFields = ['fullName', 'address', 'notes'];
+                    people.ids.forEach(function(personId) {
+                        var person = people.list[personId];
+                        var matches = searchFields.some(function(sf) {
+                            return person[sf].toLowerCase().search(searchTerm.toLowerCase()) >= 0;
+                        });
+                        person.isFiltered = !matches;
+                        return personId;
+                    });
                     return sortPeople(people);
                 case UPDATE_SIGNIN_STATUS:
                     if (action.payload.isSignedIn == false) {
