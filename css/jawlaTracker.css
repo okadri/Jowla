@@ -2,6 +2,10 @@ body {
   padding-top: 50px;
 }
 
+.row-marginless {
+  margin: 0;
+}
+
 .navbar-nav {
   margin-right: 0.3em; 
 }
@@ -39,4 +43,13 @@ table.table-jawla tr:hover td {
 
 .btn-sharp {
   border-radius: 0;
+}
+
+.page-title {
+    padding-bottom: 9px;
+    border-bottom: 1px solid #eee;
+}
+
+textarea.form-control {
+  height: 100%;
 }
