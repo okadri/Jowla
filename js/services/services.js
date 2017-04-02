@@ -157,11 +157,9 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
         }
 
         var bounds = new google.maps.LatLngBounds();
+        var config = showPopups ? {} : {maxZoom: 17};
 
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 12,
-            maxZoom: 15
-        });
+        var map = new google.maps.Map(document.getElementById('map'), config);
 
         self.getMarkers(people).then(function (markers) {
             var infoWindow = new google.maps.InfoWindow(), marker, i;
