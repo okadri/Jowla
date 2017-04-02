@@ -36,11 +36,26 @@
                 <tr ng-repeat="personId in view.state.people.ids track by personId"
                     ng-if="!view.state.people.list[personId].isFiltered" ng-click="goToPerson(personId)">
                     <td>
-                    {{ view.state.people.list[personId].firstName }} {{ view.state.people.list[personId].lastName }}<br />
-                    <small class="text-muted">
-                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                        {{ view.state.people.list[personId].address }}
-                    </small>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ view.state.people.list[personId].firstName }} {{ view.state.people.list[personId].lastName }}
+                            </div>
+                            <div class="col-xs-6 text-muted" ng-if="view.state.people.list[personId].visitHistory.length">
+                                <small>
+                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    Last visit: 
+                                    {{ view.state.people.list[personId].visitHistory[0] | date:shortDate }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 text-muted">
+                                <small>
+                                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                                    {{ view.state.people.list[personId].address }}
+                                </small>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </table>
