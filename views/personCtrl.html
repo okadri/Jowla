@@ -40,15 +40,16 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-8">
-                    <textarea class="form-control" rows="3" placeholder="Notes..."
+                <div class="col-xs-7">
+                    <textarea class="form-control" rows="5" placeholder="Notes..."
                         ng-model="view.state.people.list[personId].notes" ng-model-options="{ debounce: 1000 }" ng-change="updateNotes(personId)"></textarea>
                 </div>
-                <div class="col-xs-4">
+                <div class="col-xs-5">
                     <span class="btn btn-default btn-block" ng-click="addVisit(personId)">Add Visit</span>
                     <ul class="visit-history" ng-show="view.state.people.list[personId].visitHistory.length">
-                        <li ng-repeat="visit in view.state.people.list[personId].visitHistory | limitTo:3 track by $index"
-                            ng-bind="visit | date:shortDate"></li>
+                        <li ng-repeat="visit in view.state.people.list[personId].visitHistory | limitTo:3 track by $index">
+                            <small ng-bind="visit | date:shortDate"></small>
+                        </li>
                     </ul>
                 </div>
             </div>

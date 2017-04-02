@@ -50,6 +50,11 @@ table.table-jawla tr:hover td {
     border-bottom: 1px solid #eee;
 }
 
+ul.visit-history {
+  list-style: none;
+  text-align: center;
+}
+
 textarea.form-control {
   height: 100%;
 }
