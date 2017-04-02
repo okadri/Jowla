@@ -26,6 +26,10 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', 'actionCreat
             actionCreators.addVisit($scope.view.state.people.list[personId]);
         };
 
+        $scope.updateNotes = function (personId) {
+            actionCreators.updateNotes($scope.view.state.people.list[personId]);
+        };
+
         // State changes listener
 		$scope.$on('stateChanged', function (event, data) {
             $timeout(function() {

@@ -41,7 +41,8 @@
             </div>
             <div class="row">
                 <div class="col-xs-8">
-                    <textarea class="form-control" rows="3" placeholder="Notes..."></textarea>
+                    <textarea class="form-control" rows="3" placeholder="Notes..."
+                        ng-model="view.state.people.list[personId].notes" ng-model-options="{ debounce: 1000 }" ng-change="updateNotes(personId)"></textarea>
                 </div>
                 <div class="col-xs-4">
                     <span class="btn btn-default btn-block" ng-click="addVisit(personId)">Add Visit</span>

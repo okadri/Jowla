@@ -87,6 +87,23 @@ app.service('gapiService', ['$q', function ($q) {
         return deferred.promise;
     };
 
+    self.updateNotes = function (person) {
+        var deferred = $q.defer();
+
+        var updatedPerson = angular.copy(person);
+
+        gapi.client.sheets.spreadsheets.values.update({
+            spreadsheetId: SPREAD_SHEET_ID,
+            range: 'List!A' + (person.id + 2),
+            valueInputOption: 'USER_ENTERED',
+            values: [[updatedPerson.getMetaString()]]
+        }).then(function (response) {
+            deferred.resolve(updatedPerson);
+        });
+
+        return deferred.promise;
+    };
+
     self.addCoordinates = function (index, person, location) {
         var deferred = $q.defer();
 

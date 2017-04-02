@@ -84,6 +84,17 @@ app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService'
                     stateService.reduce(action);
                 });
             },
+            updateNotes: function (person) {
+                gapiService.updateNotes(person).then(function (updatedPerson) {
+                    var action = {
+                        type: UPDATE_NOTE,
+                        payload: {
+                            updatedPerson: updatedPerson
+                        }
+                    };
+                    stateService.reduce(action);
+                });
+            },
             switchDisplayMode: function (people) {
                 var action = {
                     type: SWITCH_DISPLAY_MODE,
