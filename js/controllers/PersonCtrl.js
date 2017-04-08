@@ -30,6 +30,12 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', 'actionCreat
             actionCreators.updateNotes($scope.view.state.people.list[personId]);
         };
 
+        $scope.visitedToday = function (personId) {
+            return $scope.view.state.people.list[personId].visitHistory.some(function(visit){
+                return visit.date.toDateString() == (new Date()).toDateString();
+            });
+        };
+
         // State changes listener
 		$scope.$on('stateChanged', function (event, data) {
             $timeout(function() {

@@ -53,6 +53,7 @@ table.table-jawla tr:hover td {
 ul.visit-history {
   list-style: none;
   text-align: center;
+  padding: 0.7em 0;
 }
 
 textarea.form-control {

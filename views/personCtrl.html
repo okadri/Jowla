@@ -45,7 +45,7 @@
                         ng-model="view.state.people.list[personId].notes" ng-model-options="{ debounce: 1000 }" ng-change="updateNotes(personId)"></textarea>
                 </div>
                 <div class="col-xs-5">
-                    <span class="btn btn-default btn-block" ng-click="addVisit(personId)">Add Visit</span>
+                    <span class="btn btn-default btn-block" ng-click="addVisit(personId)" ng-disabled="visitedToday(personId)">Report Visit</span>
                     <ul class="visit-history" ng-show="view.state.people.list[personId].visitHistory.length">
                         <li ng-repeat="visit in view.state.people.list[personId].visitHistory | limitTo:3 track by $index">
                             <small ng-bind="visit.date | date:shortDate"></small> - 
