@@ -25,7 +25,7 @@ app.factory('Person', [function () {
                                     .sort(function(a,b) { return b.date - a.date; })
                 }
             } catch (e) {
-                console.warn("metaData not valid", metaArr[0]);
+                console.warn("metaData not valid", personRowData[0]);
             }
 
 			angular.extend(this, {

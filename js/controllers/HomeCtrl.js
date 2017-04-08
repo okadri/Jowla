@@ -21,7 +21,7 @@ app.controller('HomeCtrl', ['$scope', '$window', '$timeout', '$routeParams', '$l
         };
 
         $scope.goToPerson = function (personId) {
-            $location.path('/' + $scope.view.state.ui.sheetId + '/p/' + personId);
+            $location.path('/' + $scope.view.state.ui.sheet.id + '/p/' + personId);
         };
 
         $scope.switchDisplayMode = function () {

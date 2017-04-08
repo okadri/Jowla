@@ -54,14 +54,29 @@ app.service('gapiService', ['$q', function ($q) {
         var deferred = $q.defer();
 
         if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-            gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: SPREAD_SHEET_ID,
-                range: 'List!A2:G',
+            gapi.client.sheets.spreadsheets.get({
+                spreadsheetId: SPREAD_SHEET_ID
             }).then(function (response) {
-                deferred.resolve(response.result.values);
+                var title = response.result.properties.title;
+                var firstSheet = response.result.sheets[0];
+                var users = firstSheet.protectedRanges[0].editors.users;
+
+                gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: SPREAD_SHEET_ID,
+                    range: firstSheet.properties.title + '!A2:G',
+                }).then(function (response) {
+                    deferred.resolve({
+                        title: title,
+                        users: users,
+                        rows: response.result.values
+                    });
+                }, function (response) {
+                    deferred.reject(response.result.error);
+                });
             }, function (response) {
                 deferred.reject(response.result.error);
             });
+
         } else {
             deferred.reject("Not signed in");
         }

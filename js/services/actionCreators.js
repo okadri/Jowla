@@ -34,14 +34,12 @@ app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService'
 
                             // 3. Finally, get the sheet data
                             if (isSignedIn) {
-                                gapiService.getSheetRows().then(function (rows) {
+                                gapiService.getSheetRows().then(function (payload) {
                                     deferred.resolve("Successful login and data retieval");
 
                                     var action = {
                                         type: GET_SHEET_ROWS,
-                                        payload: {
-                                            rows: rows
-                                        }
+                                        payload: payload
                                     };
                                     stateService.reduce(action);
                                 });

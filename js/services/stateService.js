@@ -69,14 +69,18 @@ app.service('stateService', function ($rootScope, $log, Person) {
                 isSignedIn: false,
                 mapIsReady: false,
                 mapIsPopulated: false,
-                sheetId: undefined,
-                currentUser: undefined
+                currentUser: undefined,
+                sheet: {}
             }
             switch (action.type) {
+                case GET_SHEET_ROWS:
+                    ui.sheet.title = action.payload.title;
+                    ui.sheet.users = action.payload.users;
+                    return ui;
                 case UPDATE_SIGNIN_STATUS:
                     ui = ui || defaultUi;
                     ui.isSignedIn = action.payload.isSignedIn;
-                    ui.sheetId = action.payload.sheetId;
+                    ui.sheet.id = action.payload.sheetId;
                     ui.displayMode = DISPLAY_MODE.LIST;
                     ui.currentUser = action.payload.currentUser
                     return ui;
