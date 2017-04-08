@@ -26,7 +26,8 @@ app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService'
                                 type: UPDATE_SIGNIN_STATUS,
                                 payload: {
                                     isSignedIn: isSignedIn,
-                                    sheetId: sheetId
+                                    sheetId: sheetId,
+                                    currentUser: gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile()
                                 }
                             };
                             stateService.reduce(action);

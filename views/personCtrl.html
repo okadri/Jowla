@@ -48,7 +48,8 @@
                     <span class="btn btn-default btn-block" ng-click="addVisit(personId)">Add Visit</span>
                     <ul class="visit-history" ng-show="view.state.people.list[personId].visitHistory.length">
                         <li ng-repeat="visit in view.state.people.list[personId].visitHistory | limitTo:3 track by $index">
-                            <small ng-bind="visit | date:shortDate"></small>
+                            <small ng-bind="visit.date | date:shortDate"></small> - 
+                            <small class="text-muted" ng-bind="visit.reportedBy"></small>
                         </li>
                     </ul>
                 </div>

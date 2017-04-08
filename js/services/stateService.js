@@ -69,7 +69,8 @@ app.service('stateService', function ($rootScope, $log, Person) {
                 isSignedIn: false,
                 mapIsReady: false,
                 mapIsPopulated: false,
-                sheetId: undefined
+                sheetId: undefined,
+                currentUser: undefined
             }
             switch (action.type) {
                 case UPDATE_SIGNIN_STATUS:
@@ -77,6 +78,7 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     ui.isSignedIn = action.payload.isSignedIn;
                     ui.sheetId = action.payload.sheetId;
                     ui.displayMode = DISPLAY_MODE.LIST;
+                    ui.currentUser = action.payload.currentUser
                     return ui;
                 case MAP_READY:
                     ui = ui || defaultUi;

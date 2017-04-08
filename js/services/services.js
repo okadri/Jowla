@@ -73,7 +73,10 @@ app.service('gapiService', ['$q', function ($q) {
         var deferred = $q.defer();
 
         var updatedPerson = angular.copy(person);
-        updatedPerson.visitHistory.unshift(new Date());
+        updatedPerson.visitHistory.unshift({
+            date: new Date(),
+            reportedBy: gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName()
+        });
 
         gapi.client.sheets.spreadsheets.values.update({
             spreadsheetId: SPREAD_SHEET_ID,
@@ -255,7 +258,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                             deferred.resolve(markers);
                         }
                     });
-                }, 500 * delayedIdx++);
+                }, 1000 * delayedIdx++);
             }
         });
 
