@@ -2,8 +2,8 @@ app.service('stateService', function ($rootScope, $log, Person) {
     function sortPeople (people) {
         people.ids.sort(function (id1, id2) {
             // By lastVisit
-            var lastVisit1 = people.list[id1].visitHistory.length ? people.list[id1].visitHistory[0] : 0;
-            var lastVisit2 = people.list[id2].visitHistory.length ? people.list[id2].visitHistory[0] : 0;
+            var lastVisit1 = people.list[id1].visitHistory.length ? people.list[id1].visitHistory[0].date : 0;
+            var lastVisit2 = people.list[id2].visitHistory.length ? people.list[id2].visitHistory[0].date : 0;
             if (lastVisit1 < lastVisit2) {
                 return -1;
             } else if (lastVisit1 > lastVisit2) {
