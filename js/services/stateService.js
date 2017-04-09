@@ -48,7 +48,8 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     people.ids.forEach(function(personId) {
                         var person = people.list[personId];
                         var matches = searchFields.some(function(sf) {
-                            return person[sf].toLowerCase().search(searchTerm.toLowerCase()) >= 0;
+                            return person[sf] !== undefined &&
+                                person[sf].toLowerCase().search(searchTerm.toLowerCase()) >= 0;
                         });
                         person.isFiltered = !matches;
                         return personId;
