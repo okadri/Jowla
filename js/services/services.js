@@ -59,7 +59,8 @@ app.service('gapiService', ['$q', function ($q) {
             }).then(function (response) {
                 var title = response.result.properties.title;
                 var firstSheet = response.result.sheets[0];
-                var users = firstSheet.protectedRanges[0].editors.users;
+                var users = firstSheet.protectedRanges[0].editors ?
+                    firstSheet.protectedRanges[0].editors.users : [];
 
                 gapi.client.sheets.spreadsheets.values.get({
                     spreadsheetId: SPREAD_SHEET_ID,
