@@ -176,12 +176,29 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
         }
 
         var bounds = new google.maps.LatLngBounds();
-        var config = showPopups ? {} : {maxZoom: 17};
+
+        defaultCenter = {
+            lat: 21.4225,
+            lng: 39.8262
+        };
+
+        config = {
+            zoom: 2,
+            center: defaultCenter
+        };
+
+        if (people.ids.length === 1) {
+            config.maxZoom = 17;
+        }
 
         var map = new google.maps.Map(document.getElementById('map'), config);
 
         self.getMarkers(people).then(function (markers) {
             var infoWindow = new google.maps.InfoWindow(), marker, i;
+
+            if (markers.length === 0) {
+                deferred.resolve("Map is empty!");
+            }
 
             // Loop through our array of markers & place each one on the map  
             for (i = 0; i < markers.length; i++) {
@@ -228,6 +245,8 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
 
         if (people.ids instanceof Array === false) {
             return deferred.reject("Passed value is not an array");
+        } else if (people.ids.length === 0) {
+            deferred.resolve([]);
         }
 
         geocoder = new google.maps.Geocoder();
