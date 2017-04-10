@@ -198,49 +198,54 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
             config.maxZoom = 17;
         }
 
-        var map = new google.maps.Map(document.getElementById('map'), config);
+        var mapEl = document.getElementById('map');
+        if (mapEl == null) {
+            deferred.reject("No map element");
+        } else {
+            var map = new google.maps.Map(mapEl, config);
 
-        self.getMarkers(people).then(function (markers) {
-            var infoWindow = new google.maps.InfoWindow(), marker, i;
+            self.getMarkers(people).then(function (markers) {
+                var infoWindow = new google.maps.InfoWindow(), marker, i;
 
-            if (markers.length === 0) {
-                deferred.resolve("Map is empty!");
-            }
-
-            // Loop through our array of markers & place each one on the map  
-            for (i = 0; i < markers.length; i++) {
-                var position = new google.maps.LatLng(markers[i].lat, markers[i].lng);
-                bounds.extend(position);
-                marker = new google.maps.Marker({
-                    position: position,
-                    map: map,
-                    title: markers[i].person.fullName
-                });
-
-                // Allow each marker to have an info window (only if more than one marker on map)
-                if (showPopups) { 
-                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                        return function() {
-                            infoWindow.setContent(
-                                '<b>' + markers[i].person.fullName + '</b><br>' +
-                                markers[i].person.address + '<br>' +
-                                '<a href="#/' + SPREAD_SHEET_ID + '/p/' + markers[i].person.id + '">View more details...</a>'
-                            );
-                            infoWindow.open(map, marker);
-                        }
-                    })(marker, i));
+                if (markers.length === 0) {
+                    deferred.resolve("Map is empty!");
                 }
 
-                // Automatically center the map fitting all markers on the screen
-                map.fitBounds(bounds);
-            }
-        });
+                // Loop through our array of markers & place each one on the map  
+                for (i = 0; i < markers.length; i++) {
+                    var position = new google.maps.LatLng(markers[i].lat, markers[i].lng);
+                    bounds.extend(position);
+                    marker = new google.maps.Marker({
+                        position: position,
+                        map: map,
+                        title: markers[i].person.fullName
+                    });
 
-        // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
-        var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function (event) {
-            deferred.resolve("Map populated");
-            google.maps.event.removeListener(boundsListener);
-        });
+                    // Allow each marker to have an info window (only if more than one marker on map)
+                    if (showPopups) { 
+                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                            return function() {
+                                infoWindow.setContent(
+                                    '<b>' + markers[i].person.fullName + '</b><br>' +
+                                    markers[i].person.address + '<br>' +
+                                    '<a href="#/' + SPREAD_SHEET_ID + '/p/' + markers[i].person.id + '">View more details...</a>'
+                                );
+                                infoWindow.open(map, marker);
+                            }
+                        })(marker, i));
+                    }
+
+                    // Automatically center the map fitting all markers on the screen
+                    map.fitBounds(bounds);
+                }
+            });
+
+            // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
+            var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function (event) {
+                deferred.resolve("Map populated");
+                google.maps.event.removeListener(boundsListener);
+            });
+        }
 
         return deferred.promise;
     };
