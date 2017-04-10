@@ -15,6 +15,12 @@
 
   <div ng-view></div>
 
+  <div class="loading-overlay" ng-if="loading">
+    <div class="loading-spinner">
+      <spinner></spinner>
+    </div>
+  </div>
+
   <!-- Angular -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 
@@ -28,6 +34,9 @@
   <!-- Bootstrap CDN -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <!-- spin.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
 
 
   <!-- Global variables and config options -->

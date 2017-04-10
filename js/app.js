@@ -30,4 +30,12 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.run(['$rootScope', function($rootScope) {
     $rootScope.title = "Jowla";
+
+    $rootScope.$on('$routeChangeStart', function(){ 
+        $rootScope.loading = true;
+    });
+
+    $rootScope.$on('$routeChangeSuccess', function(){ 
+        $rootScope.loading = false;
+    });
 }]);
