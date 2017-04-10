@@ -4,6 +4,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', 'actionCreat
         $scope.view = {
             state: actionCreators.getState()
         };
+        actionCreators.setPageTitle($scope.view.state.people.list[$scope.personId].fullName);
 
         // TODO: Consider moving to a directive
         if($scope.view.state.ui.isSignedIn) {

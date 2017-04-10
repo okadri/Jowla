@@ -1,3 +1,10 @@
+app.service('pageService', ['$rootScope', function ($rootScope) {
+    var self = this;
+    self.setTitle = function(title) {
+        $rootScope.title = 'Jowla - ' + title;
+    };
+}]);
+
 app.service('gapiService', ['$q', function ($q) {
     var self = this;
 

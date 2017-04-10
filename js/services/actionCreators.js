@@ -1,5 +1,5 @@
-app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService',
-    function ($q, stateService, gapiService, mapService) {
+app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService', 'mapService',
+    function ($q, stateService, pageService, gapiService, mapService) {
         return {
             initialize: function (sheetId) {
                 var self = this;
@@ -51,6 +51,9 @@ app.service('actionCreators', ['$q', 'stateService', 'gapiService', 'mapService'
                 });
 
                 return deferred.promise;
+            },
+            setPageTitle: function(title) {
+                pageService.setTitle(title);
             },
             signIn: function () {
                 gapiService.signIn();

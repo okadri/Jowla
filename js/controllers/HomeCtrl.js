@@ -4,6 +4,7 @@ app.controller('HomeCtrl', ['$scope', '$window', '$timeout', '$routeParams', '$l
             state: actionCreators.getState(),
             searchTerm: ''
         };
+        actionCreators.setPageTitle($scope.view.state.ui.sheet.title);
 
         // TODO: Consider moving to a directive
         if($scope.view.state.ui.isSignedIn && $scope.view.state.ui.displayMode == DISPLAY_MODE.MAP) {

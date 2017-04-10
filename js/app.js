@@ -1,6 +1,6 @@
 var app = angular.module('jawlaTracker', ['ngRoute']);
 
-app.config(function ($routeProvider) {
+app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when('/', {
             templateUrl: 'views/instructions.html'
@@ -26,4 +26,8 @@ app.config(function ($routeProvider) {
         .otherwise({
             redirectTo: '/'
         });
-});
+}]);
+
+app.run(['$rootScope', function($rootScope) {
+    $rootScope.title = "Jowla";
+}]);
