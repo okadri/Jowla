@@ -1,12 +1,14 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-        <div class="navbar-header pull-left">
+        <div class="navbar-header navbar-brand-container pull-left">
         <a class="navbar-brand" ng-href="/#/{{ view.state.ui.sheet.id }}" ng-bind="view.state.ui.sheet.title"></a>
         </div>
-        <div class="navbar-header pull-right">
-            <ul class="nav navbar-nav pull-left">
-                <li><a ng-if="view.state.ui.isSignedIn" ng-click="logout()" class="glyphicon glyphicon-log-out"></a></li>
-            </ul>
+        <div class="navbar-header navbar-tools-container pull-right">
+            <div class="nav navbar-nav pull-right">
+                <div class="col-xs-12">
+                    <a ng-if="view.state.ui.isSignedIn" ng-click="logout()" class="glyphicon glyphicon-log-out nav-btn"></a>
+                </div>
+            </div>
         </div>
     </div>
 </nav>

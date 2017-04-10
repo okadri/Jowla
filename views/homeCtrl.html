@@ -1,21 +1,20 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header navbar-brand-container pull-left">
-            <a class="navbar-brand" ng-href="/#/{{ view.state.ui.sheet.id }}" ng-bind="view.state.ui.sheet.title"></a>
+            <a class="navbar-brand" ng-href="/#/{{ view.state.ui.sheet.id }}"
+            ng-bind="view.state.ui.sheet.title" ng-style="{'font-size' : 50/view.state.ui.sheet.title.length + 'vw'}"></a>
         </div>
         <div class="navbar-header navbar-tools-container pull-right">
-            <div class="nav navbar-nav pull-left">
-                <div class="col-xs-8">
+            <div class="nav navbar-nav pull-right">
+                <div class="col-xs-7">
                     <input type="text" class="form-control search-input" placeholder="Search" ng-model="view.searchTerm"
                         ng-model-options="{ debounce: 500 }" ng-change="search()">
                 </div>
-                <div class="col-xs-2">
-                    <a ng-click="switchDisplayMode()">
-                        <span class="glyphicon glyphicon-map-marker nav-btn" ng-show="view.state.ui.displayMode == 'list'"></span>
-                        <span class="glyphicon glyphicon-list nav-btn" ng-show="view.state.ui.displayMode == 'map'"></span>
+                <div class="col-xs-5">
+                    <a ng-click="switchDisplayMode()" class="nav-btn">
+                        <span class="glyphicon glyphicon-map-marker" ng-show="view.state.ui.displayMode == 'list'"></span>
+                        <span class="glyphicon glyphicon-list" ng-show="view.state.ui.displayMode == 'map'"></span>
                     </a>
-                </div>
-                <div class="col-xs-2">
                     <a ng-if="view.state.ui.isSignedIn" ng-click="logout()" class="glyphicon glyphicon-log-out nav-btn"></a>
                 </div>
             </div>
