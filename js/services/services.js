@@ -290,7 +290,7 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
 
                         if (status == google.maps.GeocoderStatus.OK) {
                             var location = results[0].geometry.location;
-                            gapiService.addCoordinates(index, person, location);
+                            gapiService.addCoordinates(person.id, person, location);
                             if (!person.isFiltered) {
                                 // Only display markers that match search term
                                 markers.push({
