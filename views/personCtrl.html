@@ -56,6 +56,11 @@
                     </ul>
                 </div>
             </div>
+            <div class="row">
+                <button class="btn btn-danger btn-block btn-bottom" ng-click="hidePerson(personId)">
+                    Delete {{ view.state.people.list[personId].fullName }}
+                </button>
+            </div>
         </div>
     </div>
 </div>

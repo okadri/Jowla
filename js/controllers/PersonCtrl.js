@@ -1,5 +1,5 @@
-app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', 'actionCreators',
-    function ($scope, $timeout, $routeParams, actionCreators) {
+app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location', 'actionCreators',
+    function ($scope, $timeout, $routeParams, $location, actionCreators) {
         $scope.personId = $routeParams.personId;
         $scope.view = {
             state: actionCreators.getState()
@@ -31,6 +31,10 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', 'actionCreat
             actionCreators.updateNotes($scope.view.state.people.list[personId]);
         };
 
+        $scope.hidePerson = function (personId) {
+            actionCreators.hidePerson($scope.view.state.people.list[personId]);
+        };
+
         $scope.visitedToday = function (personId) {
             return $scope.view.state.people.list[personId].visitHistory.some(function(visit){
                 return visit.date.toDateString() == (new Date()).toDateString();
@@ -42,10 +46,15 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', 'actionCreat
             $timeout(function() {
                 $scope.view.state = data.state;
 
+                // If initial load of view, populate map
                 if ($scope.view.state.ui.mapIsReady && data.action.type === GET_SHEET_ROWS && $scope.view.state.people.ids.length) {
                     var people = angular.copy($scope.view.state.people);
                     people.ids = [$scope.personId]; // Limit map markers to just the current person
                     actionCreators.populateMap(people);
+                }
+                // If hiding person, navigate to main list
+                if (data.action.type === HIDE_PERSON) {
+                    $location.path('/' + $scope.view.state.ui.sheet.id);
                 }
             });
 		});

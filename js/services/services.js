@@ -130,7 +130,7 @@ app.service('gapiService', ['$q', function ($q) {
         return deferred.promise;
     };
 
-    self.addCoordinates = function (index, person, location) {
+    self.addCoordinates = function (person, location) {
         var deferred = $q.defer();
 
         var updatedPerson = angular.copy(person);
@@ -139,7 +139,25 @@ app.service('gapiService', ['$q', function ($q) {
 
         gapi.client.sheets.spreadsheets.values.update({
             spreadsheetId: SPREAD_SHEET_ID,
-            range: 'List!A' + (index + 2),
+            range: 'List!A' + (person.id + 2),
+            valueInputOption: 'USER_ENTERED',
+            values: [[updatedPerson.getMetaString()]]
+        }).then(function (response) {
+            deferred.resolve(updatedPerson);
+        });
+
+        return deferred.promise;
+    };
+
+    self.hidePerson = function (person) {
+        var deferred = $q.defer();
+
+        var updatedPerson = angular.copy(person);
+        updatedPerson.isHidden = true;
+
+        gapi.client.sheets.spreadsheets.values.update({
+            spreadsheetId: SPREAD_SHEET_ID,
+            range: 'List!A' + (person.id + 2),
             valueInputOption: 'USER_ENTERED',
             values: [[updatedPerson.getMetaString()]]
         }).then(function (response) {
@@ -292,7 +310,7 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
                     geocoder.geocode({ 'address': person.address }, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             var location = results[0].geometry.location;
-                            gapiService.addCoordinates(person.id, person, location);
+                            gapiService.addCoordinates(person, location);
                             if (!person.isFiltered) {
                                 // Only display markers that match search term
                                 markers.push({

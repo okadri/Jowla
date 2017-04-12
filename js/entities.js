@@ -37,7 +37,8 @@ app.factory('Person', [function () {
                 address: personRowData[3] + ', ' + personRowData[4] + ', ' + personRowData[5] + ' ' + personRowData[6],
                 notes: metaData.notes,
                 addressLat: metaData.addressLat,
-                addressLng: metaData.addressLng
+                addressLng: metaData.addressLng,
+                isHidden: metaData.isHidden
             });
 		},
 		getMetaString: function () {
@@ -45,7 +46,8 @@ app.factory('Person', [function () {
                 addressLat: this.addressLat,
                 addressLng: this.addressLng,
                 notes: this.notes,
-                visitHistory: this.visitHistory
+                visitHistory: this.visitHistory,
+                isHidden: this.isHidden
             });
 		}
 	};

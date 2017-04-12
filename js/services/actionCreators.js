@@ -97,6 +97,17 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
                     stateService.reduce(action);
                 });
             },
+            hidePerson: function (person) {
+                gapiService.hidePerson(person).then(function (updatedPerson) {
+                    var action = {
+                        type: HIDE_PERSON,
+                        payload: {
+                            updatedPerson: updatedPerson
+                        }
+                    };
+                    stateService.reduce(action);
+                });
+            },
             switchDisplayMode: function (people) {
                 var action = {
                     type: SWITCH_DISPLAY_MODE,
