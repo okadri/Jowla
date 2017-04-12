@@ -52,5 +52,10 @@ app.controller('HomeCtrl', ['$scope', '$window', '$timeout', '$routeParams', '$l
             }
 		});
 
+		$scope.$on('mapPopulationStatusChanged', function (event, data) {
+            $timeout(function() {
+                $scope.view.mapProgress = data;
+            });
+        });
     }]);
 

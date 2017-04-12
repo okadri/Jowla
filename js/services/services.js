@@ -150,7 +150,7 @@ app.service('gapiService', ['$q', function ($q) {
     };
 }]);
 
-app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
+app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $rootScope, gapiService) {
     var self = this;
 
     self.injectedOnce = false;
@@ -269,7 +269,6 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
         people.ids.forEach(function (personId, index) {
             var person = people.list[personId];
             if (person.addressLat && person.addressLng) {
-                validMarkers++;
 
                 if (!person.isFiltered) {
                     // Only display markers that match search term
@@ -280,14 +279,17 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                     });
                 }
 
+                validMarkers++;
+                $rootScope.$broadcast('mapPopulationStatusChanged', {
+                    valid: validMarkers,
+                    total: people.ids.length
+                });
                 if (validMarkers === people.ids.length) {
                     deferred.resolve(markers);
                 }
             } else {
                 setTimeout(function () {
                     geocoder.geocode({ 'address': person.address }, function (results, status) {
-                        validMarkers++;
-
                         if (status == google.maps.GeocoderStatus.OK) {
                             var location = results[0].geometry.location;
                             gapiService.addCoordinates(person.id, person, location);
@@ -301,6 +303,11 @@ app.service('mapService', ['$q', 'gapiService', function ($q, gapiService) {
                             }
                         }
 
+                        validMarkers++;
+                        $rootScope.$broadcast('mapPopulationStatusChanged', {
+                            valid: validMarkers,
+                            total: people.ids.length
+                        });
                         if (validMarkers === people.ids.length) {
                             deferred.resolve(markers);
                         }

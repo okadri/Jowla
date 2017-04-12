@@ -62,6 +62,17 @@
 
         <div class="jawla-map-container" ng-if="view.state.ui.displayMode == 'map'">
             <div id="map" class="col-sm-12" style="height: calc(100vh - 55px);"></div>
+            <div class="progress-overlay" ng-if="view.mapProgress && view.mapProgress.valid < view.mapProgress.total">
+                <div class="progress-container col-xs-offset-1 col-xs-10 text-center">
+                    <strong>Populating map data</strong>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar"
+                        ng-style="{'width': (100 * view.mapProgress.valid / view.mapProgress.total) + '%'}">
+                            {{ view.mapProgress.valid }} / {{ view.mapProgress.total }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

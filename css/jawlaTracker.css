@@ -2,7 +2,7 @@ body {
   padding-top: 50px;
 }
 
-.loading-overlay {
+.loading-overlay, .progress-overlay {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -12,7 +12,7 @@ body {
   left: 0;
 }
 
-.loading-overlay .loading-spinner {
+.loading-overlay .loading-spinner, .progress-overlay .progress-container {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
