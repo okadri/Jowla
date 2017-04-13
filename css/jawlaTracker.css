@@ -80,8 +80,3 @@ ul.visit-history {
 textarea.form-control {
   height: 100%;
 }
-
-.btn-bottom {
-  position: fixed;
-  bottom: 0;
-}

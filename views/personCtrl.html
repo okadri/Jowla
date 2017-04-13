@@ -37,7 +37,10 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 text-center">
-                    <h1 class="page-title">{{ view.state.people.list[personId].fullName }}</h1>
+                    <h1 class="page-title">
+                        {{ view.state.people.list[personId].fullName }}
+                        <small class="glyphicon glyphicon-remove-sign text-danger" confirm-button="hidePerson(personId)"></small>
+                    </h1>
                     <p class="text-muted">{{ view.state.people.list[personId].address }}</p>
                 </div>
             </div>
@@ -55,11 +58,6 @@
                         </li>
                     </ul>
                 </div>
-            </div>
-            <div class="row">
-                <button class="btn btn-danger btn-block btn-bottom" ng-click="hidePerson(personId)">
-                    Delete {{ view.state.people.list[personId].fullName }}
-                </button>
             </div>
         </div>
     </div>
