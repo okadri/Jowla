@@ -28,7 +28,7 @@ app.config(['$routeProvider', function ($routeProvider) {
         });
 }]);
 
-app.run(['$rootScope', function($rootScope) {
+app.run(['$rootScope', '$location', function($rootScope, $location) {
     $rootScope.title = "Jowla";
 
     $rootScope.$on('$routeChangeStart', function(){ 
@@ -37,5 +37,10 @@ app.run(['$rootScope', function($rootScope) {
 
     $rootScope.$on('$routeChangeSuccess', function(){ 
         $rootScope.loading = false;
+    });
+
+    $rootScope.$on('$routeChangeError', function(a,b,c){ 
+        $rootScope.loading = false;
+        $location.path('/');
     });
 }]);

@@ -42,6 +42,8 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
                                         payload: payload
                                     };
                                     stateService.reduce(action);
+                                }, function(error) {
+                                    deferred.reject(error);
                                 });
                             } else {
                                 deferred.resolve("Login failed");
