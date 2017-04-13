@@ -45,7 +45,7 @@ app.directive('confirmButton', ['$document', '$parse', function ($document, $par
             var title = attrs.title || "Confirm";
 
             html = "<div id=\"button-" + buttonId + "\">\
-            <span class=\"confirmbutton-msg\">" + message + "</span><br>\
+            <span class=\"confirmbutton-msg\">" + message + "</span><br><br>\
             <button class=\"confirmbutton-yes btn btn-danger\">" + yep + "</button>\
             <button class=\"confirmbutton-no btn\">" + nope + "</button>\n</div>";
 
@@ -54,7 +54,7 @@ app.directive('confirmButton', ['$document', '$parse', function ($document, $par
                 html: true,
                 trigger: "manual",
                 title: title,
-                placement: 'top'
+                placement: 'left'
             });
 
             element.bind('click', function (e) {

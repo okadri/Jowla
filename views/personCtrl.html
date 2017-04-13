@@ -39,7 +39,8 @@
                 <div class="col-xs-12 text-center">
                     <h1 class="page-title">
                         {{ view.state.people.list[personId].fullName }}
-                        <small class="glyphicon glyphicon-remove-sign text-danger" confirm-button="hidePerson(personId)"></small>
+                        <small class="glyphicon glyphicon-remove-sign text-danger" confirm-button="hidePerson(personId)"
+                        message="Are you sure you want to delete?"></small>
                     </h1>
                     <p class="text-muted">{{ view.state.people.list[personId].address }}</p>
                 </div>

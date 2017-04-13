@@ -35,8 +35,11 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     var length = action.payload.rows ? action.payload.rows.length : 0;
                     for (var i = 0; i < length; i++) {
                         var rowData = action.payload.rows[i];
-                        people.list[i] = new Person(rowData, i);
-                        people.ids.push(i);
+                        var person = new Person(rowData, i);
+                        if (!person.isHidden) {
+                            people.list[i] = new Person(rowData, i);
+                            people.ids.push(i);
+                        }
                     }
                     return sortPeople(people);
                 case ADD_VISIT:
