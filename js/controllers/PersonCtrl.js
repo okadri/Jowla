@@ -24,6 +24,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
         };
 
         $scope.addVisit = function (personId) {
+            if ($scope.visitedToday(personId)) { return; }
             actionCreators.addVisit($scope.view.state.people.list[personId]);
         };
 
