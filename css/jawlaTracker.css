@@ -48,6 +48,7 @@ body {
 
 .main-container {
   padding: 0;
+  overflow-x: hidden;
 }
 
 .jawla-toolbar-container {
