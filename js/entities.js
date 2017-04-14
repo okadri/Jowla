@@ -41,6 +41,11 @@ app.factory('Person', [function () {
                 isHidden: metaData.isHidden
             });
 		},
+        isVisitedToday: function() {
+            return this.visitHistory.some(function(visit){
+                return visit.date.toDateString() == (new Date()).toDateString();
+            });
+        },
 		getMetaString: function () {
             return JSON.stringify({
                 addressLat: this.addressLat,

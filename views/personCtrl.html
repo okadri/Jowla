@@ -28,32 +28,32 @@
         <div class="jawla-person-container">
             <div class="row">
                 <div class="col-xs-12">
-                    <a ng-href="https://www.google.com/maps/place/{{ view.state.people.list[personId].address }}"
+                    <a ng-href="https://www.google.com/maps/place/{{ view.person.address }}"
                     target="_blank" class="btn btn-info btn-block btn-sharp">
                         <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                        Navigate to {{ view.state.people.list[personId].fullName }}
+                        Navigate to {{ view.person.fullName }}
                     </a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-12 text-center">
                     <h1 class="page-title">
-                        {{ view.state.people.list[personId].fullName }}
-                        <small class="glyphicon glyphicon-remove-sign text-danger" confirm-button="hidePerson(personId)"
+                        {{ view.person.fullName }}
+                        <small class="glyphicon glyphicon-remove-sign text-danger" confirm-button="hidePerson()"
                         message="Are you sure you want to delete?"></small>
                     </h1>
-                    <p class="text-muted">{{ view.state.people.list[personId].address }}</p>
+                    <p class="text-muted">{{ view.person.address }}</p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-7">
                     <textarea class="form-control" rows="5" placeholder="Notes..."
-                        ng-model="view.state.people.list[personId].notes" ng-model-options="{ debounce: 1000 }" ng-change="updateNotes(personId)"></textarea>
+                        ng-model="view.person.notes" ng-model-options="{ debounce: 1000 }" ng-change="updateNotes()"></textarea>
                 </div>
                 <div class="col-xs-5">
-                    <span class="btn btn-default btn-block" ng-click="addVisit(personId)" ng-disabled="visitedToday(personId)">Report Visit</span>
-                    <ul class="visit-history" ng-show="view.state.people.list[personId].visitHistory.length">
-                        <li ng-repeat="visit in view.state.people.list[personId].visitHistory | limitTo:3 track by $index">
+                    <span class="btn btn-default btn-block" ng-click="addVisit()" ng-disabled="view.person.isVisitedToday()">Report Visit</span>
+                    <ul class="visit-history" ng-show="view.person.visitHistory.length">
+                        <li ng-repeat="visit in view.person.visitHistory | limitTo:3 track by $index">
                             <small ng-bind="visit.date | date:shortDate"></small> - 
                             <small class="text-muted" ng-bind="visit.reportedBy"></small>
                         </li>

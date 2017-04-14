@@ -43,8 +43,12 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     }
                     return sortPeople(people);
                 case ADD_VISIT:
-                case HIDE_PERSON:
                     people.list[action.payload.updatedPerson.id] = action.payload.updatedPerson;
+                    return sortPeople(people);
+                case HIDE_PERSON:
+                    var index = people.ids.indexOf(action.payload.updatedPerson.id);
+                    people.ids.splice(index, 1);
+                    delete people.list[action.payload.updatedPerson.id]
                     return sortPeople(people);
                 case FILTER_PEOPLE:
                     var searchTerm = action.payload.searchTerm;
