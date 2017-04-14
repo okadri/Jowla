@@ -55,6 +55,10 @@ body {
   padding: 20px;
 }
 
+table.table-jawla {
+  white-space: nowrap;
+}
+
 table.table-jawla tr {
   cursor: pointer;
 }
