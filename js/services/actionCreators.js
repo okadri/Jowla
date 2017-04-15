@@ -132,10 +132,10 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
                 };
                 stateService.reduce(action);
             },
-            populateMap: function (people, showPopups) {
+            populateMap: function (people, personId) {
                 if (!people) { return; }
 
-                mapService.populateMap(people, showPopups).then(function (mappedPeople) {
+                mapService.populateMap(people, personId).then(function (mappedPeople) {
                     var action = {
                         type: POPULATE_MAP,
                         payload: {

@@ -46,7 +46,7 @@ app.controller('HomeCtrl', ['$scope', '$window', '$timeout', '$routeParams', '$l
             reMapActions.indexOf(data.action.type) >= 0 &&
             $scope.view.state.ui.displayMode == DISPLAY_MODE.MAP) {
                 $timeout(function() {
-                    actionCreators.populateMap($scope.view.state.people, true);
+                    actionCreators.populateMap($scope.view.state.people);
                 });
             }
 		});

@@ -194,7 +194,7 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
         return deferred.promise;
     };
 
-    self.populateMap = function (people, showPopups) {
+    self.populateMap = function (people, personId) {
         var deferred = $q.defer();
 
         if (people.ids instanceof Array === false) {
@@ -203,19 +203,10 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 
         var bounds = new google.maps.LatLngBounds();
 
-        defaultCenter = {
-            lat: 21.4225,
-            lng: 39.8262
-        };
-
-        config = {
+        var config = {
             zoom: 2,
-            center: defaultCenter
+            center: { lat: 21.4225, lng: 39.8262 }
         };
-
-        if (people.ids.length === 1) {
-            config.maxZoom = 17;
-        }
 
         var mapEl = document.getElementById('map');
         if (mapEl == null) {
@@ -223,15 +214,15 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
         } else {
             var map = new google.maps.Map(mapEl, config);
 
-            self.getMarkers(people).then(function (mappedPeople) {
+            self.getMarkers(people, personId).then(function (markers) {
                 var infoWindow = new google.maps.InfoWindow(), marker, i;
 
-                if (mappedPeople.length === 0) {
-                    deferred.resolve(mappedPeople);
+                if (markers.length === 0) {
+                    deferred.resolve(markers);
                 }
 
                 // Loop through our array of markers & place each one on the map
-                mappedPeople.forEach(function(person) {
+                markers.forEach(function(person) {
                     var position = new google.maps.LatLng(person.addressLat, person.addressLng);
                     bounds.extend(position);
                     marker = new google.maps.Marker({
@@ -240,8 +231,11 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
                         title: person.fullName
                     });
 
-                    // Allow each marker to have an info window (only if more than one marker on map)
-                    if (showPopups) { 
+                    if (personId !== undefined) {
+                        map.setCenter(position);
+                        map.setZoom(17);
+                    } else {
+                        // Allow each marker to have an info window
                         google.maps.event.addListener(marker, 'click', (function(marker, i) {
                             return function() {
                                 infoWindow.setContent(
@@ -252,11 +246,11 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
                                 infoWindow.open(map, marker);
                             }
                         })(marker, i));
+                        // Automatically center the map fitting all markers on the screen
+                        map.fitBounds(bounds);
                     }
 
-                    // Automatically center the map fitting all markers on the screen
-                    deferred.resolve(mappedPeople);
-                    map.fitBounds(bounds);
+                    deferred.resolve(markers);
                 });
             });
         }
@@ -264,10 +258,9 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
         return deferred.promise;
     };
 
-    self.getMarkers = function (people) {
-
+    self.getMarkers = function (people, personId) {
         var deferred = $q.defer();
-        var mappedPeople = [];
+        var markers = [];
 
         if (people.ids instanceof Array === false) {
             return deferred.reject("Passed value is not an array");
@@ -275,55 +268,68 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
             deferred.resolve([]);
         }
 
-        geocoder = new google.maps.Geocoder();
+        var validMarkers = 0;
+        var skippedMarkers = 0;
+        var completedMarkers = 0;
 
-        var delayedIdx = 0;
-        var validMappedPeople = 0;
-
-        people.ids.forEach(function (personId, index) {
-            var person = people.list[personId];
-            if (person.addressLat && person.addressLng && MD5(person.address) === person.addressMD5) {
-
-                if (!person.isFiltered) {
-                    // Only display people that match search term
-                    mappedPeople.push(person);
-                }
-
-                validMappedPeople++;
+        if (personId !== undefined) {
+            self.getMarker(people.list[personId]).then(function(marker) {
+                markers.push(marker);
                 $rootScope.$broadcast('mapPopulationStatusChanged', {
-                    valid: validMappedPeople,
-                    total: people.ids.length
+                    completed: 1,
+                    total: 1
                 });
-                if (validMappedPeople === people.ids.length) {
-                    deferred.resolve(mappedPeople);
-                }
-            } else {
-                setTimeout(function () {
-                    geocoder.geocode({ 'address': person.address }, function (results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            var location = results[0].geometry.location;
-                            gapiService.addCoordinates(person, location);
-                            if (!person.isFiltered) {
-                                // Only display people that match search term
-                                person.addressLat = location.lat();
-                                person.addressLng = location.lng();
-                                person.addressMD5 = MD5(person.address);
-                                mappedPeople.push(person);
-                            }
-                        }
+                deferred.resolve(markers);
+            });
+        } else {
+            people.ids.forEach(function (pId) {
+                var person = people.list[pId];
+                if (person.isFiltered) {
+                    skippedMarkers++;
+                } else {
+                    // Only display people that match search term
+                    self.getMarker(person).then(function(marker) {
+                        markers.push(marker);
 
-                        validMappedPeople++;
+                        validMarkers++;
+                        completedMarkers = validMarkers + skippedMarkers;
                         $rootScope.$broadcast('mapPopulationStatusChanged', {
-                            valid: validMappedPeople,
+                            completed: completedMarkers,
                             total: people.ids.length
                         });
-                        if (validMappedPeople === people.ids.length) {
-                            deferred.resolve(mappedPeople);
+                        if (completedMarkers === people.ids.length) {
+                            deferred.resolve(markers);
                         }
                     });
-                }, 1000 * delayedIdx++);
-            }
-        });
+                }
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    self.getMarker = function(person) {
+        var deferred = $q.defer();
+        self.delayIndex = self.delayIndex || 0;
+
+        if (person.addressLat && person.addressLng && MD5(person.address) === person.addressMD5) {
+            deferred.resolve(person);
+        } else {
+            var geocoder = new google.maps.Geocoder();
+            setTimeout(function () {
+                geocoder.geocode({ 'address': person.address }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        var location = results[0].geometry.location;
+                        gapiService.addCoordinates(person, location);
+
+                        person.addressLat = location.lat();
+                        person.addressLng = location.lng();
+                        person.addressMD5 = MD5(person.address);
+                        deferred.resolve(person);
+                    }
+                });
+            }, 1000 * self.delayIndex++);
+        }
 
         return deferred.promise;
     }

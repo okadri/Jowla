@@ -10,9 +10,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
         // TODO: Consider moving to a directive
         if($scope.view.state.ui.isSignedIn) {
             $timeout(function() {
-                var people = angular.copy($scope.view.state.people);
-                people.ids = [$scope.view.person.id]; // Limit map markers to just the current person
-                actionCreators.populateMap(people);
+                actionCreators.populateMap($scope.view.state.people, $scope.view.person.id);
             });
         }
 
@@ -45,9 +43,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
 
                 // If initial load of view, populate map
                 if ($scope.view.state.ui.mapIsReady && data.action.type === GET_SHEET_ROWS && $scope.view.state.people.ids.length) {
-                    var people = angular.copy($scope.view.state.people);
-                    people.ids = [$scope.view.person.id]; // Limit map markers to just the current person
-                    actionCreators.populateMap(people);
+                    actionCreators.populateMap($scope.view.state.people, $scope.view.person.id);
                 }
                 // If hiding person, navigate to main list
                 if (data.action.type === HIDE_PERSON) {
