@@ -1,8 +1,7 @@
 app.controller('HomeCtrl', ['$scope', '$window', '$timeout', '$routeParams', '$location', 'actionCreators',
     function ($scope, $window, $timeout, $routeParams, $location, actionCreators) {
         $scope.view = {
-            state: actionCreators.getState(),
-            searchTerm: ''
+            state: actionCreators.getState()
         };
         actionCreators.setPageTitle($scope.view.state.ui.sheet.title);
 
@@ -30,7 +29,7 @@ app.controller('HomeCtrl', ['$scope', '$window', '$timeout', '$routeParams', '$l
         };
 
         $scope.search = function() {
-            actionCreators.filterPeople($scope.view.searchTerm);
+            actionCreators.filterPeople($scope.view.state.ui.searchTerm);
         };
 
         // State changes listener
