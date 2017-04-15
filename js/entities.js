@@ -36,6 +36,7 @@ app.factory('Person', [function () {
                 fullName: personRowData[1] + ' ' + personRowData[2],
                 address: personRowData[3] + ', ' + personRowData[4] + ', ' + personRowData[5] + ' ' + personRowData[6],
                 notes: metaData.notes,
+                addressMD5: metaData.addressMD5,
                 addressLat: metaData.addressLat,
                 addressLng: metaData.addressLng,
                 isHidden: metaData.isHidden
@@ -48,6 +49,7 @@ app.factory('Person', [function () {
         },
 		getMetaString: function () {
             return JSON.stringify({
+                addressMD5: this.addressMD5,
                 addressLat: this.addressLat,
                 addressLng: this.addressLng,
                 notes: this.notes,

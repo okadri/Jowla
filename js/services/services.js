@@ -134,6 +134,7 @@ app.service('gapiService', ['$q', function ($q) {
         var deferred = $q.defer();
 
         var updatedPerson = angular.copy(person);
+        updatedPerson.addressMD5 = MD5(updatedPerson.address);
         updatedPerson.addressLat = location.lat();
         updatedPerson.addressLng = location.lng();
 
@@ -222,21 +223,21 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
         } else {
             var map = new google.maps.Map(mapEl, config);
 
-            self.getMarkers(people).then(function (markers) {
+            self.getMarkers(people).then(function (mappedPeople) {
                 var infoWindow = new google.maps.InfoWindow(), marker, i;
 
-                if (markers.length === 0) {
-                    deferred.resolve("Map is empty!");
+                if (mappedPeople.length === 0) {
+                    deferred.resolve(mappedPeople);
                 }
 
-                // Loop through our array of markers & place each one on the map  
-                for (i = 0; i < markers.length; i++) {
-                    var position = new google.maps.LatLng(markers[i].lat, markers[i].lng);
+                // Loop through our array of markers & place each one on the map
+                mappedPeople.forEach(function(person) {
+                    var position = new google.maps.LatLng(person.addressLat, person.addressLng);
                     bounds.extend(position);
                     marker = new google.maps.Marker({
                         position: position,
                         map: map,
-                        title: markers[i].person.fullName
+                        title: person.fullName
                     });
 
                     // Allow each marker to have an info window (only if more than one marker on map)
@@ -244,9 +245,9 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
                         google.maps.event.addListener(marker, 'click', (function(marker, i) {
                             return function() {
                                 infoWindow.setContent(
-                                    '<b>' + markers[i].person.fullName + '</b><br>' +
-                                    markers[i].person.address + '<br>' +
-                                    '<a href="#/' + SPREAD_SHEET_ID + '/p/' + markers[i].person.id + '">View more details...</a>'
+                                    '<b>' + person.fullName + '</b><br>' +
+                                    person.address + '<br>' +
+                                    '<a href="#/' + SPREAD_SHEET_ID + '/p/' + person.id + '">View more details...</a>'
                                 );
                                 infoWindow.open(map, marker);
                             }
@@ -254,14 +255,9 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
                     }
 
                     // Automatically center the map fitting all markers on the screen
+                    deferred.resolve(mappedPeople);
                     map.fitBounds(bounds);
-                }
-            });
-
-            // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
-            var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function (event) {
-                deferred.resolve("Map populated");
-                google.maps.event.removeListener(boundsListener);
+                });
             });
         }
 
@@ -271,7 +267,7 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
     self.getMarkers = function (people) {
 
         var deferred = $q.defer();
-        var markers = [];
+        var mappedPeople = [];
 
         if (people.ids instanceof Array === false) {
             return deferred.reject("Passed value is not an array");
@@ -282,28 +278,24 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
         geocoder = new google.maps.Geocoder();
 
         var delayedIdx = 0;
-        var validMarkers = 0;
+        var validMappedPeople = 0;
 
         people.ids.forEach(function (personId, index) {
             var person = people.list[personId];
-            if (person.addressLat && person.addressLng) {
+            if (person.addressLat && person.addressLng && MD5(person.address) === person.addressMD5) {
 
                 if (!person.isFiltered) {
-                    // Only display markers that match search term
-                    markers.push({
-                        person: person,
-                        lat: person.addressLat,
-                        lng: person.addressLng
-                    });
+                    // Only display people that match search term
+                    mappedPeople.push(person);
                 }
 
-                validMarkers++;
+                validMappedPeople++;
                 $rootScope.$broadcast('mapPopulationStatusChanged', {
-                    valid: validMarkers,
+                    valid: validMappedPeople,
                     total: people.ids.length
                 });
-                if (validMarkers === people.ids.length) {
-                    deferred.resolve(markers);
+                if (validMappedPeople === people.ids.length) {
+                    deferred.resolve(mappedPeople);
                 }
             } else {
                 setTimeout(function () {
@@ -312,22 +304,21 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
                             var location = results[0].geometry.location;
                             gapiService.addCoordinates(person, location);
                             if (!person.isFiltered) {
-                                // Only display markers that match search term
-                                markers.push({
-                                    person: person,
-                                    lat: location.lat(),
-                                    lng: location.lng()
-                                });
+                                // Only display people that match search term
+                                person.addressLat = location.lat();
+                                person.addressLng = location.lng();
+                                person.addressMD5 = MD5(person.address);
+                                mappedPeople.push(person);
                             }
                         }
 
-                        validMarkers++;
+                        validMappedPeople++;
                         $rootScope.$broadcast('mapPopulationStatusChanged', {
-                            valid: validMarkers,
+                            valid: validMappedPeople,
                             total: people.ids.length
                         });
-                        if (validMarkers === people.ids.length) {
-                            deferred.resolve(markers);
+                        if (validMappedPeople === people.ids.length) {
+                            deferred.resolve(mappedPeople);
                         }
                     });
                 }, 1000 * delayedIdx++);

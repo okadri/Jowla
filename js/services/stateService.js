@@ -68,6 +68,12 @@ app.service('stateService', function ($rootScope, $log, Person) {
                         people = defaultPeople;
                     }
                     return people;
+                case POPULATE_MAP:
+                    var length = action.payload.mappedPeople ? action.payload.mappedPeople.length : 0;
+                    action.payload.mappedPeople.forEach(function(person) {
+                        people.list[person.id] = person;
+                    });
+                    return people;
                 default:
                     return people || defaultPeople;
             }
