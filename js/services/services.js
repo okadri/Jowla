@@ -71,7 +71,7 @@ app.service('gapiService', ['$q', function ($q) {
 
                 gapi.client.sheets.spreadsheets.values.get({
                     spreadsheetId: SPREAD_SHEET_ID,
-                    range: firstSheet.properties.title + '!A2:G',
+                    range: firstSheet.properties.title + '!A2:I',
                 }).then(function (response) {
                     deferred.resolve({
                         title: title,
@@ -118,6 +118,17 @@ app.service('gapiService', ['$q', function ($q) {
 
         var updatedPerson = angular.copy(person);
 
+        gapi.client.sheets.spreadsheets.values.update({
+            spreadsheetId: SPREAD_SHEET_ID,
+            range: 'List!I' + (person.id + 2),
+            valueInputOption: 'USER_ENTERED',
+            values: [[updatedPerson.notes]]
+        }).then(function (response) {
+            deferred.resolve(updatedPerson);
+        });
+
+        // This makes sure the notes in the meta data cell is removed
+        // Can be removed in the future once no notes are left in the metadata column
         gapi.client.sheets.spreadsheets.values.update({
             spreadsheetId: SPREAD_SHEET_ID,
             range: 'List!A' + (person.id + 2),

@@ -13,6 +13,7 @@ app.factory('Person', [function () {
 
             var metaData = {};
             var visitHistory = [];
+            var compinedNotes = personRowData[7];
 
             try {
                 if (personRowData[0]) {
@@ -23,6 +24,9 @@ app.factory('Person', [function () {
                                         return s
                                     })
                                     .sort(function(a,b) { return b.date - a.date; })
+                    // This appends the notes from the meta data column with the notes column, to avoid any data loss
+                    // Can be removed in the future once no notes are left in the metadata column
+                    compinedNotes = [metaData.notes, personRowData[8]].filter(function(c){ return c; }).join('\n');
                 }
             } catch (e) {
                 console.warn("metaData not valid", personRowData[0]);
@@ -35,7 +39,7 @@ app.factory('Person', [function () {
                 lastName: personRowData[2],
                 fullName: personRowData[1] + ' ' + personRowData[2],
                 address: personRowData[3] + ', ' + personRowData[4] + ', ' + personRowData[5] + ' ' + personRowData[6],
-                notes: metaData.notes,
+                notes: compinedNotes,
                 addressMD5: metaData.addressMD5,
                 addressLat: metaData.addressLat,
                 addressLng: metaData.addressLng,
@@ -52,7 +56,6 @@ app.factory('Person', [function () {
                 addressMD5: this.addressMD5,
                 addressLat: this.addressLat,
                 addressLng: this.addressLng,
-                notes: this.notes,
                 visitHistory: this.visitHistory,
                 isHidden: this.isHidden
             });
