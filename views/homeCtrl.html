@@ -1,8 +1,8 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header navbar-brand-container pull-left">
-            <a class="navbar-brand" ng-href="/#/{{ view.state.ui.sheet.id }}"
-            ng-bind="view.state.ui.sheet.title" ng-style="{'font-size' : 50/view.state.ui.sheet.title.length + 'vw'}"></a>
+            <a class="navbar-brand" ng-click="view.state.ui.displayMode = 'list'"
+            ng-bind="view.state.ui.sheet.title" ng-style="{'font-size' : 50/view.state.ui.sheet.title.length + 'vmin'}"></a>
         </div>
         <div class="navbar-header navbar-tools-container pull-right">
             <div class="nav navbar-nav pull-right">
