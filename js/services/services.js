@@ -71,7 +71,7 @@ app.service('gapiService', ['$q', function ($q) {
 
                 gapi.client.sheets.spreadsheets.values.get({
                     spreadsheetId: SPREAD_SHEET_ID,
-                    range: firstSheet.properties.title + '!A2:I',
+                    range: firstSheet.properties.title + '!A2:J',
                 }).then(function (response) {
                     deferred.resolve({
                         title: title,
@@ -134,6 +134,24 @@ app.service('gapiService', ['$q', function ($q) {
             range: 'List!A' + (person.id + 2),
             valueInputOption: 'USER_ENTERED',
             values: [[updatedPerson.getMetaString()]]
+        }).then(function (response) {
+            deferred.resolve(updatedPerson);
+        });
+
+        return deferred.promise;
+    };
+
+    self.updateCountry = function (person) {
+        var deferred = $q.defer();
+
+        var updatedPerson = angular.copy(person);
+        var newCountryCode = updatedPerson.country ? updatedPerson.country.code : "";
+
+        gapi.client.sheets.spreadsheets.values.update({
+            spreadsheetId: SPREAD_SHEET_ID,
+            range: 'List!J' + (person.id + 2),
+            valueInputOption: 'USER_ENTERED',
+            values: [[newCountryCode]]
         }).then(function (response) {
             deferred.resolve(updatedPerson);
         });

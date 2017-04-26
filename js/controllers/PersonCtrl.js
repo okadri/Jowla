@@ -3,7 +3,8 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
         var state = actionCreators.getState();
         $scope.view = {
             state: state,
-            person: state.people.list[$routeParams.personId]
+            person: state.people.list[$routeParams.personId],
+            countries: countries
         };
         actionCreators.setPageTitle($scope.view.person.fullName);
 
@@ -29,6 +30,10 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
 
         $scope.updateNotes = function () {
             actionCreators.updateNotes($scope.view.person);
+        };
+
+        $scope.updateCountry = function () {
+            actionCreators.updateCountry($scope.view.person);
         };
 
         $scope.hidePerson = function () {
