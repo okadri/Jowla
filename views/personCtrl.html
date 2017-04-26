@@ -50,7 +50,9 @@
             <div class="row">
                 <div class="col-xs-7">
                     <select ng-options="country.name for country in view.countries track by country.code"
-                    ng-model="view.person.country" class="form-control" ng-change="updateCountry()"></select>
+                    ng-model="view.person.country" class="form-control" ng-change="updateCountry()">
+                        <option value="">Select Country</option>
+                    </select>
 
                     <textarea class="form-control" rows="5" placeholder="Notes..."
                         ng-model="view.person.notes" ng-model-options="{ debounce: 1000 }" ng-change="updateNotes()"></textarea>

@@ -5,12 +5,12 @@
             ng-bind="view.state.ui.sheet.title" ng-style="{'font-size' : 50/view.state.ui.sheet.title.length + 'vmin'}"></a>
         </div>
         <div class="navbar-header navbar-tools-container pull-right">
-            <div class="nav navbar-nav pull-right">
-                <div class="col-xs-7">
+            <div class="nav navbar-nav pull-right row">
+                <div class="col-xs-6">
                     <input type="text" class="form-control search-input" placeholder="Search" ng-model="view.state.ui.searchTerm"
                         ng-model-options="{ debounce: 500 }" ng-change="search()">
                 </div>
-                <div class="col-xs-5">
+                <div class="col-xs-6">
                     <a ng-click="switchDisplayMode()" class="nav-btn">
                         <span class="glyphicon glyphicon-map-marker" ng-show="view.state.ui.displayMode == 'list'"></span>
                         <span class="glyphicon glyphicon-list" ng-show="view.state.ui.displayMode == 'map'"></span>
