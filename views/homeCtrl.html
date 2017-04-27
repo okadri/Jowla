@@ -38,6 +38,8 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 {{ view.state.people.list[personId].firstName }} {{ view.state.people.list[personId].lastName }}
+                                <img src="/images/blank.gif" alt="{{ view.state.people.list[personId].country.name }}"
+                                ng-if="view.state.people.list[personId].country" class="flag flag-{{ view.state.people.list[personId].country.code.toLowerCase() }}" />
                             </div>
                             <div class="col-xs-6 text-muted" ng-if="view.state.people.list[personId].visitHistory.length">
                                 <small>
