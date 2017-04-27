@@ -2,6 +2,10 @@ body {
   padding-top: 50px;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .loading-overlay, .progress-overlay {
   position: fixed;
   width: 100%;
@@ -38,12 +42,37 @@ body {
 
 .navbar-tools-container {
   width: 65%;
+  padding-top: 8px;
 }
+
+/* enable absolute positioning */
+.inner-addon { 
+  position: relative; 
+}
+
+/* style icon */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px 25px;
+}
+
+/* align icon */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
 
 .nav-btn {
   color: #fff;
   font-size: 120%;
   padding: 7px 8px;
+}
+
+.nav-btn:hover {
+  color: #ccc;
+  text-decoration: none;
 }
 
 .main-container {

@@ -32,6 +32,12 @@ app.controller('HomeCtrl', ['$scope', '$window', '$timeout', '$routeParams', '$l
             actionCreators.filterPeople($scope.view.state.ui.searchTerm);
         };
 
+        $scope.clearSearch = function() {
+            $scope.view.navMode = '';
+            $scope.view.state.ui.searchTerm = '';
+            actionCreators.filterPeople($scope.view.state.ui.searchTerm);
+        };
+
         // State changes listener
         var reMapActions = [
             SWITCH_DISPLAY_MODE,

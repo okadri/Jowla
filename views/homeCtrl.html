@@ -4,19 +4,19 @@
             <a class="navbar-brand" ng-click="view.state.ui.displayMode = 'list'"
             ng-bind="view.state.ui.sheet.title" ng-style="{'font-size' : 50/view.state.ui.sheet.title.length + 'vmin'}"></a>
         </div>
-        <div class="navbar-header navbar-tools-container pull-right">
-            <div class="nav navbar-nav pull-right row">
-                <div class="col-xs-6">
-                    <input type="text" class="form-control search-input" placeholder="Search" ng-model="view.state.ui.searchTerm"
-                        ng-model-options="{ debounce: 500 }" ng-change="search()">
-                </div>
-                <div class="col-xs-6">
-                    <a ng-click="switchDisplayMode()" class="nav-btn">
-                        <span class="glyphicon glyphicon-map-marker" ng-show="view.state.ui.displayMode == 'list'"></span>
-                        <span class="glyphicon glyphicon-list" ng-show="view.state.ui.displayMode == 'map'"></span>
-                    </a>
-                    <a ng-if="view.state.ui.isSignedIn" ng-click="logout()" class="glyphicon glyphicon-log-out nav-btn"></a>
-                </div>
+        <div class="navbar-header navbar-tools-container pull-right text-right" ng-if="view.state.ui.isSignedIn">
+            <div class="col-xs-12 inner-addon right-addon" ng-show="view.navMode === 'search'">
+                <input type="text" class="form-control search-input" placeholder="Search" ng-model="view.state.ui.searchTerm"
+                    ng-model-options="{ debounce: 500 }" ng-change="search()">
+                <i ng-click="clearSearch()" class="glyphicon glyphicon-remove clickable"></i>
+            </div>
+            <div class="col-xs-12" ng-hide="view.navMode">
+                <a ng-click="view.navMode = 'search';" class="glyphicon glyphicon-search nav-btn"></a>
+                <a ng-click="switchDisplayMode()" class="nav-btn">
+                    <span class="glyphicon glyphicon-map-marker" ng-show="view.state.ui.displayMode == 'list'"></span>
+                    <span class="glyphicon glyphicon-list" ng-show="view.state.ui.displayMode == 'map'"></span>
+                </a>
+                <a ng-click="logout()" class="glyphicon glyphicon-log-out nav-btn"></a>
             </div>
         </div>
     </div>
