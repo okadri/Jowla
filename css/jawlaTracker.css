@@ -100,6 +100,17 @@ table.table-jawla tr:hover td {
   background-color: #ebebeb;
 }
 
+.table.table-jawla td {
+    max-width: 100px;
+}
+.table.table-jawla td small {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100%;
+}
+
 .btn-sharp {
   border-radius: 0;
 }
