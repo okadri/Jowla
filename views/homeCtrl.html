@@ -11,7 +11,8 @@
                 <i ng-click="clearSearch()" class="glyphicon glyphicon-remove clickable"></i>
             </div>
             <div class="col-xs-12" ng-hide="view.navMode">
-                <a ng-click="openFilters()" class="glyphicon glyphicon-filter nav-btn"></a>
+                <a ng-click="openFilters()" class="glyphicon glyphicon-filter nav-btn"
+                    ng-class="{ 'active': view.state.ui.filters.isFiltered }"></a>
                 <a ng-click="view.navMode = 'search';" class="glyphicon glyphicon-search nav-btn"></a>
                 <a ng-click="switchDisplayMode()" class="nav-btn">
                     <span class="glyphicon glyphicon-map-marker" ng-show="view.state.ui.displayMode == 'list'"></span>

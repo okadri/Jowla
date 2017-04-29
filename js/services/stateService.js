@@ -117,6 +117,14 @@ app.service('stateService', function ($rootScope, $log, Person) {
                 case SWITCH_DISPLAY_MODE:
                     ui.displayMode = (ui.displayMode == DISPLAY_MODE.LIST) ? DISPLAY_MODE.MAP : DISPLAY_MODE.LIST;
                     return ui;
+                case FILTER_PEOPLE:
+                    var countries = action.payload.filters.countries || [];
+                    if (countries.length) {
+                        ui.filters.isFiltered = true;
+                    } else {
+                        ui.filters.isFiltered = false;
+                    }
+                    return ui;
                 default:
                     return ui || defaultUi;
             }
