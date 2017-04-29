@@ -13,5 +13,9 @@ app.controller('FiltersCtrl', ['$scope', '$uibModalInstance', 'state', 'actionCr
             $uibModalInstance.dismiss('cancel');
         };
 
+        $scope.clearFilters = function () {
+            $scope.view.state.ui.filters.countries.length = 0;
+        };
+
     }
 ]);
