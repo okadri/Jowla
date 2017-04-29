@@ -92,6 +92,7 @@ app.service('stateService', function ($rootScope, $log, Person) {
                 mapIsReady: false,
                 mapIsPopulated: false,
                 currentUser: undefined,
+                filters: {},
                 sheet: {}
             }
             switch (action.type) {

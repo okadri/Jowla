@@ -6,7 +6,7 @@
         </div>
         <div class="navbar-header navbar-tools-container pull-right text-right" ng-if="view.state.ui.isSignedIn">
             <div class="col-xs-12 inner-addon right-addon" ng-show="view.navMode === 'search'">
-                <input type="text" class="form-control search-input" placeholder="Search" ng-model="view.filters.searchTerm"
+                <input type="text" class="form-control search-input" placeholder="Search" ng-model="view.state.ui.filters.searchTerm"
                     ng-model-options="{ debounce: 500 }" ng-change="search()">
                 <i ng-click="clearSearch()" class="glyphicon glyphicon-remove clickable"></i>
             </div>

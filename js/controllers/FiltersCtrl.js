@@ -3,11 +3,10 @@ app.controller('FiltersCtrl', ['$scope', '$uibModalInstance', 'state', 'actionCr
         $scope.view = {
             state: state,
             countries: countries,
-            selectedCountries: []
         };
 
         $scope.apply = function () {
-            $uibModalInstance.close($scope.view.selectedCountries);
+            $uibModalInstance.close($scope.view.state.ui.filters.countries);
         };
 
         $scope.cancel = function () {

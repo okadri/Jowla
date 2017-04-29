@@ -30,13 +30,13 @@ app.controller('HomeCtrl', ['$scope', '$log', '$window', '$timeout', '$routePara
         };
 
         $scope.search = function () {
-            actionCreators.filterPeople($scope.view.filters);
+            actionCreators.filterPeople($scope.view.state.ui.filters);
         };
 
         $scope.clearSearch = function () {
             $scope.view.navMode = '';
-            $scope.view.filters.searchTerm = '';
-            actionCreators.filterPeople($scope.view.filters);
+            $scope.view.state.ui.filters.searchTerm = '';
+            actionCreators.filterPeople($scope.view.state.ui.filters);
         };
 
         $scope.openFilters = function (size) {
@@ -52,8 +52,8 @@ app.controller('HomeCtrl', ['$scope', '$log', '$window', '$timeout', '$routePara
             });
 
             modalInstance.result.then(function (selectedCountries) {
-                $scope.view.filters.countries = selectedCountries;
-                actionCreators.filterPeople($scope.view.filters);
+                $scope.view.state.ui.filters.countries = selectedCountries;
+                actionCreators.filterPeople($scope.view.state.ui.filters);
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
