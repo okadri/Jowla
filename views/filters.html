@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Filters</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <ui-select multiple ng-model="view.selectedCountries" theme="bootstrap" sortable="true" close-on-select="false">
+        <ui-select-match placeholder="Select country...">{{$item.name}}</ui-select-match>
+        <ui-select-choices repeat="country in view.countries | filter: {name: $select.search}">
+            <div ng-bind-html="country.name | highlight: $select.search"></div>
+        </ui-select-choices>
+    </ui-select>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="apply()">Apply</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

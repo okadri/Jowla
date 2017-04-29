@@ -134,11 +134,11 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
                 };
                 stateService.reduce(action);
             },
-            filterPeople: function (searchTerm) {
+            filterPeople: function (filters) {
                 var action = {
                     type: FILTER_PEOPLE,
                     payload: {
-                        searchTerm: searchTerm
+                        filters: filters
                     }
                 };
                 stateService.reduce(action);

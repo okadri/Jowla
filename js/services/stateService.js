@@ -51,15 +51,22 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     delete people.list[action.payload.updatedPerson.id]
                     return sortPeople(people);
                 case FILTER_PEOPLE:
-                    var searchTerm = action.payload.searchTerm;
+                    var searchTerm = action.payload.filters.searchTerm || '';
+                    var countries = action.payload.filters.countries || [];
                     var searchFields = ['fullName', 'address', 'notes'];
                     people.ids.forEach(function(personId) {
                         var person = people.list[personId];
-                        var matches = searchFields.some(function(sf) {
+
+                        var matchesSearchTerm = !searchTerm || searchFields.some(function(sf) {
                             return person[sf] !== undefined &&
                                 person[sf].toLowerCase().search(searchTerm.toLowerCase()) >= 0;
                         });
-                        person.isFiltered = !matches;
+
+                        var matchesCountries = countries.length ? person.country && countries.some(function(c) {
+                            return c.code === person.country.code;
+                        }) : true;
+
+                        person.isFiltered = !matchesSearchTerm || !matchesCountries;
                         return personId;
                     });
                     return sortPeople(people);
