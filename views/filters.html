@@ -4,7 +4,7 @@
 <div class="modal-body" id="modal-body">
     <ui-select multiple ng-model="view.state.ui.filters.countries" theme="bootstrap" sortable="true" close-on-select="false">
         <ui-select-match placeholder="Select country...">{{$item.name}}</ui-select-match>
-        <ui-select-choices repeat="country in view.countries | filter: {name: $select.search}">
+        <ui-select-choices repeat="country in view.userCountries | filter: {name: $select.search}">
             <div ng-bind-html="country.name | highlight: $select.search"></div>
         </ui-select-choices>
     </ui-select>
