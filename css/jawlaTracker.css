@@ -114,3 +114,7 @@ ul.visit-history {
 textarea.form-control {
   height: 100%;
 }
+
+.confirmbutton-popover {
+  min-width: 200px;
+}
