@@ -1,4 +1,4 @@
-var app = angular.module('jawlaTracker', ['ngRoute', 'ngSanitize', 'ui.bootstrap', 'ui.select']);
+var app = angular.module('jawlaTracker', ['ngRoute', 'ngSanitize', 'ngAnimate', 'ui.bootstrap', 'ui.select']);
 
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
