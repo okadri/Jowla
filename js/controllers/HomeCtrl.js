@@ -25,8 +25,8 @@ app.controller('HomeCtrl', ['$scope', '$log', '$window', '$timeout', '$routePara
             $location.path('/' + $scope.view.state.ui.sheet.id + '/p/' + personId);
         };
 
-        $scope.switchDisplayMode = function () {
-            actionCreators.switchDisplayMode();
+        $scope.switchDisplayMode = function (mode) {
+            actionCreators.switchDisplayMode(mode);
         };
 
         $scope.search = function () {

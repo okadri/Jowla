@@ -115,7 +115,7 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     ui.mapIsPopulated = true;
                     return ui;
                 case SWITCH_DISPLAY_MODE:
-                    ui.displayMode = (ui.displayMode == DISPLAY_MODE.LIST) ? DISPLAY_MODE.MAP : DISPLAY_MODE.LIST;
+                    ui.displayMode = action.payload.mode || DISPLAY_MODE.LIST;
                     return ui;
                 case FILTER_PEOPLE:
                     var countries = action.payload.filters.countries || [];

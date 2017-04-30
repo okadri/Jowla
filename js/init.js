@@ -10,7 +10,7 @@ var MAP_READY = 'MAP_READY';
 var POPULATE_MAP = 'POPULATE_MAP';
 var SWITCH_DISPLAY_MODE = 'SWITCH_DISPLAY_MODE';
 var FILTER_PEOPLE = 'FILTER_PEOPLE';
-var DISPLAY_MODE = { MAP: 'map', LIST: 'list' };
+var DISPLAY_MODE = { LIST: 0, MAP: 1 };
 
 var countries = [
     { name: 'Afghanistan', code: 'AF' },

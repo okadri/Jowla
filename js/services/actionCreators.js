@@ -127,10 +127,12 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
                     stateService.reduce(action);
                 });
             },
-            switchDisplayMode: function (people) {
+            switchDisplayMode: function (mode) {
                 var action = {
                     type: SWITCH_DISPLAY_MODE,
-                    payload: {}
+                    payload: {
+                        mode: mode
+                    }
                 };
                 stateService.reduce(action);
             },
