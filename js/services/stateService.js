@@ -92,6 +92,7 @@ app.service('stateService', function ($rootScope, $log, Person) {
                 mapIsReady: false,
                 mapIsPopulated: false,
                 currentUser: undefined,
+                filterable: false,
                 filters: {},
                 sheet: {}
             }
@@ -99,6 +100,8 @@ app.service('stateService', function ($rootScope, $log, Person) {
                 case GET_SHEET_ROWS:
                     ui.sheet.title = action.payload.title;
                     ui.sheet.users = action.payload.users;
+                    // Set filterable to true if any row has a country code set
+                    ui.filterable = action.payload.rows.some(function(r) { return r[9]; });
                     return ui;
                 case UPDATE_SIGNIN_STATUS:
                     ui = ui || defaultUi;
@@ -116,6 +119,11 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     return ui;
                 case SWITCH_DISPLAY_MODE:
                     ui.displayMode = action.payload.mode || DISPLAY_MODE.LIST;
+                    return ui;
+                case UPDATE_COUNTRY:
+                    var hasCountry = !!action.payload.updatedPerson.country;
+                    // Set filterable to true if a country was set
+                    ui.filterable = ui.filterable || hasCountry;
                     return ui;
                 case FILTER_PEOPLE:
                     var countries = action.payload.filters.countries || [];

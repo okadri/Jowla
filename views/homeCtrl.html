@@ -10,7 +10,7 @@
                 <i ng-click="clearSearch()" class="glyphicon glyphicon-remove clickable"></i>
             </div>
             <div class="col-xs-12" ng-hide="view.navMode">
-                <a ng-click="openFilters()" class="glyphicon glyphicon-filter nav-btn" ng-class="{ 'active': view.state.ui.filters.isFiltered }"></a>
+                <a ng-click="openFilters()" ng-show="view.state.ui.filterable" class="glyphicon glyphicon-filter nav-btn" ng-class="{ 'active': view.state.ui.filters.isFiltered }"></a>
                 <a ng-click="view.navMode = 'search';" class="glyphicon glyphicon-search nav-btn"></a>
                 <a class="glyphicon glyphicon-log-out nav-btn" confirm-button="logout()" message="Are you sure you want to logout?" position="bottom"></a>
             </div>
