@@ -5,3 +5,11 @@ app.filter('peopleFilter', [function () {
         });
 	};
 }]);
+
+app.filter('languageCodes', [function () {
+	return function (languages) {
+		return languages.map(function(l) {
+			return l.name;
+		}).join(', ');
+	};
+}]);

@@ -48,7 +48,10 @@
                     <uib-accordion close-others="false">
                         <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[0]">
                             <uib-accordion-heading ng-click="view.accIsOpen[0]=!view.accIsOpen[0]">
-                                <div><i class="fa fa-history"></i> Visit History</div>
+                                <div>
+                                    <i class="fa fa-history"></i> Visit History
+                                    <small class="accordion-sneak pull-right" ng-bind="view.person.visitHistory.length ? (view.person.visitHistory[0] | date:shortDate) : 'Never'"></small>
+                                </div>
                             </uib-accordion-heading>
                             <span class="btn btn-default btn-block" ng-click="addVisit()" ng-disabled="view.person.isVisitedToday()">Report Visit</span>
                             <ul class="visit-history" ng-show="view.person.visitHistory.length">
@@ -60,14 +63,20 @@
                         </div>
                         <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[1]">
                             <uib-accordion-heading ng-click="view.accIsOpen[1]=!view.accIsOpen[1]">
-                                <div><i class="fa fa-sticky-note-o"></i> Notes</div>
+                                <div>
+                                    <i class="fa fa-sticky-note-o"></i> Notes
+                                    <small class="accordion-sneak pull-right" ng-bind="view.person.notes"></small>
+                                </div>
                             </uib-accordion-heading>
                             <textarea class="form-control" rows="5" placeholder="Notes..." ng-model="view.person.notes" ng-model-options="{ debounce: 1000 }"
                                 ng-change="updateNotes()"></textarea>
                         </div>
                         <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[2]">
                             <uib-accordion-heading ng-click="view.accIsOpen[2]=!view.accIsOpen[2]">
-                                <div><i class="fa fa-globe"></i> Country of Origin</div>
+                                <div>
+                                    <i class="fa fa-globe"></i> Country of Origin
+                                    <small class="accordion-sneak pull-right" ng-bind="view.person.country.name"></small>
+                                </div>
                             </uib-accordion-heading>
                             <ui-select ng-model="view.person.country" theme="bootstrap" sortable="true" close-on-select="true" on-select="updateCountry()">
                                 <ui-select-match placeholder="Select country...">{{ $select.selected.name }}</ui-select-match>
@@ -78,7 +87,10 @@
                         </div>
                         <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[3]">
                             <uib-accordion-heading ng-click="view.accIsOpen[3]=!view.accIsOpen[3]">
-                                <div><i class="fa fa-language"></i> Languages Spoken</div>
+                                <div>
+                                    <i class="fa fa-language"></i> Languages Spoken
+                                    <small class="accordion-sneak pull-right" ng-bind="view.person.languages | languageCodes"></small>
+                                </div>
                             </uib-accordion-heading>
                             <ui-select multiple ng-model="view.person.languages" theme="bootstrap" sortable="true" close-on-select="true" on-select="updateLanguages()"
                                 on-remove="updateLanguages()">

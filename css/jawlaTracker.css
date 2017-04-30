@@ -133,3 +133,11 @@ textarea.form-control {
 .confirmbutton-popover {
   min-width: 200px;
 }
+
+.accordion-sneak {
+  padding: 3px;
+  max-width: 100px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
