@@ -32,8 +32,14 @@ app.factory('Person', [function () {
                 console.warn("metaData not valid", personRowData[0]);
             }
 
-            var country = personRowData[9] ? countries.find(function (c) {
+            var userCountry = personRowData[9] ? countries.find(function (c) {
                 return c.code.toLowerCase() == personRowData[9].toLowerCase();
+            }) : undefined;
+
+            var userLanguages = personRowData[10] ? personRowData[10].split(',').map(function(code) {
+                return languages.find(function(l) {
+                    return l.code.toLowerCase() == code.toLowerCase();
+                });
             }) : undefined;
 
             angular.extend(this, {
@@ -44,7 +50,8 @@ app.factory('Person', [function () {
                 fullName: personRowData[1] + ' ' + personRowData[2],
                 address: personRowData[3] + ', ' + personRowData[4] + ', ' + personRowData[5] + ' ' + personRowData[6],
                 notes: compinedNotes,
-                country: country,
+                country: userCountry,
+                languages: userLanguages,
                 addressMD5: metaData.addressMD5,
                 addressLat: metaData.addressLat,
                 addressLng: metaData.addressLng,

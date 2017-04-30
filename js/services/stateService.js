@@ -53,6 +53,7 @@ app.service('stateService', function ($rootScope, $log, Person) {
                 case FILTER_PEOPLE:
                     var searchTerm = action.payload.filters.searchTerm || '';
                     var countries = action.payload.filters.countries || [];
+                    var languages = action.payload.filters.languages || [];
                     var searchFields = ['fullName', 'address', 'notes'];
                     people.ids.forEach(function(personId) {
                         var person = people.list[personId];
@@ -66,7 +67,11 @@ app.service('stateService', function ($rootScope, $log, Person) {
                             return c.code === person.country.code;
                         }) : true;
 
-                        person.isFiltered = !matchesSearchTerm || !matchesCountries;
+                        var matchesLanguages = languages.length ? person.languages && languages.some(function(l) {
+                            return person.languages.some(function(pl) { return pl.code == l.code });
+                        }) : true;
+
+                        person.isFiltered = !matchesSearchTerm || !matchesCountries || !matchesLanguages;
                         return personId;
                     });
                     return sortPeople(people);
@@ -101,7 +106,7 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     ui.sheet.title = action.payload.title;
                     ui.sheet.users = action.payload.users;
                     // Set filterable to true if any row has a country code set
-                    ui.filterable = action.payload.rows.some(function(r) { return r[9]; });
+                    ui.filterable = action.payload.rows.some(function(r) { return r[9] || r[10]; });
                     return ui;
                 case UPDATE_SIGNIN_STATUS:
                     ui = ui || defaultUi;
@@ -121,13 +126,16 @@ app.service('stateService', function ($rootScope, $log, Person) {
                     ui.displayMode = action.payload.mode || DISPLAY_MODE.LIST;
                     return ui;
                 case UPDATE_COUNTRY:
+                case UPDATE_LANGUAGES:
                     var hasCountry = !!action.payload.updatedPerson.country;
-                    // Set filterable to true if a country was set
-                    ui.filterable = ui.filterable || hasCountry;
+                    var hasLanguages = action.payload.updatedPerson.languages && action.payload.updatedPerson.languages.length;
+                    // Set filterable to true if a country or a language was set
+                    ui.filterable = ui.filterable || hasCountry || hasLanguages;
                     return ui;
                 case FILTER_PEOPLE:
                     var countries = action.payload.filters.countries || [];
-                    if (countries.length) {
+                    var languages = action.payload.filters.languages || [];
+                    if (countries.length || languages.length) {
                         ui.filters.isFiltered = true;
                     } else {
                         ui.filters.isFiltered = false;

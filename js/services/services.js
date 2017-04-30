@@ -71,7 +71,7 @@ app.service('gapiService', ['$q', function ($q) {
 
                 gapi.client.sheets.spreadsheets.values.get({
                     spreadsheetId: SPREAD_SHEET_ID,
-                    range: firstSheet.properties.title + '!A2:J',
+                    range: firstSheet.properties.title + '!A2:K',
                 }).then(function (response) {
                     deferred.resolve({
                         title: title,
@@ -154,6 +154,24 @@ app.service('gapiService', ['$q', function ($q) {
             values: [[newCountryCode]]
         }).then(function (response) {
             deferred.resolve(updatedPerson);
+        });
+
+        return deferred.promise;
+    };
+
+    self.updateLanguages = function (person) {
+        var deferred = $q.defer();
+
+        var updatedPerson = angular.copy(person);
+        var newLanguageCodes = updatedPerson.languages ? updatedPerson.languages.map(function(l) { return l.code; }).join(',') : "";
+
+        gapi.client.sheets.spreadsheets.values.update({
+            spreadsheetId: SPREAD_SHEET_ID,
+            range: 'List!K' + (person.id + 2),
+            valueInputOption: 'USER_ENTERED',
+            values: [[newLanguageCodes]]
+        }).then(function (response) {
+            deferred.resolve(newLanguageCodes);
         });
 
         return deferred.promise;

@@ -116,6 +116,17 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
                     stateService.reduce(action);
                 });
             },
+            updateLanguages: function (person) {
+                gapiService.updateLanguages(person).then(function (updatedPerson) {
+                    var action = {
+                        type: UPDATE_LANGUAGES,
+                        payload: {
+                            updatedPerson: updatedPerson
+                        }
+                    };
+                    stateService.reduce(action);
+                });
+            },
             hidePerson: function (person) {
                 gapiService.hidePerson(person).then(function (updatedPerson) {
                     var action = {

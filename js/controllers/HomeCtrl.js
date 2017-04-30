@@ -51,8 +51,9 @@ app.controller('HomeCtrl', ['$scope', '$log', '$window', '$timeout', '$routePara
                 }
             });
 
-            modalInstance.result.then(function (selectedCountries) {
-                $scope.view.state.ui.filters.countries = selectedCountries;
+            modalInstance.result.then(function (filters) {
+                $scope.view.state.ui.filters.countries = filters.countries;
+                $scope.view.state.ui.filters.languages = filters.languages;
                 actionCreators.filterPeople($scope.view.state.ui.filters);
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());

@@ -4,7 +4,8 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
         $scope.view = {
             state: state,
             person: state.people.list[$routeParams.personId],
-            countries: countries
+            countries: countries,
+            languages: languages
         };
         actionCreators.setPageTitle($scope.view.person.fullName);
 
@@ -34,6 +35,10 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
 
         $scope.updateCountry = function () {
             actionCreators.updateCountry($scope.view.person);
+        };
+
+        $scope.updateLanguages = function () {
+            actionCreators.updateLanguages($scope.view.person);
         };
 
         $scope.hidePerson = function () {
