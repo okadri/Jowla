@@ -5,7 +5,8 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
             state: state,
             person: state.people.list[$routeParams.personId],
             countries: countries,
-            languages: languages
+            languages: languages,
+            accIsOpen: [true, false, false, false]
         };
         actionCreators.setPageTitle($scope.view.person.fullName);
 

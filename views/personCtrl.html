@@ -46,7 +46,10 @@
             <div class="row">
                 <div class="col-xs-12">
                     <uib-accordion close-others="false">
-                        <div uib-accordion-group class="panel-default" heading="Visit History" is-open="true">
+                        <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[0]">
+                            <uib-accordion-heading ng-click="view.accIsOpen[0]=!view.accIsOpen[0]">
+                                <div><i class="fa fa-history"></i> Visit History</div>
+                            </uib-accordion-heading>
                             <span class="btn btn-default btn-block" ng-click="addVisit()" ng-disabled="view.person.isVisitedToday()">Report Visit</span>
                             <ul class="visit-history" ng-show="view.person.visitHistory.length">
                                 <li ng-repeat="visit in view.person.visitHistory | limitTo:3 track by $index">
@@ -55,11 +58,17 @@
                                 </li>
                             </ul>
                         </div>
-                        <div uib-accordion-group class="panel-default" heading="Notes">
+                        <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[1]">
+                            <uib-accordion-heading ng-click="view.accIsOpen[1]=!view.accIsOpen[1]">
+                                <div><i class="fa fa-sticky-note-o"></i> Notes</div>
+                            </uib-accordion-heading>
                             <textarea class="form-control" rows="5" placeholder="Notes..." ng-model="view.person.notes" ng-model-options="{ debounce: 1000 }"
                                 ng-change="updateNotes()"></textarea>
                         </div>
-                        <div uib-accordion-group class="panel-default" heading="Country of Origin">
+                        <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[2]">
+                            <uib-accordion-heading ng-click="view.accIsOpen[2]=!view.accIsOpen[2]">
+                                <div><i class="fa fa-globe"></i> Country of Origin</div>
+                            </uib-accordion-heading>
                             <ui-select ng-model="view.person.country" theme="bootstrap" sortable="true" close-on-select="true" on-select="updateCountry()">
                                 <ui-select-match placeholder="Select country...">{{ $select.selected.name }}</ui-select-match>
                                 <ui-select-choices repeat="country in view.countries | filter: {name: $select.search}">
@@ -67,7 +76,10 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
-                        <div uib-accordion-group class="panel-default" heading="Languages Spoken">
+                        <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[3]">
+                            <uib-accordion-heading ng-click="view.accIsOpen[3]=!view.accIsOpen[3]">
+                                <div><i class="fa fa-language"></i> Languages Spoken</div>
+                            </uib-accordion-heading>
                             <ui-select multiple ng-model="view.person.languages" theme="bootstrap" sortable="true" close-on-select="true" on-select="updateLanguages()"
                                 on-remove="updateLanguages()">
                                 <ui-select-match placeholder="Select languages...">{{$item.name}} ({{$item.nativeName}})</ui-select-match>
