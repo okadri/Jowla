@@ -264,6 +264,14 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 
 			self.getMarkers(people, personId).then(function (markers) {
 				var infoWindow = new google.maps.InfoWindow(), marker, i;
+				var currentPositionIcon = {
+					url: '/images/currentPosition.png',
+					scaledSize: new google.maps.Size(24, 24)
+				};
+				var markerIcon = {
+					url: '/images/marker.png',
+					scaledSize: new google.maps.Size(16, 16)
+				};
 
 				// Create the current posiion map marker
 				self.getCurrentPosition().then(function (currentPosition) {
@@ -272,6 +280,7 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 					new google.maps.Marker({
 						position: position,
 						map: map,
+						icon: currentPositionIcon,
 						title: "You are here"
 					});
 					map.fitBounds(bounds);
@@ -288,6 +297,7 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 					marker = new google.maps.Marker({
 						position: position,
 						map: map,
+						icon: markerIcon,
 						title: person.fullName
 					});
 
