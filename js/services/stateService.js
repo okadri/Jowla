@@ -81,7 +81,7 @@ app.service('stateService', function ($rootScope, $log, Person) {
 					}
 					return people;
 				case POPULATE_MAP:
-					action.payload.markers.people.forEach(function (person) {
+					action.payload.markers.forEach(function (person) {
 						people.list[person.id] = person;
 					});
 					return people;

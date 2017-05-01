@@ -260,24 +260,29 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 			deferred.reject("No map element");
 		} else {
 			var map = new google.maps.Map(mapEl, config);
+			var position;
 
 			self.getMarkers(people, personId).then(function (markers) {
 				var infoWindow = new google.maps.InfoWindow(), marker, i;
 
 				// Create the current posiion map marker
-				var position = new google.maps.LatLng(markers.currentPosition.lat, markers.currentPosition.lng);
-				new google.maps.Marker({
-					position: position,
-					map: map,
-					title: "You are here"
+				self.getCurrentPosition().then(function (currentPosition) {
+					position = new google.maps.LatLng(currentPosition.lat, currentPosition.lng);
+					bounds.extend(position);
+					new google.maps.Marker({
+						position: position,
+						map: map,
+						title: "You are here"
+					});
+					map.fitBounds(bounds);
 				});
 
-				if (markers.people.length === 0) {
+				if (markers.length === 0) {
 					deferred.resolve(markers);
 				}
 
 				// Loop through our array of markers & place each one on the map
-				markers.people.forEach(function (person) {
+				markers.forEach(function (person) {
 					position = new google.maps.LatLng(person.addressLat, person.addressLng);
 					bounds.extend(position);
 					marker = new google.maps.Marker({
@@ -317,61 +322,50 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 		var deferred = $q.defer();
 		var markers = [];
 
-		self.getCurrentPosition().then(function (currentPosition) {
-			if (people.ids instanceof Array === false) {
-				return deferred.reject("Passed value is not an array");
-			} else if (people.ids.length === 0) {
-				deferred.resolve({
-					currentPosition: currentPosition,
-					people: []
+		if (people.ids instanceof Array === false) {
+			return deferred.reject("Passed value is not an array");
+		} else if (people.ids.length === 0) {
+			deferred.resolve([]);
+		}
+
+		var validMarkers = 0;
+		var skippedMarkers = 0;
+		var completedMarkers = 0;
+
+		if (personId !== undefined) {
+			// Single person map
+			self.getMarker(people.list[personId]).then(function (marker) {
+				markers.push(marker);
+				$rootScope.$broadcast('mapPopulationStatusChanged', {
+					completed: 1,
+					total: 1
 				});
-			}
+				deferred.resolve(markers);
+			});
+		} else {
+			// Multiple pointers map
+			people.ids.forEach(function (pId) {
+				var person = people.list[pId];
+				if (person.isFiltered) {
+					skippedMarkers++;
+				} else {
+					// Only display people that match search term
+					self.getMarker(person).then(function (marker) {
+						markers.push(marker);
 
-			var validMarkers = 0;
-			var skippedMarkers = 0;
-			var completedMarkers = 0;
-
-			if (personId !== undefined) {
-				// Single person map
-				self.getMarker(people.list[personId]).then(function (marker) {
-					markers.push(marker);
-					$rootScope.$broadcast('mapPopulationStatusChanged', {
-						completed: 1,
-						total: 1
-					});
-					deferred.resolve({
-						currentPosition: currentPosition,
-						people: markers
-					});
-				});
-			} else {
-				// Multiple pointers map
-				people.ids.forEach(function (pId) {
-					var person = people.list[pId];
-					if (person.isFiltered) {
-						skippedMarkers++;
-					} else {
-						// Only display people that match search term
-						self.getMarker(person).then(function (marker) {
-							markers.push(marker);
-
-							validMarkers++;
-							completedMarkers = validMarkers + skippedMarkers;
-							$rootScope.$broadcast('mapPopulationStatusChanged', {
-								completed: completedMarkers,
-								total: people.ids.length
-							});
-							if (completedMarkers === people.ids.length) {
-								deferred.resolve({
-									currentPosition: currentPosition,
-									people: markers
-								});
-							}
+						validMarkers++;
+						completedMarkers = validMarkers + skippedMarkers;
+						$rootScope.$broadcast('mapPopulationStatusChanged', {
+							completed: completedMarkers,
+							total: people.ids.length
 						});
-					}
-				});
-			}
-		});
+						if (completedMarkers === people.ids.length) {
+							deferred.resolve(markers);
+						}
+					});
+				}
+			});
+		}
 
 		return deferred.promise;
 	};
