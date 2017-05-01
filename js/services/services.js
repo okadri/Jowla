@@ -418,7 +418,11 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 			}, function () {
 				console.warn("Could not get current location");
 				deferred.resolve();
-			});
+			}, {
+					enableHighAccuracy: true
+					, timeout: 5000
+				}
+			);
 		} else {
 			console.warn("Browser doesn't support Geolocation");
 			deferred.resolve();
