@@ -49,7 +49,7 @@
 							<uib-accordion-heading ng-click="view.accIsOpen[0]=!view.accIsOpen[0]">
 								<div>
 									<i class="fa fa-history"></i> Visit History
-									<small class="accordion-sneak pull-right" ng-bind="view.person.visitHistory.length ? (view.person.visitHistory[0] | date:shortDate) : 'Never'"></small>
+									<small class="accordion-sneak pull-right" ng-bind="view.person.visitHistory.length ? (view.person.visitHistory[0].date | date:shortDate) : 'Never'"></small>
 								</div>
 							</uib-accordion-heading>
 							<span class="btn btn-default btn-block" ng-click="addVisit()" ng-disabled="view.person.isVisitedToday()">Report Visit</span>
