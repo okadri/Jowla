@@ -148,7 +148,6 @@ select.multi-token-select {
 	background-color: #5cb85c;
 	width: 5em;
 	padding: 1px;
-	font-size: 75%;
 	font-weight: 700;
 	line-height: 1;
 	color: #fff;
@@ -162,4 +161,9 @@ select.multi-token-select {
 span.label-token {
 	margin: 0 3px 6px 0;
 	float: left;
+	font-size: 100%;
+}
+
+span.label-token span.glyphicon-remove {
+	padding: 3px;
 }
