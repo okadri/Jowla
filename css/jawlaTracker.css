@@ -1,59 +1,59 @@
 body {
-  padding-top: 50px;
+	padding-top: 50px;
 }
 
 .clickable {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .loading-overlay, .progress-overlay {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.1);
-  top: 0;
-  left: 0;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background-color: rgba(0, 0, 0, 0.1);
+	top: 0;
+	left: 0;
 }
 
 .loading-overlay .loading-spinner, .progress-overlay .progress-container {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 .loading-overlay .loading-spinner * {
-  display: block;
-  margin: auto;
+	display: block;
+	margin: auto;
 }
 
 .row-marginless {
-  margin: 0;
+	margin: 0;
 }
 
 .navbar-nav {
-  white-space: nowrap;
+	white-space: nowrap;
 }
 
 .navbar-brand-container {
-  width: 35%;
-  white-space: nowrap;
+	width: 35%;
+	white-space: nowrap;
 }
 
 .navbar-tools-container {
-  width: 65%;
-  padding-top: 8px;
+	width: 65%;
+	padding-top: 8px;
 }
 
 /* enable absolute positioning */
 .inner-addon { 
-  position: relative; 
+	position: relative; 
 }
 
 /* style icon */
 .inner-addon .glyphicon {
-  position: absolute;
-  padding: 10px 25px;
+	position: absolute;
+	padding: 10px 25px;
 }
 
 /* align icon */
@@ -65,79 +65,101 @@ body {
 .right-addon input { padding-right: 30px; }
 
 .nav-btn {
-  color: #fff;
-  font-size: 120%;
-  padding: 7px 12px;
+	color: #fff;
+	font-size: 120%;
+	padding: 7px 12px;
 }
 
 .nav-btn:hover {
-  color: #ccc;
-  text-decoration: none;
+	color: #ccc;
+	text-decoration: none;
 }
 
 .nav-btn.active {
-  color: #337ab7;
+	color: #337ab7;
 }
 
 .main-container {
-  padding: 0;
-  overflow-x: hidden;
+	padding: 0;
+	overflow-x: hidden;
 }
 
 .jawla-toolbar-container {
-  padding: 20px;
+	padding: 20px;
 }
 
 table.table-jawla {
-  white-space: nowrap;
+	white-space: nowrap;
 }
 
 table.table-jawla tr {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 table.table-jawla tr:hover td {
-  background-color: #ebebeb;
+	background-color: #ebebeb;
 }
 
 .table.table-jawla td {
-    max-width: 100px;
+		max-width: 100px;
 }
 .table.table-jawla td small {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
-    max-width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+	max-width: 100%;
 }
 
 .btn-sharp {
-  border-radius: 0;
+	border-radius: 0;
 }
 
 .page-title {
-    padding-bottom: 9px;
-    border-bottom: 1px solid #eee;
+	padding-bottom: 9px;
+	border-bottom: 1px solid #eee;
 }
 
 ul.visit-history {
-  list-style: none;
-  text-align: center;
-  padding: 0.7em 0;
+	list-style: none;
+	text-align: center;
+	padding: 0.7em 0;
 }
 
 textarea.form-control {
-  height: 100%;
+	height: 100%;
 }
 
 .confirmbutton-popover {
-  min-width: 200px;
+	min-width: 200px;
 }
 
 .accordion-sneak {
-  padding: 3px;
-  max-width: 100px;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	padding: 3px;
+	max-width: 100px;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+select.multi-token-select {
+	display: block;
+	clear: both;
+	background-color: #5cb85c;
+	width: 5em;
+	padding: 1px;
+	font-size: 75%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+	margin-top: 0.3em;
+}
+
+span.label-token {
+	margin: 0 3px 6px 0;
+	float: left;
 }

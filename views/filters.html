@@ -1,35 +1,23 @@
 <div class="modal-header">
-    <h3 class="modal-title" id="modal-title">Filters</h3>
+	<h3 class="modal-title" id="modal-title">Filters</h3>
 </div>
 <div class="modal-body" id="modal-body">
 
-    <div ng-if="view.userCountries.length">
-        <label>Countries</label>
-        <ui-select multiple ng-model="view.state.ui.filters.countries" theme="bootstrap" sortable="true" close-on-select="true">
-            <ui-select-match placeholder="Select countries...">{{$item.name}}</ui-select-match>
-            <ui-select-choices repeat="country in view.userCountries | filter: {name: $select.search}">
-                <div ng-bind-html="country.name | highlight: $select.search"></div>
-            </ui-select-choices>
-        </ui-select>
-    </div>
+	<div ng-if="view.userCountries.length">
+		<label>Countries</label>
+		<multi-token choices="view.userCountries" selected="view.state.ui.filters.countries" display-property="name" id-property="code"></multi-token>
+	</div>
 
-    <hr ng-if="view.userCountries.length && view.userLanguages.length" />
+	<hr ng-if="view.userCountries.length && view.userLanguages.length" />
 
-    <div ng-if="view.userLanguages.length">
-        <label>Languages</label>
-        <ui-select multiple ng-model="view.state.ui.filters.languages" theme="bootstrap" sortable="true" close-on-select="true">
-            <ui-select-match placeholder="Select languages...">{{$item.name}} ({{$item.nativeName}})</ui-select-match>
-            <ui-select-choices repeat="language in view.userLanguages | filter: {name: $select.search}">
-                <span ng-bind-html="language.name | highlight: $select.search"></span>
-                (<span ng-bind-html="language.nativeName | highlight: $select.search"></span>)
-            </ui-select-choices>
-        </ui-select>
-    </div>
+	<div ng-if="view.userLanguages.length">
+		<label>Languages</label>
+		<multi-token choices="view.userLanguages" selected="view.state.ui.filters.languages" display-property="name" id-property="code"></multi-token>
+	</div>
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default btn-sm" type="button" ng-click="cancel()">Cancel</button>
-    <button class="btn btn-info btn-sm" type="button" ng-click="clearFilters()"
-        ng-show="view.state.ui.filters.isFiltered">Clear All</button>
-    <button class="btn btn-primary btn-sm" type="button" ng-click="apply()">Apply</button>
+	<button class="btn btn-default btn-sm" type="button" ng-click="cancel()">Cancel</button>
+	<button class="btn btn-info btn-sm" type="button" ng-click="clearFilters()" ng-show="view.state.ui.filters.isFiltered">Clear All</button>
+	<button class="btn btn-primary btn-sm" type="button" ng-click="apply()">Apply</button>
 </div>

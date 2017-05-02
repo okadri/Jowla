@@ -1,112 +1,101 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header navbar-brand-container pull-left">
-            <a class="navbar-brand" ng-href="/#/{{ view.state.ui.sheet.id }}" ng-bind="view.state.ui.sheet.title"></a>
-        </div>
-        <div class="navbar-header navbar-tools-container pull-right text-right" ng-if="view.state.ui.isSignedIn">
-            <div class="col-xs-12 inner-addon right-addon">
-                <a class="glyphicon glyphicon-log-out nav-btn" confirm-button="logout()" message="Are you sure you want to logout?" position="bottom"></a>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<div class="navbar-header navbar-brand-container pull-left">
+			<a class="navbar-brand" ng-href="/#/{{ view.state.ui.sheet.id }}" ng-bind="view.state.ui.sheet.title"></a>
+		</div>
+		<div class="navbar-header navbar-tools-container pull-right text-right" ng-if="view.state.ui.isSignedIn">
+			<div class="col-xs-12 inner-addon right-addon">
+				<a class="glyphicon glyphicon-log-out nav-btn" confirm-button="logout()" message="Are you sure you want to logout?" position="bottom"></a>
+			</div>
+		</div>
+	</div>
 </nav>
 
 <div class="main-container row row-marginless">
-    <div ng-if="view.state.ui.isSignedIn == false">
-        <button class="btn btn-primary btn-block btn-lg btn-sharp" ng-click="login()">
-            Login with Google
-        </button>
-    </div>
+	<div ng-if="view.state.ui.isSignedIn == false">
+		<button class="btn btn-primary btn-block btn-lg btn-sharp" ng-click="login()">
+						Login with Google
+				</button>
+	</div>
 
-    <div ng-if="view.state.ui.isSignedIn">
-        <div class="jawla-map-container">
-            <div id="map" class="col-xs-12" style="height: calc(40vh - 55px);"></div>
-        </div>
+	<div ng-if="view.state.ui.isSignedIn">
+		<div class="jawla-map-container">
+			<div id="map" class="col-xs-12" style="height: calc(40vh - 55px);"></div>
+		</div>
 
-        <div class="jawla-person-container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <a ng-href="https://www.google.com/maps/place/{{ view.person.address }}" target="_blank" class="btn btn-info btn-block btn-sharp">
-                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Navigate to {{ view.person.fullName
-                        }}
-                    </a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12 text-center">
-                    <h1 class="page-title" ng-style="{'font-size' : 135/view.person.fullName.length + 'vmin'}">
-                        {{ view.person.fullName }}
-                        <small class="glyphicon glyphicon-remove-sign text-danger" confirm-button="hidePerson()" message="Are you sure you want to delete?"></small>
-                    </h1>
-                    <p class="text-muted" ng-style="{'font-size' : 170/view.person.address.length + 'vmin'}">
-                        {{ view.person.address }}
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <uib-accordion close-others="false">
-                        <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[0]">
-                            <uib-accordion-heading ng-click="view.accIsOpen[0]=!view.accIsOpen[0]">
-                                <div>
-                                    <i class="fa fa-history"></i> Visit History
-                                    <small class="accordion-sneak pull-right" ng-bind="view.person.visitHistory.length ? (view.person.visitHistory[0] | date:shortDate) : 'Never'"></small>
-                                </div>
-                            </uib-accordion-heading>
-                            <span class="btn btn-default btn-block" ng-click="addVisit()" ng-disabled="view.person.isVisitedToday()">Report Visit</span>
-                            <ul class="visit-history" ng-show="view.person.visitHistory.length">
-                                <li ng-repeat="visit in view.person.visitHistory | limitTo:3 track by $index">
-                                    <small ng-bind="visit.date | date:shortDate"></small> -
-                                    <small class="text-muted" ng-bind="visit.reportedBy"></small>
-                                </li>
-                            </ul>
-                        </div>
-                        <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[1]">
-                            <uib-accordion-heading ng-click="view.accIsOpen[1]=!view.accIsOpen[1]">
-                                <div>
-                                    <i class="fa fa-sticky-note-o"></i> Notes
-                                    <small class="accordion-sneak pull-right" ng-bind="view.person.notes"></small>
-                                </div>
-                            </uib-accordion-heading>
-                            <textarea class="form-control" rows="5" placeholder="Notes..." ng-model="view.person.notes" ng-model-options="{ debounce: 1000 }"
-                                ng-change="updateNotes()"></textarea>
-                        </div>
-                        <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[2]">
-                            <uib-accordion-heading ng-click="view.accIsOpen[2]=!view.accIsOpen[2]">
-                                <div>
-                                    <i class="fa fa-globe"></i> Country of Origin
-                                    <small class="accordion-sneak pull-right" ng-bind="view.person.country.name"></small>
-                                </div>
-                            </uib-accordion-heading>
-                            <ui-select ng-model="view.person.country" theme="bootstrap" sortable="true" close-on-select="true" on-select="updateCountry()">
-                                <ui-select-match placeholder="Select country...">{{ $select.selected.name }}</ui-select-match>
-                                <ui-select-choices repeat="country in view.countries | filter: {name: $select.search}">
-                                    <div ng-bind-html="country.name | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
-                        </div>
-                        <div uib-accordion-group class="panel-default" is-open="view.accIsOpen[3]">
-                            <uib-accordion-heading ng-click="view.accIsOpen[3]=!view.accIsOpen[3]">
-                                <div>
-                                    <i class="fa fa-language"></i> Languages Spoken
-                                    <small class="accordion-sneak pull-right" ng-bind="view.person.languages | languageCodes"></small>
-                                </div>
-                            </uib-accordion-heading>
-                            <ui-select multiple ng-model="view.person.languages" theme="bootstrap" sortable="true" close-on-select="true" on-select="updateLanguages()"
-                                on-remove="updateLanguages()">
-                                <ui-select-match placeholder="Select languages...">{{$item.name}} ({{$item.nativeName}})</ui-select-match>
-                                <ui-select-choices repeat="language in view.languages | filter: {name: $select.search}">
-                                    <span ng-bind-html="language.name | highlight: $select.search"></span> (
-                                    <span ng-bind-html="language.nativeName | highlight: $select.search"></span>)
-                                </ui-select-choices>
-                            </ui-select>
-                        </div>
-                    </uib-accordion>
-                </div>
+		<div class="jawla-person-container">
+			<div class="row">
+				<div class="col-xs-12">
+					<a ng-href="https://www.google.com/maps/place/{{ view.person.address }}" target="_blank" class="btn btn-info btn-block btn-sharp">
+						<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Navigate to {{ view.person.fullName }}
+					</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<h1 class="page-title" ng-style="{'font-size' : 135/view.person.fullName.length + 'vmin'}">
+						{{ view.person.fullName }}
+						<small class="glyphicon glyphicon-remove-sign text-danger" confirm-button="hidePerson()" message="Are you sure you want to delete?"></small>
+					</h1>
+					<p class="text-muted" ng-style="{'font-size' : 170/view.person.address.length + 'vmin'}">
+						{{ view.person.address }}
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<uib-accordion close-others="false">
+						<div uib-accordion-group class="panel-default" is-open="view.accIsOpen[0]">
+							<uib-accordion-heading ng-click="view.accIsOpen[0]=!view.accIsOpen[0]">
+								<div>
+									<i class="fa fa-history"></i> Visit History
+									<small class="accordion-sneak pull-right" ng-bind="view.person.visitHistory.length ? (view.person.visitHistory[0] | date:shortDate) : 'Never'"></small>
+								</div>
+							</uib-accordion-heading>
+							<span class="btn btn-default btn-block" ng-click="addVisit()" ng-disabled="view.person.isVisitedToday()">Report Visit</span>
+							<ul class="visit-history" ng-show="view.person.visitHistory.length">
+								<li ng-repeat="visit in view.person.visitHistory | limitTo:3 track by $index">
+									<small ng-bind="visit.date | date:shortDate"></small> -
+									<small class="text-muted" ng-bind="visit.reportedBy"></small>
+								</li>
+							</ul>
+						</div>
+						<div uib-accordion-group class="panel-default" is-open="view.accIsOpen[1]">
+							<uib-accordion-heading ng-click="view.accIsOpen[1]=!view.accIsOpen[1]">
+								<div>
+									<i class="fa fa-sticky-note-o"></i> Notes
+									<small class="accordion-sneak pull-right" ng-bind="view.person.notes"></small>
+								</div>
+							</uib-accordion-heading>
+							<textarea class="form-control" rows="5" placeholder="Notes..." ng-model="view.person.notes" ng-model-options="{ debounce: 1000 }"
+							 ng-change="updateNotes()"></textarea>
+						</div>
+						<div uib-accordion-group class="panel-default" is-open="view.accIsOpen[2]">
+							<uib-accordion-heading ng-click="view.accIsOpen[2]=!view.accIsOpen[2]">
+								<div>
+									<i class="fa fa-globe"></i> Country of Origin
+									<small class="accordion-sneak pull-right" ng-bind="view.person.country.name"></small>
+								</div>
+							</uib-accordion-heading>
+							<select ng-options="country.name for country in view.countries track by country.code" ng-model="view.person.country" class="form-control"
+							 ng-change="updateCountry()">
+								<option value="">Select Country</option>
+							</select>
+						</div>
+						<div uib-accordion-group class="panel-default" is-open="view.accIsOpen[3]">
+							<uib-accordion-heading ng-click="view.accIsOpen[3]=!view.accIsOpen[3]">
+								<div>
+									<i class="fa fa-language"></i> Languages Spoken
+									<small class="accordion-sneak pull-right" ng-bind="view.person.languages | languageCodes"></small>
+								</div>
+							</uib-accordion-heading>
+							<multi-token choices="view.languages" selected="view.person.languages" display-property="name" id-property="code" on-add="updateLanguages()"
+							 on-remove="updateLanguages()"></multi-token>
+						</div>
+					</uib-accordion>
+				</div>
 
-            </div>
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
 </div>
-</div>
-<!-- /.main-container -->

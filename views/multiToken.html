@@ -1,0 +1,10 @@
+<div class="multi-token">
+	<span class="label label-primary label-token" ng-repeat="item in selected track by $index">
+		<span ng-bind="item[displayProperty]"></span>
+	<span class="glyphicon glyphicon-remove clickable" ng-click="remove(item)"></span>
+	</span>
+	<select ng-model="view.selectValue" class="multi-token-select" ng-change="add()">
+		<option value="">Add</option>
+		<option  ng-repeat="item in choices track by $index" ng-if="selected.indexOf(item) < 0" ng-value="item[idProperty]" ng-bind="item[displayProperty]">
+	</select>
+</div>
