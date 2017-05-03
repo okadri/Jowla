@@ -2,7 +2,7 @@ body {
 	padding-top: 50px;
 	max-width: 600px;
 	margin: 0 auto;
-	box-shadow: 0 0 50px #888888;
+	box-shadow: 12px 0 15px -15px rgba(128, 128, 128, 0.7), -12px 0 15px -15px rgba(128, 128, 128, 0.7);
 }
 
 .clickable {
