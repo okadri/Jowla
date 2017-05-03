@@ -141,3 +141,24 @@ app.directive('multiToken', [function () {
 		}
 	};
 }]);
+
+app.directive('fitText', [function () {
+	return {
+		restrict: 'A',
+		link: function (scope, element, attr) {
+			var maxFontSize = attr.maxFontSize || 30;
+			var minFontSize = attr.minFontSize || 8;
+
+			element.addClass('fit-text');
+			scope.$watch(function () {
+				return element.width();
+			}, function (newWidth) {
+				if (attr.fitText) {
+					var calcFontSize = Math.ceil(2 * newWidth / attr.fitText.length);
+					var fontSize = calcFontSize < maxFontSize ? calcFontSize > minFontSize ? calcFontSize : minFontSize : maxFontSize;
+					element.css('font-size', fontSize + 'px');
+				}
+			});
+		}
+	};
+}]);

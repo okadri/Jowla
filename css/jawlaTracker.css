@@ -31,18 +31,14 @@ body {
 	margin: 0;
 }
 
-.navbar-nav {
-	white-space: nowrap;
-}
-
-.navbar-brand-container {
-	width: 35%;
+.navbar-header {
 	white-space: nowrap;
 }
 
 .navbar-tools-container {
-	width: 65%;
 	padding-top: 8px;
+	text-align: right;
+	height: 50px;
 }
 
 /* enable absolute positioning */
@@ -166,4 +162,10 @@ span.label-token {
 
 span.label-token span.glyphicon-remove {
 	padding: 3px;
+}
+
+.fit-text {
+	width: 100%;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
 }

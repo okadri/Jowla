@@ -1,9 +1,9 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
-		<div class="navbar-header navbar-brand-container pull-left">
-			<a class="navbar-brand" ng-href="/#/{{ view.state.ui.sheet.id }}" ng-bind="view.state.ui.sheet.title"></a>
+	<div class="row">
+		<div class="navbar-header col-xs-6">
+			<a class="navbar-brand" ng-href="/#/{{ view.state.ui.sheet.id }}" ng-bind="view.state.ui.sheet.title" fit-text="{{ view.state.ui.sheet.title }}"></a>
 		</div>
-		<div class="navbar-header navbar-tools-container pull-right text-right" ng-if="view.state.ui.isSignedIn">
+		<div class="navbar-header navbar-tools-container col-xs-6" ng-if="view.state.ui.isSignedIn">
 			<div class="col-xs-12 inner-addon right-addon">
 				<a class="glyphicon glyphicon-log-out nav-btn" confirm-button="logout()" message="Are you sure you want to logout?" position="bottom"></a>
 			</div>
@@ -33,11 +33,11 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<h1 class="page-title" ng-style="{'font-size' : 135/view.person.fullName.length + 'vmin'}">
+					<h1 class="page-title" fit-text="{{ view.person.fullName }}">
 						{{ view.person.fullName }}
 						<small class="glyphicon glyphicon-remove-sign text-danger" confirm-button="hidePerson()" message="Are you sure you want to delete?"></small>
 					</h1>
-					<p class="text-muted" ng-style="{'font-size' : 170/view.person.address.length + 'vmin'}">
+					<p class="text-muted" fit-text="{{ view.person.address }}" max-font-size="20">
 						{{ view.person.address }}
 					</p>
 				</div>
