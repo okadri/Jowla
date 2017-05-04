@@ -1,8 +1,5 @@
 body {
 	padding-top: 50px;
-	max-width: 600px;
-	margin: 0 auto;
-	box-shadow: 12px 0 15px -15px rgba(128, 128, 128, 0.7), -12px 0 15px -15px rgba(128, 128, 128, 0.7);
 }
 
 .clickable {
@@ -32,11 +29,6 @@ body {
 
 .row-marginless {
 	margin: 0;
-}
-
-.navbar-fixed-top {
-	max-width: 600px;
-	margin: 0 auto;
 }
 
 .navbar-header {
@@ -176,4 +168,21 @@ span.label-token span.glyphicon-remove {
 	width: 100%;
 	overflow-x: hidden;
 	text-overflow: ellipsis;
+}
+
+@media (min-width: 600px) {
+	html, body {
+		height: 100%;
+	}
+
+	body {
+		max-width: 600px;
+		margin: 0 auto;
+		box-shadow: 12px 0 15px -15px rgba(128, 128, 128, 0.7), -12px 0 15px -15px rgba(128, 128, 128, 0.7);
+	}
+
+	.navbar-fixed-top {
+		max-width: 600px;
+		margin: 0 auto;
+	}
 }
