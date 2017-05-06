@@ -41,6 +41,11 @@ body {
 	height: 50px;
 }
 
+.navbar-tools-container li:not(.divider) {
+	display: inline;
+	list-style: none;
+}
+
 /* enable absolute positioning */
 .inner-addon { 
 	position: relative; 

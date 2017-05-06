@@ -4,8 +4,25 @@
 			<a class="navbar-brand" ng-href="/#/{{ view.state.ui.sheet.id }}" ng-bind="view.state.ui.sheet.title" fit-text="{{ view.state.ui.sheet.title }}"></a>
 		</div>
 		<div class="navbar-header navbar-tools-container col-xs-6" ng-if="view.state.ui.isSignedIn">
-			<div class="col-xs-12 inner-addon right-addon">
-				<a class="glyphicon glyphicon-log-out nav-btn" confirm-button="logout()" message="Are you sure you want to logout?" position="bottom"></a>
+			<div class="col-xs-12">
+				<li class="dropdown">
+					<a class="nav-btn dropdown-toggle" data-toggle="dropdown">
+						<i class="glyphicon glyphicon-option-vertical"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<li>
+							<a class="nav-btn clickable" ng-href="https://docs.google.com/spreadsheets/d/{{ view.state.ui.sheet.id }}" target="_blank">
+								<i class="fa fa-table"></i> Google Sheet
+							</a>
+						</li>
+						<li role="separator" class="divider"></li>
+						<li>
+							<a class="nav-btn clickable" ng-click="logout()">
+								<i class="glyphicon glyphicon-log-out"></i> Logout
+							</a>
+						</li>
+					</ul>
+				</li>
 			</div>
 		</div>
 	</div>

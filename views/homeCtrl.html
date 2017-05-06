@@ -10,9 +10,30 @@
 				<i ng-click="clearSearch()" class="glyphicon glyphicon-remove clickable"></i>
 			</div>
 			<div class="col-xs-12" ng-hide="view.navMode">
-				<a ng-click="openFilters()" ng-show="view.state.ui.filterable" class="glyphicon glyphicon-filter nav-btn" ng-class="{ 'active': view.state.ui.filters.isFiltered }"></a>
-				<a ng-click="view.navMode = 'search';" class="glyphicon glyphicon-search nav-btn"></a>
-				<a class="glyphicon glyphicon-log-out nav-btn" confirm-button="logout()" message="Are you sure you want to logout?" position="bottom"></a>
+				<li>
+					<a ng-click="openFilters()" ng-show="view.state.ui.filterable" class="glyphicon glyphicon-filter nav-btn" ng-class="{ 'active': view.state.ui.filters.isFiltered }"></a>
+				</li>
+				<li>
+					<a ng-click="view.navMode = 'search';" class="glyphicon glyphicon-search nav-btn"></a>
+				</li>
+				<li class="dropdown">
+					<a class="nav-btn dropdown-toggle" data-toggle="dropdown">
+						<i class="glyphicon glyphicon-option-vertical"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<li>
+							<a class="nav-btn clickable" ng-href="https://docs.google.com/spreadsheets/d/{{ view.state.ui.sheet.id }}" target="_blank">
+								<i class="fa fa-table"></i> Google Sheet
+							</a>
+						</li>
+						<li role="separator" class="divider"></li>
+						<li>
+							<a class="nav-btn clickable" ng-click="logout()">
+								<i class="glyphicon glyphicon-log-out"></i> Logout
+							</a>
+						</li>
+					</ul>
+				</li>
 			</div>
 		</div>
 	</div>
