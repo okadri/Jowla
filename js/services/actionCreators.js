@@ -72,10 +72,10 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 			getState: function () {
 				return stateService.getState();
 			},
-			getSheetRows: function () {
-				gapiService.getSheetRows().then(function (rows) {
+			mergeSheet: function (sheetId) {
+				gapiService.mergeSheet(sheetId).then(function (rows) {
 					var action = {
-						type: GET_SHEET_ROWS,
+						type: MERGE_SHEET_ROWS,
 						payload: {
 							rows: rows
 						}
