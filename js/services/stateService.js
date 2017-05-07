@@ -1,4 +1,4 @@
-app.service('stateService', function ($rootScope, $log, Person) {
+app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 	function sortPeople(people) {
 		people.ids.sort(function (id1, id2) {
 			// By lastVisit
@@ -27,7 +27,8 @@ app.service('stateService', function ($rootScope, $log, Person) {
 		_personReducers: function (action, people) {
 			var defaultPeople = {
 				ids: [],
-				list: {}
+				list: {},
+				mergeList: []
 			};
 			switch (action.type) {
 				case GET_SHEET_ROWS:
@@ -84,6 +85,30 @@ app.service('stateService', function ($rootScope, $log, Person) {
 					action.payload.markers.forEach(function (person) {
 						people.list[person.id] = person;
 					});
+					return people;
+				case GET_MERGE_REPORT:
+					people.mergeList.length = 0;
+					var length = action.payload.rows ? action.payload.rows.length : 0;
+					for (var i = 0; i < length; i++) {
+						var rowData = action.payload.rows[i];
+						var person = new Person(rowData, i);
+						// Find if we have this person already based on full name
+						var existingId = people.ids.find(function (id) {
+							return people.list[id].fullName.toLowerCase() === person.fullName.toLowerCase();
+						});
+
+						if (existingId) {
+							var existingPerson = people.list[existingId];
+							// If the person exists, check if we need to update the address
+							if (MD5(existingPerson.address) !== MD5(person.address)) {
+								// Address on record differs, create the diff object
+								people.mergeList.push(new PersonDiff(existingPerson, person));
+							}
+						} else {
+							// Person is not on list, create a (create) diff object
+							people.mergeList.push(new PersonDiff(new Person(), person));
+						}
+					}
 					return people;
 				default:
 					return people || defaultPeople;

@@ -75,3 +75,18 @@ app.factory('Person', [function () {
 	};
 	return Person;
 }]);
+
+app.factory('PersonDiff', ['Person', function (Person) {
+	function PersonDiff(fromPerson, toPerson) {
+		if (fromPerson instanceof Person && toPerson instanceof Person) {
+			this.setData(fromPerson, toPerson);
+		}
+	};
+	PersonDiff.prototype = {
+		setData: function (fromPerson, toPerson) {
+			this.fromPerson = fromPerson;
+			this.toPerson = toPerson;
+		}
+	};
+	return PersonDiff;
+}]);
