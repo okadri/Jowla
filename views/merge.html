@@ -3,10 +3,24 @@
 </div>
 <div class="modal-body" id="modal-body">
 
-	<!-- TODO: Collect updated sheet ID -->
+	<p>
+		If you have an updated list of addresses that needs to be merged into the current list, start by creating a new sheet using
+		the same
+		<a href="https://docs.google.com/spreadsheets/d/1n8wdE3bu25I7i8QPuulZmG7uq1HE5xmSfNhXcjw8eLo/edit?usp=sharing" target="_blank">template spread sheet</a>,
+		then copy the new sheet id into the box below.
+	</p>
+
+	<p>
+		When you hit <strong>next</strong>, the next screen will show the entries that will be updated and those that will be added.
+		you can then uncheck the ones that you don't want to be updated or added.
+	</p>
+
+	<input type="text" class="form-control" ng-model="view.newSheetId" ng-change="validateSheetId()" placeholder="Updated Sheet ID"
+	/>
+	<small class="text-danger pull-right" ng-bind="view.error"></small>
 
 </div>
 <div class="modal-footer">
 	<button class="btn btn-default btn-sm" type="button" ng-click="cancel()">Cancel</button>
-	<button class="btn btn-primary btn-sm" type="button" ng-click="next()">Next</button>
+	<button class="btn btn-primary btn-sm" type="button" ng-click="next()" ng-disabled="view.idInvalid">Next</button>
 </div>
