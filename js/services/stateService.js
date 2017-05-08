@@ -100,7 +100,7 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 						if (existingId) {
 							var existingPerson = people.list[existingId];
 							// If the person exists, check if we need to update the address
-							if (MD5(existingPerson.address) !== MD5(person.address)) {
+							if (MD5(existingPerson.address.full) !== MD5(person.address.full)) {
 								// Address on record differs, create the diff object
 								people.mergeList.push(new PersonDiff(existingPerson, person));
 							}

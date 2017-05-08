@@ -48,13 +48,19 @@ app.factory('Person', [function () {
 				firstName: personRowData[1],
 				lastName: personRowData[2],
 				fullName: personRowData[1] + ' ' + personRowData[2],
-				address: personRowData[3] + ', ' + personRowData[4] + ', ' + personRowData[5] + ' ' + personRowData[6],
 				notes: compinedNotes,
 				country: userCountry,
 				languages: userLanguages,
-				addressMD5: metaData.addressMD5,
-				addressLat: metaData.addressLat,
-				addressLng: metaData.addressLng,
+				address: {
+					full: personRowData[3] + ', ' + personRowData[4] + ', ' + personRowData[5] + ' ' + personRowData[6],
+					street: personRowData[3],
+					city: personRowData[4],
+					state: personRowData[5],
+					zipCode: personRowData[6],
+					md5: metaData.addressMD5,
+					lat: metaData.addressLat,
+					lng: metaData.addressLng
+				},
 				isHidden: metaData.isHidden
 			});
 		},
@@ -65,9 +71,9 @@ app.factory('Person', [function () {
 		},
 		getMetaString: function () {
 			return JSON.stringify({
-				addressMD5: this.addressMD5,
-				addressLat: this.addressLat,
-				addressLng: this.addressLng,
+				addressMD5: this.address.md5,
+				addressLat: this.address.lat,
+				addressLng: this.address.lng,
 				visitHistory: this.visitHistory,
 				isHidden: this.isHidden
 			});

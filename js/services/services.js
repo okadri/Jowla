@@ -182,9 +182,9 @@ app.service('gapiService', ['$q', function ($q) {
 		var deferred = $q.defer();
 
 		var updatedPerson = angular.copy(person);
-		updatedPerson.addressMD5 = MD5(updatedPerson.address);
-		updatedPerson.addressLat = location.lat();
-		updatedPerson.addressLng = location.lng();
+		updatedPerson.address.md5 = MD5(updatedPerson.address.full);
+		updatedPerson.address.lat = location.lat();
+		updatedPerson.address.lng = location.lng();
 
 		gapi.client.sheets.spreadsheets.values.update({
 			spreadsheetId: SPREAD_SHEET_ID,
@@ -293,7 +293,7 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 
 				// Loop through our array of markers & place each one on the map
 				markers.forEach(function (person) {
-					position = new google.maps.LatLng(person.addressLat, person.addressLng);
+					position = new google.maps.LatLng(person.address.lat, person.address.lng);
 					bounds.extend(position);
 					marker = new google.maps.Marker({
 						position: position,
@@ -311,7 +311,7 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 							return function () {
 								infoWindow.setContent(
 									'<b>' + person.fullName + '</b><br>' +
-									person.address + '<br>' +
+									person.address.full + '<br>' +
 									'<a href="#/' + SPREAD_SHEET_ID + '/p/' + person.id + '">View more details...</a>'
 								);
 								infoWindow.open(map, marker);
@@ -385,19 +385,19 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 		var deferred = $q.defer();
 		self.delayIndex = self.delayIndex || 0;
 
-		if (person.addressLat && person.addressLng && MD5(person.address) === person.addressMD5) {
+		if (person.address.lat && person.address.lng && MD5(person.address.full) === person.address.md5) {
 			deferred.resolve(person);
 		} else {
 			var geocoder = new google.maps.Geocoder();
 			setTimeout(function () {
-				geocoder.geocode({ 'address': person.address }, function (results, status) {
+				geocoder.geocode({ 'address': person.address.full }, function (results, status) {
 					if (status == google.maps.GeocoderStatus.OK) {
 						var location = results[0].geometry.location;
 						gapiService.addCoordinates(person, location);
 
-						person.addressLat = location.lat();
-						person.addressLng = location.lng();
-						person.addressMD5 = MD5(person.address);
+						person.address.lat = location.lat();
+						person.address.lng = location.lng();
+						person.address.md5 = MD5(person.address.full);
 						deferred.resolve(person);
 					}
 				});

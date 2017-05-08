@@ -43,7 +43,7 @@
 		<div class="jawla-person-container">
 			<div class="row">
 				<div class="col-xs-12">
-					<a ng-href="https://www.google.com/maps/place/{{ view.person.address }}" target="_blank" class="btn btn-info btn-block btn-sharp">
+					<a ng-href="https://www.google.com/maps/place/{{ view.person.address.full }}" target="_blank" class="btn btn-info btn-block btn-sharp">
 						<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Navigate to {{ view.person.fullName }}
 					</a>
 				</div>
@@ -54,8 +54,8 @@
 						{{ view.person.fullName }}
 						<small class="glyphicon glyphicon-remove-sign text-danger" confirm-button="hidePerson()" message="Are you sure you want to delete?"></small>
 					</h1>
-					<p class="text-muted" fit-text="{{ view.person.address }}" max-font-size="20">
-						{{ view.person.address }}
+					<p class="text-muted" fit-text="{{ view.person.address.full }}" max-font-size="20">
+						{{ view.person.address.full }}
 					</p>
 				</div>
 			</div>
