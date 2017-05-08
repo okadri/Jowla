@@ -9,14 +9,20 @@ app.controller('MergeCtrl', ['$scope', '$uibModalInstance', 'state', 'actionCrea
 
 		$scope.next = function () {
 			if ($scope.view.idInvalid) { return; }
-			actionCreators.getMergeReport($scope.view.newSheetId);
-		};
-
-		$scope.apply = function () {
-			$uibModalInstance.close($scope.view.state.ui.filters);
+			switch ($scope.view.state.ui.mergeStep) {
+				case 0:
+					actionCreators.getMergeReport($scope.view.newSheetId);
+					break;
+				case 1:
+					actionCreators.performMerge($scope.view.state.people);
+					break;
+				default:
+					$scope.cancel();
+			}
 		};
 
 		$scope.cancel = function () {
+			actionCreators.resetMerge();
 			$uibModalInstance.dismiss('cancel');
 		};
 

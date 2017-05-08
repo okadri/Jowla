@@ -215,6 +215,14 @@ app.service('gapiService', ['$q', function ($q) {
 
 		return deferred.promise;
 	};
+	self.performMerge = function (people) {
+		var deferred = $q.defer();
+
+		// TODO: Perform Merge
+		deferred.resolve(people);
+
+		return deferred.promise;
+	};
 }]);
 
 app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $rootScope, gapiService) {

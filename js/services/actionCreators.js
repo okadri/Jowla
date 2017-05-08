@@ -81,6 +81,22 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 					stateService.reduce(action);
 				});
 			},
+			performMerge: function (people) {
+				gapiService.performMerge(people).then(function (payload) {
+					var action = {
+						type: PERFORM_MERGE,
+						payload: payload
+					};
+					stateService.reduce(action);
+				});
+			},
+			resetMerge: function () {
+				var action = {
+					type: RESET_MERGE,
+					payload: {}
+				};
+				stateService.reduce(action);
+			},
 			addVisit: function (person) {
 				gapiService.addVisit(person).then(function (updatedPerson) {
 					var action = {

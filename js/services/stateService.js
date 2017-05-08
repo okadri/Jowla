@@ -110,6 +110,12 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 						}
 					}
 					return people;
+				case PERFORM_MERGE:
+					// TODO: What?
+					return people;
+				case RESET_MERGE:
+					people.mergeList.length = 0;
+					return people;
 				default:
 					return people || defaultPeople;
 			}
@@ -123,7 +129,8 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 				currentUser: undefined,
 				filterable: false,
 				filters: {},
-				sheet: {}
+				sheet: {},
+				mergeStep: 0
 			}
 			switch (action.type) {
 				case GET_SHEET_ROWS:
@@ -164,6 +171,15 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 					} else {
 						ui.filters.isFiltered = false;
 					}
+					return ui;
+				case GET_MERGE_REPORT:
+					ui.mergeStep = 1;
+					return ui;
+				case PERFORM_MERGE:
+					ui.mergeStep = 2;
+					return ui;
+				case RESET_MERGE:
+					ui.mergeStep = 0;
 					return ui;
 				default:
 					return ui || defaultUi;
