@@ -218,7 +218,40 @@ app.service('gapiService', ['$q', function ($q) {
 	self.performMerge = function (people) {
 		var deferred = $q.defer();
 
-		// TODO: Perform Merge
+		var updateList = people.mergeList.filter(function (d) { return d.fromPerson.id; });
+		var appendList = people.mergeList.filter(function (d) { return !d.fromPerson.id; });
+
+		// Perform Updates
+		if (updateList.length) {
+			var updateData = updateList.map(function (diff) { return diff.getUpdateData(); });
+
+			var batchParams = {
+				spreadsheetId: SPREAD_SHEET_ID,
+				resource: {
+					valueInputOption: 'USER_ENTERED',
+					data: updateData
+				}
+			};
+
+			gapi.client.sheets.spreadsheets.values.batchUpdate(batchParams)
+				.then(function (res) { console.log(res); }, function (e) { console.log(e); });
+		}
+
+		// Perform Appends
+		if (appendList.length) {
+			var appendData = appendList.map(function (diff) { return diff.getAppendData(); });
+
+			var appendParams = {
+				spreadsheetId: SPREAD_SHEET_ID,
+				range: "List!B2:K",
+				valueInputOption: 'USER_ENTERED',
+				values: appendData
+			};
+
+			gapi.client.sheets.spreadsheets.values.append(appendParams)
+				.then(function (res) { console.log(res); }, function (e) { console.log(e); });
+		}
+
 		deferred.resolve(people);
 
 		return deferred.promise;

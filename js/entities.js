@@ -92,6 +92,20 @@ app.factory('PersonDiff', ['Person', function (Person) {
 		setData: function (fromPerson, toPerson) {
 			this.fromPerson = fromPerson;
 			this.toPerson = toPerson;
+		},
+		getUpdateData: function () {
+			var rowNum = this.fromPerson.id + 2;
+			var a = this.toPerson.address;
+			return {
+				range: "List!D" + rowNum + ":G" + rowNum,
+				majorDimension: "COLUMNS",
+				values: [[a.street], [a.city], [a.state], [a.zipCode]]
+			}
+		},
+		getAppendData: function () {
+			var p = this.toPerson;
+			var a = p.address;
+			return ['', p.firstName, p.lastName, a.street, a.city, a.state, a.zipCode];
 		}
 	};
 	return PersonDiff;
