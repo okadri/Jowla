@@ -22,7 +22,38 @@
 	</div>
 
 	<div ng-show="view.state.ui.mergeStep == 1">
-		Show diff vew here
+
+		Review changes and uncheck to exclude
+
+		<table class="table table-striped">
+			<caption>Will be updated</caption>
+			<tr>
+				<th></th>
+				<th>Name</th>
+				<th>Current Address</th>
+				<th>Change to</th>
+			</tr>
+			<tr ng-repeat="merge in view.state.people.mergeList | filter: {fromPerson:{id:''}} track by $index">
+				<td><input type="checkbox" ng-model="merge.doMerge"></td>
+				<td ng-bind="merge.toPerson.fullName"></td>
+				<td ng-bind="merge.fromPerson.address.full"></td>
+				<td ng-bind="merge.toPerson.address.full"></td>
+			</tr>
+		</table>
+
+		<table class="table table-striped">
+			<caption>Will be added</caption>
+			<tr>
+				<th></th>
+				<th>Name</th>
+				<th>Address</th>
+			</tr>
+			<tr ng-repeat="merge in view.state.people.mergeList | filter: {fromPerson:{id:'!'}} track by $index">
+				<td><input type="checkbox" ng-model="merge.doMerge"></td>
+				<td ng-bind="merge.toPerson.fullName"></td>
+				<td ng-bind="merge.toPerson.address.full"></td>
+			</tr>
+		</table>
 	</div>
 
 </div>

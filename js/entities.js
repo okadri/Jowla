@@ -90,6 +90,7 @@ app.factory('PersonDiff', ['Person', function (Person) {
 	};
 	PersonDiff.prototype = {
 		setData: function (fromPerson, toPerson) {
+			this.doMerge = true;
 			this.fromPerson = fromPerson;
 			this.toPerson = toPerson;
 		},

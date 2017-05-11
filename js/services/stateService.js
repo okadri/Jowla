@@ -55,13 +55,16 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 					var searchTerm = action.payload.filters.searchTerm || '';
 					var countries = action.payload.filters.countries || [];
 					var languages = action.payload.filters.languages || [];
-					var searchFields = ['fullName', 'address', 'notes'];
+					var searchFields = ['fullName', 'address>full', 'notes'];
 					people.ids.forEach(function (personId) {
 						var person = people.list[personId];
 
 						var matchesSearchTerm = !searchTerm || searchFields.some(function (sf) {
-							return person[sf] !== undefined &&
-								person[sf].toLowerCase().search(searchTerm.toLowerCase()) >= 0;
+							var props = sf.split('>');
+							var val = props.reduce(function (prev, current) {
+								return prev[current];
+							}, person);
+							return val && val.toLowerCase().search(searchTerm.toLowerCase()) >= 0;
 						});
 
 						var matchesCountries = countries.length ? person.country && countries.some(function (c) {

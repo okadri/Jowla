@@ -218,8 +218,8 @@ app.service('gapiService', ['$q', function ($q) {
 	self.performMerge = function (people) {
 		var deferred = $q.defer();
 
-		var updateList = people.mergeList.filter(function (d) { return d.fromPerson.id; });
-		var appendList = people.mergeList.filter(function (d) { return !d.fromPerson.id; });
+		var updateList = people.mergeList.filter(function (d) { return d.doMerge && d.fromPerson.id; });
+		var appendList = people.mergeList.filter(function (d) { return d.doMerge && !d.fromPerson.id; });
 
 		// Perform Updates
 		if (updateList.length) {
