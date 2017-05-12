@@ -15,15 +15,16 @@ app.controller('MergeCtrl', ['$scope', '$uibModalInstance', 'state', 'actionCrea
 					break;
 				case 1:
 					actionCreators.performMerge($scope.view.state.people);
+					$scope.close();
 					break;
 				default:
-					$scope.cancel();
+					$scope.close();
 			}
 		};
 
-		$scope.cancel = function () {
+		$scope.close = function () {
 			actionCreators.resetMerge();
-			$uibModalInstance.dismiss('cancel');
+			$uibModalInstance.dismiss();
 		};
 
 		$scope.validateSheetId = function () {
