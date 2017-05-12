@@ -1,0 +1,69 @@
+<div class="modal-header">
+	<h3 class="modal-title" id="modal-title">Merge/Import Updated Sheet</h3>
+</div>
+<div class="modal-body" id="modal-body">
+
+	<div ng-show="view.state.ui.mergeStep == 0">
+		<p>
+			If you have an updated list of addresses that needs to be merged into the current list, start by creating a new sheet using
+			the same
+			<a href="https://docs.google.com/spreadsheets/d/1n8wdE3bu25I7i8QPuulZmG7uq1HE5xmSfNhXcjw8eLo/edit?usp=sharing" target="_blank">template spread sheet</a>,
+			then copy the new sheet id into the box below.
+		</p>
+
+		<p>
+			When you hit <strong>next</strong>, the next screen will show the entries that will be updated and those that will be
+			added. you can then uncheck the ones that you don't want to be updated or added.
+		</p>
+
+		<input type="text" class="form-control" ng-model="view.newSheetId" ng-change="validateSheetId()" placeholder="Updated Sheet ID"
+		 autofocus />
+		<small class="text-danger pull-right" ng-bind="view.error"></small>
+	</div>
+
+	<div ng-show="view.state.ui.mergeStep == 1">
+
+		<p ng-show="view.state.people.mergeList.length">Review changes and uncheck to exclude</p>
+		<p ng-hide="view.state.people.mergeList.length">Nothing to merge/import.</p>
+
+		<table class="table table-striped" ng-if="(view.state.people.mergeList | filter: {fromPerson:{id:''}}).length">
+			<caption>Will be updated</caption>
+			<tr>
+				<th></th>
+				<th>Name</th>
+				<th>Current Address</th>
+				<th>Change to</th>
+			</tr>
+			<tr ng-repeat="merge in view.state.people.mergeList | filter: {fromPerson:{id:''}} track by $index">
+				<td><input type="checkbox" ng-model="merge.doMerge"></td>
+				<td ng-bind="merge.toPerson.fullName"></td>
+				<td ng-bind="merge.fromPerson.address.full"></td>
+				<td ng-bind="merge.toPerson.address.full"></td>
+			</tr>
+		</table>
+
+		<table class="table table-striped" ng-if="(view.state.people.mergeList | filter: {fromPerson:{id:'!'}}).length">
+			<caption>Will be added</caption>
+			<tr>
+				<th></th>
+				<th>Name</th>
+				<th>Address</th>
+			</tr>
+			<tr ng-repeat="merge in view.state.people.mergeList | filter: {fromPerson:{id:'!'}} track by $index">
+				<td><input type="checkbox" ng-model="merge.doMerge"></td>
+				<td ng-bind="merge.toPerson.fullName"></td>
+				<td ng-bind="merge.toPerson.address.full"></td>
+			</tr>
+		</table>
+	</div>
+
+</div>
+<div class="modal-footer">
+	<!-- Cancel -->
+	<button class="btn btn-default btn-sm" type="button" ng-click="close()" ng-hide="view.state.ui.mergeStep > 0">Cancel</button>
+	<!-- Action -->
+	<button class="btn btn-primary btn-sm" type="button" ng-click="next()" ng-disabled="view.idInvalid" ng-show="view.state.ui.mergeStep == 0">Next</button>
+	<button class="btn btn-primary btn-sm" type="button" ng-click="next()" ng-show="view.state.ui.mergeStep > 0">
+		{{ view.state.people.mergeList.length ? 'Perform Merge' : 'Done' }}
+	</button>
+</div>

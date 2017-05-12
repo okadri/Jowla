@@ -23,13 +23,18 @@
 					<ul class="dropdown-menu dropdown-menu-right">
 						<li>
 							<a class="nav-btn clickable" ng-href="https://docs.google.com/spreadsheets/d/{{ view.state.ui.sheet.id }}" target="_blank">
-								<i class="fa fa-table"></i> Google Sheet
+								<i class="fa fa-table nav-dropdown-icon"></i> Google Sheet
+							</a>
+						</li>
+						<li>
+							<a class="nav-btn clickable" ng-click="openMergeDiag()">
+								<i class="fa fa-code-fork nav-dropdown-icon"></i> Merge/Import list...
 							</a>
 						</li>
 						<li role="separator" class="divider"></li>
 						<li>
 							<a class="nav-btn clickable" ng-click="logout()">
-								<i class="glyphicon glyphicon-log-out"></i> Logout
+								<i class="glyphicon glyphicon-log-out nav-dropdown-icon"></i> Logout
 							</a>
 						</li>
 					</ul>
@@ -73,7 +78,7 @@
 								<div class="col-xs-12 text-muted">
 									<small>
 											<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-											{{ view.state.people.list[personId].address }}
+											{{ view.state.people.list[personId].address.full }}
 									</small>
 								</div>
 							</div>

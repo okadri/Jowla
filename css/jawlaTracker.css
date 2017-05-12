@@ -46,6 +46,10 @@ body {
 	list-style: none;
 }
 
+i.nav-dropdown-icon {
+	width: 1.2em;
+}
+
 /* enable absolute positioning */
 .inner-addon { 
 	position: relative; 
@@ -176,10 +180,6 @@ span.label-token span.glyphicon-remove {
 }
 
 @media (min-width: 600px) {
-	html, body {
-		height: 100%;
-	}
-
 	body {
 		max-width: 600px;
 		margin: 0 auto;

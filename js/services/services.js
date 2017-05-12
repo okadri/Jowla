@@ -57,12 +57,13 @@ app.service('gapiService', ['$q', function ($q) {
 		gapi.auth2.getAuthInstance().signOut();
 	};
 
-	self.getSheetRows = function () {
+	self.getSheetRows = function (sheetId) {
 		var deferred = $q.defer();
+		sheetId = sheetId || SPREAD_SHEET_ID;
 
 		if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
 			gapi.client.sheets.spreadsheets.get({
-				spreadsheetId: SPREAD_SHEET_ID
+				spreadsheetId: sheetId
 			}).then(function (response) {
 				var title = response.result.properties.title;
 				var firstSheet = response.result.sheets[0];
@@ -70,7 +71,7 @@ app.service('gapiService', ['$q', function ($q) {
 					firstSheet.protectedRanges[0].editors.users : [];
 
 				gapi.client.sheets.spreadsheets.values.get({
-					spreadsheetId: SPREAD_SHEET_ID,
+					spreadsheetId: sheetId,
 					range: firstSheet.properties.title + '!A2:K',
 				}).then(function (response) {
 					deferred.resolve({
@@ -181,9 +182,9 @@ app.service('gapiService', ['$q', function ($q) {
 		var deferred = $q.defer();
 
 		var updatedPerson = angular.copy(person);
-		updatedPerson.addressMD5 = MD5(updatedPerson.address);
-		updatedPerson.addressLat = location.lat();
-		updatedPerson.addressLng = location.lng();
+		updatedPerson.address.md5 = MD5(updatedPerson.address.full);
+		updatedPerson.address.lat = location.lat();
+		updatedPerson.address.lng = location.lng();
 
 		gapi.client.sheets.spreadsheets.values.update({
 			spreadsheetId: SPREAD_SHEET_ID,
@@ -211,6 +212,74 @@ app.service('gapiService', ['$q', function ($q) {
 		}).then(function (response) {
 			deferred.resolve(updatedPerson);
 		});
+
+		return deferred.promise;
+	};
+	self.performMerge = function (people) {
+		var deferred = $q.defer();
+		var mergeTasks = { done: 0, pending: 0 };
+
+		var updateList = people.mergeList.filter(function (d) { return d.doMerge && d.fromPerson.id; });
+		var appendList = people.mergeList.filter(function (d) { return d.doMerge && !d.fromPerson.id; });
+
+		// Perform Updates
+		if (updateList.length) {
+			mergeTasks.pending++;
+			var updateData = updateList.map(function (diff) { return diff.getUpdateData(); });
+
+			var batchParams = {
+				spreadsheetId: SPREAD_SHEET_ID,
+				resource: {
+					valueInputOption: 'USER_ENTERED',
+					data: updateData
+				}
+			};
+
+			gapi.client.sheets.spreadsheets.values.batchUpdate(batchParams)
+				.then(function (res) {
+					updateList.forEach(function (diff) {
+						people.list[diff.fromPerson.id].setAddress(diff.toPerson.address);
+					});
+
+					mergeTasks.done++;
+					if (mergeTasks.done == mergeTasks.pending) {
+						deferred.resolve(people);
+					}
+				}, function (e) {
+					console.log(e);
+				});
+		}
+
+		// Perform Appends
+		if (appendList.length) {
+			mergeTasks.pending++;
+			var appendData = appendList.map(function (diff) { return diff.getAppendData(); });
+
+			var appendParams = {
+				spreadsheetId: SPREAD_SHEET_ID,
+				range: "List!B2:K",
+				valueInputOption: 'USER_ENTERED',
+				values: appendData
+			};
+
+			gapi.client.sheets.spreadsheets.values.append(appendParams)
+				.then(function (res) {
+					var lastId = Math.max.apply(Math, people.ids);
+					appendList.forEach(function (diff) {
+						lastId++;
+						people.ids.push(lastId);
+						diff.toPerson.id = lastId;
+						people.list[lastId] = diff.toPerson;
+					});
+
+					mergeTasks.done++;
+					if (mergeTasks.done == mergeTasks.pending) {
+						deferred.resolve(people);
+					}
+				}, function (e) {
+					console.log(e);
+				});
+		}
 
 		return deferred.promise;
 	};
@@ -292,7 +361,7 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 
 				// Loop through our array of markers & place each one on the map
 				markers.forEach(function (person) {
-					position = new google.maps.LatLng(person.addressLat, person.addressLng);
+					position = new google.maps.LatLng(person.address.lat, person.address.lng);
 					bounds.extend(position);
 					marker = new google.maps.Marker({
 						position: position,
@@ -310,7 +379,7 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 							return function () {
 								infoWindow.setContent(
 									'<b>' + person.fullName + '</b><br>' +
-									person.address + '<br>' +
+									person.address.full + '<br>' +
 									'<a href="#/' + SPREAD_SHEET_ID + '/p/' + person.id + '">View more details...</a>'
 								);
 								infoWindow.open(map, marker);
@@ -384,19 +453,19 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 		var deferred = $q.defer();
 		self.delayIndex = self.delayIndex || 0;
 
-		if (person.addressLat && person.addressLng && MD5(person.address) === person.addressMD5) {
+		if (person.address.lat && person.address.lng && MD5(person.address.full) === person.address.md5) {
 			deferred.resolve(person);
 		} else {
 			var geocoder = new google.maps.Geocoder();
 			setTimeout(function () {
-				geocoder.geocode({ 'address': person.address }, function (results, status) {
+				geocoder.geocode({ 'address': person.address.full }, function (results, status) {
 					if (status == google.maps.GeocoderStatus.OK) {
 						var location = results[0].geometry.location;
 						gapiService.addCoordinates(person, location);
 
-						person.addressLat = location.lat();
-						person.addressLng = location.lng();
-						person.addressMD5 = MD5(person.address);
+						person.address.lat = location.lat();
+						person.address.lng = location.lng();
+						person.address.md5 = MD5(person.address.full);
 						deferred.resolve(person);
 					}
 				});

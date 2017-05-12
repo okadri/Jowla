@@ -48,13 +48,19 @@ app.factory('Person', [function () {
 				firstName: personRowData[1],
 				lastName: personRowData[2],
 				fullName: personRowData[1] + ' ' + personRowData[2],
-				address: personRowData[3] + ', ' + personRowData[4] + ', ' + personRowData[5] + ' ' + personRowData[6],
 				notes: compinedNotes,
 				country: userCountry,
 				languages: userLanguages,
-				addressMD5: metaData.addressMD5,
-				addressLat: metaData.addressLat,
-				addressLng: metaData.addressLng,
+				address: {
+					full: personRowData[3] + ', ' + personRowData[4] + ', ' + personRowData[5] + ' ' + personRowData[6],
+					street: personRowData[3],
+					city: personRowData[4],
+					state: personRowData[5],
+					zipCode: personRowData[6],
+					md5: metaData.addressMD5,
+					lat: metaData.addressLat,
+					lng: metaData.addressLng
+				},
 				isHidden: metaData.isHidden
 			});
 		},
@@ -63,15 +69,48 @@ app.factory('Person', [function () {
 				return visit.date.toDateString() == (new Date()).toDateString();
 			});
 		},
+		setAddress: function (address) {
+			this.address = address;
+		},
 		getMetaString: function () {
 			return JSON.stringify({
-				addressMD5: this.addressMD5,
-				addressLat: this.addressLat,
-				addressLng: this.addressLng,
+				addressMD5: this.address.md5,
+				addressLat: this.address.lat,
+				addressLng: this.address.lng,
 				visitHistory: this.visitHistory,
 				isHidden: this.isHidden
 			});
 		}
 	};
 	return Person;
+}]);
+
+app.factory('PersonDiff', ['Person', function (Person) {
+	function PersonDiff(fromPerson, toPerson) {
+		if (fromPerson instanceof Person && toPerson instanceof Person) {
+			this.setData(fromPerson, toPerson);
+		}
+	};
+	PersonDiff.prototype = {
+		setData: function (fromPerson, toPerson) {
+			this.doMerge = true;
+			this.fromPerson = fromPerson;
+			this.toPerson = toPerson;
+		},
+		getUpdateData: function () {
+			var rowNum = this.fromPerson.id + 2;
+			var a = this.toPerson.address;
+			return {
+				range: "List!D" + rowNum + ":G" + rowNum,
+				majorDimension: "COLUMNS",
+				values: [[a.street], [a.city], [a.state], [a.zipCode]]
+			}
+		},
+		getAppendData: function () {
+			var p = this.toPerson;
+			var a = p.address;
+			return ['', p.firstName, p.lastName, a.street, a.city, a.state, a.zipCode];
+		}
+	};
+	return PersonDiff;
 }]);

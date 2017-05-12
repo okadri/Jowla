@@ -72,16 +72,32 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 			getState: function () {
 				return stateService.getState();
 			},
-			getSheetRows: function () {
-				gapiService.getSheetRows().then(function (rows) {
+			getMergeReport: function (sheetId) {
+				gapiService.getSheetRows(sheetId).then(function (payload) {
 					var action = {
-						type: GET_SHEET_ROWS,
+						type: GET_MERGE_REPORT,
+						payload: payload
+					};
+					stateService.reduce(action);
+				});
+			},
+			performMerge: function (people) {
+				gapiService.performMerge(people).then(function (people) {
+					var action = {
+						type: PERFORM_MERGE,
 						payload: {
-							rows: rows
+							people: people
 						}
 					};
 					stateService.reduce(action);
 				});
+			},
+			resetMerge: function () {
+				var action = {
+					type: RESET_MERGE,
+					payload: {}
+				};
+				stateService.reduce(action);
 			},
 			addVisit: function (person) {
 				gapiService.addVisit(person).then(function (updatedPerson) {

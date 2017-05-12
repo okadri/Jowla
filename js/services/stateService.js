@@ -1,4 +1,4 @@
-app.service('stateService', function ($rootScope, $log, Person) {
+app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 	function sortPeople(people) {
 		people.ids.sort(function (id1, id2) {
 			// By lastVisit
@@ -27,7 +27,8 @@ app.service('stateService', function ($rootScope, $log, Person) {
 		_personReducers: function (action, people) {
 			var defaultPeople = {
 				ids: [],
-				list: {}
+				list: {},
+				mergeList: []
 			};
 			switch (action.type) {
 				case GET_SHEET_ROWS:
@@ -54,13 +55,16 @@ app.service('stateService', function ($rootScope, $log, Person) {
 					var searchTerm = action.payload.filters.searchTerm || '';
 					var countries = action.payload.filters.countries || [];
 					var languages = action.payload.filters.languages || [];
-					var searchFields = ['fullName', 'address', 'notes'];
+					var searchFields = ['fullName', 'address>full', 'notes'];
 					people.ids.forEach(function (personId) {
 						var person = people.list[personId];
 
 						var matchesSearchTerm = !searchTerm || searchFields.some(function (sf) {
-							return person[sf] !== undefined &&
-								person[sf].toLowerCase().search(searchTerm.toLowerCase()) >= 0;
+							var props = sf.split('>');
+							var val = props.reduce(function (prev, current) {
+								return prev[current];
+							}, person);
+							return val && val.toLowerCase().search(searchTerm.toLowerCase()) >= 0;
 						});
 
 						var matchesCountries = countries.length ? person.country && countries.some(function (c) {
@@ -85,6 +89,36 @@ app.service('stateService', function ($rootScope, $log, Person) {
 						people.list[person.id] = person;
 					});
 					return people;
+				case GET_MERGE_REPORT:
+					people.mergeList.length = 0;
+					var length = action.payload.rows ? action.payload.rows.length : 0;
+					for (var i = 0; i < length; i++) {
+						var rowData = action.payload.rows[i];
+						var person = new Person(rowData, i);
+						// Find if we have this person already based on full name
+						var existingId = people.ids.find(function (id) {
+							return people.list[id].fullName.toLowerCase() === person.fullName.toLowerCase();
+						});
+
+						if (existingId) {
+							var existingPerson = people.list[existingId];
+							// If the person exists, check if we need to update the address
+							if (MD5(existingPerson.address.full) !== MD5(person.address.full)) {
+								// Address on record differs, create the diff object
+								people.mergeList.push(new PersonDiff(existingPerson, person));
+							}
+						} else {
+							// Person is not on list, create a (create) diff object
+							people.mergeList.push(new PersonDiff(new Person(), person));
+						}
+					}
+					return people;
+				case PERFORM_MERGE:
+					people = action.payload.people;
+					return sortPeople(people);
+				case RESET_MERGE:
+					people.mergeList.length = 0;
+					return people;
 				default:
 					return people || defaultPeople;
 			}
@@ -98,7 +132,8 @@ app.service('stateService', function ($rootScope, $log, Person) {
 				currentUser: undefined,
 				filterable: false,
 				filters: {},
-				sheet: {}
+				sheet: {},
+				mergeStep: 0
 			}
 			switch (action.type) {
 				case GET_SHEET_ROWS:
@@ -139,6 +174,13 @@ app.service('stateService', function ($rootScope, $log, Person) {
 					} else {
 						ui.filters.isFiltered = false;
 					}
+					return ui;
+				case GET_MERGE_REPORT:
+					ui.mergeStep = 1;
+					return ui;
+				case PERFORM_MERGE:
+				case RESET_MERGE:
+					ui.mergeStep = 0;
 					return ui;
 				default:
 					return ui || defaultUi;
