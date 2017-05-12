@@ -344,6 +344,7 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 
 				// Create the current posiion map marker
 				self.getCurrentPosition().then(function (currentPosition) {
+					if (!currentPosition) { return; }
 					position = new google.maps.LatLng(currentPosition.lat, currentPosition.lng);
 					bounds.extend(position);
 					new google.maps.Marker({
