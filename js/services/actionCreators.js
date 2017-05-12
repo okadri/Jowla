@@ -82,10 +82,12 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 				});
 			},
 			performMerge: function (people) {
-				gapiService.performMerge(people).then(function (payload) {
+				gapiService.performMerge(people).then(function (people) {
 					var action = {
 						type: PERFORM_MERGE,
-						payload: payload
+						payload: {
+							people: people
+						}
 					};
 					stateService.reduce(action);
 				});

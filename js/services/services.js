@@ -217,12 +217,14 @@ app.service('gapiService', ['$q', function ($q) {
 	};
 	self.performMerge = function (people) {
 		var deferred = $q.defer();
+		var mergeTasks = { done: 0, pending: 0 };
 
 		var updateList = people.mergeList.filter(function (d) { return d.doMerge && d.fromPerson.id; });
 		var appendList = people.mergeList.filter(function (d) { return d.doMerge && !d.fromPerson.id; });
 
 		// Perform Updates
 		if (updateList.length) {
+			mergeTasks.pending++;
 			var updateData = updateList.map(function (diff) { return diff.getUpdateData(); });
 
 			var batchParams = {
@@ -234,11 +236,23 @@ app.service('gapiService', ['$q', function ($q) {
 			};
 
 			gapi.client.sheets.spreadsheets.values.batchUpdate(batchParams)
-				.then(function (res) { console.log(res); }, function (e) { console.log(e); });
+				.then(function (res) {
+					updateList.forEach(function (diff) {
+						people.list[diff.fromPerson.id].setAddress(diff.toPerson.address);
+					});
+
+					mergeTasks.done++;
+					if (mergeTasks.done == mergeTasks.pending) {
+						deferred.resolve(people);
+					}
+				}, function (e) {
+					console.log(e);
+				});
 		}
 
 		// Perform Appends
 		if (appendList.length) {
+			mergeTasks.pending++;
 			var appendData = appendList.map(function (diff) { return diff.getAppendData(); });
 
 			var appendParams = {
@@ -249,10 +263,23 @@ app.service('gapiService', ['$q', function ($q) {
 			};
 
 			gapi.client.sheets.spreadsheets.values.append(appendParams)
-				.then(function (res) { console.log(res); }, function (e) { console.log(e); });
-		}
+				.then(function (res) {
+					var lastId = Math.max.apply(Math, people.ids);
+					appendList.forEach(function (diff) {
+						lastId++;
+						people.ids.push(lastId);
+						diff.toPerson.id = lastId;
+						people.list[lastId] = diff.toPerson;
+					});
 
-		deferred.resolve(people);
+					mergeTasks.done++;
+					if (mergeTasks.done == mergeTasks.pending) {
+						deferred.resolve(people);
+					}
+				}, function (e) {
+					console.log(e);
+				});
+		}
 
 		return deferred.promise;
 	};

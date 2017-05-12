@@ -69,6 +69,9 @@ app.factory('Person', [function () {
 				return visit.date.toDateString() == (new Date()).toDateString();
 			});
 		},
+		setAddress: function (address) {
+			this.address = address;
+		},
 		getMetaString: function () {
 			return JSON.stringify({
 				addressMD5: this.address.md5,

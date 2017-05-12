@@ -114,8 +114,8 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 					}
 					return people;
 				case PERFORM_MERGE:
-					// TODO: What?
-					return people;
+					people = action.payload.people;
+					return sortPeople(people);
 				case RESET_MERGE:
 					people.mergeList.length = 0;
 					return people;
@@ -179,8 +179,6 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 					ui.mergeStep = 1;
 					return ui;
 				case PERFORM_MERGE:
-					ui.mergeStep = 2;
-					return ui;
 				case RESET_MERGE:
 					ui.mergeStep = 0;
 					return ui;
