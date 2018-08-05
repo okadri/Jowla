@@ -337,10 +337,6 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 					url: '/images/currentPosition.png',
 					scaledSize: new google.maps.Size(24, 24)
 				};
-				var markerIcon = {
-					url: '/images/marker.png',
-					scaledSize: new google.maps.Size(16, 16)
-				};
 
 				// Create the current posiion map marker
 				self.getCurrentPosition().then(function (currentPosition) {
@@ -364,6 +360,10 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 				markers.forEach(function (person) {
 					position = new google.maps.LatLng(person.address.lat, person.address.lng);
 					bounds.extend(position);
+					var markerIcon = {
+						url: person.getMarkerIcon(),
+						scaledSize: new google.maps.Size(16, 16)
+					};
 					marker = new google.maps.Marker({
 						position: position,
 						map: map,

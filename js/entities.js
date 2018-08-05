@@ -69,6 +69,21 @@ app.factory('Person', [function () {
 				return visit.date.toDateString() == (new Date()).toDateString();
 			});
 		},
+		getMarkerIcon: function () {
+			var today = new Date();
+
+			if (this.visitHistory.length) {
+				if ((today.getMonth() - 6) > this.visitHistory[0]) {
+					return '/images/redMarker.png';
+				} else if ((today.getMonth() - 3) > this.visitHistory[0]) {
+					return '/images/amberMarker.png';
+				} else {
+					return '/images/greenMarker.png';
+				}
+			} else {
+				return '/images/redMarker.png';
+			}
+		},
 		setAddress: function (address) {
 			this.address = address;
 		},
