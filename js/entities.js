@@ -70,12 +70,15 @@ app.factory('Person', [function () {
 			});
 		},
 		getMarkerIcon: function () {
-			var today = new Date();
+			var threeMonthsBefore = new Date();
+			threeMonthsBefore.setMonth(threeMonthsBefore.getMonth() - 3);
+			var sixMonthsBefore = new Date();
+			sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
 
 			if (this.visitHistory.length) {
-				if ((today.getMonth() - 6) > this.visitHistory[0]) {
+				if (sixMonthsBefore > this.visitHistory[0]) {
 					return '/images/redMarker.png';
-				} else if ((today.getMonth() - 3) > this.visitHistory[0]) {
+				} else if (threeMonthsBefore > this.visitHistory[0]) {
 					return '/images/amberMarker.png';
 				} else {
 					return '/images/greenMarker.png';
