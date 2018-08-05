@@ -76,15 +76,15 @@ app.factory('Person', [function () {
 			sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
 
 			if (this.visitHistory.length) {
-				if (sixMonthsBefore > this.visitHistory[0]) {
+				if (this.visitHistory[0] < sixMonthsBefore) {
 					return '/images/redMarker.png';
-				} else if (threeMonthsBefore > this.visitHistory[0]) {
+				} else if (this.visitHistory[0] < threeMonthsBefore) {
 					return '/images/amberMarker.png';
 				} else {
 					return '/images/greenMarker.png';
 				}
 			} else {
-				return '/images/redMarker.png';
+				return '/images/grayMarker.png';
 			}
 		},
 		setAddress: function (address) {
