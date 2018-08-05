@@ -70,15 +70,15 @@ app.factory('Person', [function () {
 			});
 		},
 		getMarkerIcon: function () {
-			var threeMonthsBefore = new Date();
-			threeMonthsBefore.setMonth(threeMonthsBefore.getMonth() - 3);
-			var sixMonthsBefore = new Date();
-			sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
+			var threeMonthsAgo = new Date();
+			threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+			var sixMonthsAgo = new Date();
+			sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
 			if (this.visitHistory.length) {
-				if (this.visitHistory[0] < sixMonthsBefore) {
+				if (this.visitHistory[0].date < sixMonthsAgo) {
 					return '/images/redMarker.png';
-				} else if (this.visitHistory[0] < threeMonthsBefore) {
+				} else if (this.visitHistory[0].date < threeMonthsAgo) {
 					return '/images/amberMarker.png';
 				} else {
 					return '/images/greenMarker.png';
