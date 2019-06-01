@@ -1,5 +1,5 @@
-app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location', 'actionCreators',
-    function ($scope, $timeout, $routeParams, $location, actionCreators) {
+app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location', '$uibModal', 'actionCreators',
+    function ($scope, $timeout, $routeParams, $location, $uibModal, actionCreators) {
         var state = actionCreators.getState();
         $scope.view = {
             state: state,
@@ -25,9 +25,25 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
             actionCreators.signOut();
         };
 
-        $scope.addVisit = function () {
-            if ($scope.view.person.isVisitedToday()) { return; }
-            actionCreators.addVisit($scope.view.person);
+        $scope.openVisitDiag = function (size) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/visit.html',
+                controller: 'VisitCtrl',
+                size: size,
+                resolve: {
+                    state: function () {
+                        return $scope.view.state;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (notes) {
+                if (!$scope.view.person.isVisitedToday()) {
+                    actionCreators.addVisit($scope.view.person, notes);
+                }
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
         };
 
         $scope.updateNotes = function () {
@@ -47,7 +63,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
         };
 
         // State changes listener
-		$scope.$on('stateChanged', function (event, data) {
+        $scope.$on('stateChanged', function (event, data) {
             $timeout(function() {
                 $scope.view.state = data.state;
                 $scope.view.person = data.state.people.list[$routeParams.personId];
@@ -61,7 +77,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
                     $location.path('/' + $scope.view.state.ui.sheet.id);
                 }
             });
-		});
+        });
 
     }]);
 

@@ -99,8 +99,8 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 				};
 				stateService.reduce(action);
 			},
-			addVisit: function (person) {
-				gapiService.addVisit(person).then(function (updatedPerson) {
+			addVisit: function (person, notes) {
+				gapiService.addVisit(person, notes).then(function (updatedPerson) {
 					var action = {
 						type: ADD_VISIT,
 						payload: {

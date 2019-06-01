@@ -93,13 +93,14 @@ app.service('gapiService', ['$q', function ($q) {
 		return deferred.promise;
 	};
 
-	self.addVisit = function (person) {
+	self.addVisit = function (person, notes) {
 		var deferred = $q.defer();
 
 		var updatedPerson = angular.copy(person);
 		updatedPerson.visitHistory.unshift({
 			date: new Date(),
-			reportedBy: gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName()
+			reportedBy: gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName(),
+			notes: notes
 		});
 
 		gapi.client.sheets.spreadsheets.values.update({
