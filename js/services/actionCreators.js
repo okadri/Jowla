@@ -39,7 +39,8 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 								// 3. Finally, get the sheet data
 								if (isSignedIn) {
 									gapiService.getSheetRows().then(function (payload) {
-										self.isInitialized = true;
+										// Uncomment this line to reduce API calls. This will cause the app not to reflect changes live though
+										// self.isInitialized = true; 
 										deferred.resolve("Successful login and data retieval");
 
 										var action = {
