@@ -43,7 +43,7 @@ app.directive('confirmButton', ['$document', '$parse', function ($document, $par
 			var yep = attrs.yes || "Yes";
 			var nope = attrs.no || "No";
 			var title = attrs.title || "Confirm";
-			var position = attrs.position || "left";
+			var position = attrs.position || "top";
 
 			html = "<div id=\"button-" + buttonId + "\" class=\"confirmbutton-popover\">\
             <span class=\"confirmbutton-msg\">" + message + "</span><br><br>\
@@ -154,7 +154,8 @@ app.directive('fitText', [function () {
 				return element.width();
 			}, function (newWidth) {
 				if (attr.fitText) {
-					var calcFontSize = Math.ceil(2 * newWidth / attr.fitText.length);
+					const padding = 10;
+					var calcFontSize = Math.ceil(2 * (newWidth - padding) / attr.fitText.length);
 					var fontSize = calcFontSize < maxFontSize ? calcFontSize > minFontSize ? calcFontSize : minFontSize : maxFontSize;
 					element.css('font-size', fontSize + 'px');
 				}

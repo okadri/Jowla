@@ -54,14 +54,17 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<h1 class="page-title" fit-text="{{ view.person.fullName }}">
+					<h1 class="page-title panel-heading" fit-text="{{ view.person.fullName }}">
 						{{ view.person.fullName }}
-						<small class="glyphicon glyphicon-remove-sign text-danger" confirm-button="hidePerson()"
-							message="Are you sure you want to delete?"></small>
 					</h1>
-					<p class="text-muted" fit-text="{{ view.person.address.full }}" max-font-size="20">
+					<p class="text-muted panel-heading" fit-text="{{ view.person.address.full }}" max-font-size="20">
 						{{ view.person.address.full }}
 					</p>
+					<div>
+						<span class="glyphicon glyphicon-trash tool-icon text-danger" confirm-button="hidePerson()"
+							message="Are you sure you want to delete this person?"></span>
+						<span class="glyphicon glyphicon-edit tool-icon text-info" ng-click="toggleEdit()"></span>
+					</div>
 				</div>
 			</div>
 			<div class="row">

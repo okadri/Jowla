@@ -6,7 +6,8 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
             person: state.people.list[$routeParams.personId],
             countries: countries,
             languages: languages,
-            accIsOpen: [true, false, false, false]
+            accIsOpen: [true, false, false, false],
+            isEditing: false,
         };
         actionCreators.setPageTitle($scope.view.person.fullName);
 
@@ -60,6 +61,10 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
 
         $scope.hidePerson = function () {
             actionCreators.hidePerson($scope.view.person);
+        };
+
+        $scope.toggleEdit = function () {
+            $scope.view.isEditing = !$scope.view.isEditing;
         };
 
         // State changes listener

@@ -179,6 +179,12 @@ span.label-token span.glyphicon-remove {
 	text-overflow: ellipsis;
 }
 
+.tool-icon {
+	font-size: 150%;
+	opacity: 0.7;
+	margin: 0 10px 15px;
+}
+
 @media (min-width: 600px) {
 	body {
 		max-width: 600px;
