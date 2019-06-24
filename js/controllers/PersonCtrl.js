@@ -4,6 +4,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
         $scope.view = {
             state: state,
             person: state.people.list[$routeParams.personId],
+            editedPerson: angular.copy(state.people.list[$routeParams.personId]),
             countries: countries,
             languages: languages,
             accIsOpen: [true, false, false, false],
@@ -64,6 +65,9 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
         };
 
         $scope.toggleEdit = function () {
+            if ($scope.view.isEditing) {
+                actionCreators.updatePerson($scope.view.editedPerson);
+            }
             $scope.view.isEditing = !$scope.view.isEditing;
         };
 
@@ -80,6 +84,11 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
                 // If hiding person, navigate to main list
                 if (data.action.type === HIDE_PERSON) {
                     $location.path('/' + $scope.view.state.ui.sheet.id);
+                }
+
+                // Update map location if user has been updated
+                if (data.action.type === UPDATE_PERSON) {
+                    actionCreators.populateMap($scope.view.state.people, $scope.view.person.id);
                 }
             });
         });

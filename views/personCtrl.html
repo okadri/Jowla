@@ -54,16 +54,31 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12 text-center">
+					<!-- Person Name -->
 					<h1 class="page-title panel-heading" fit-text="{{ view.person.fullName }}">
-						{{ view.person.fullName }}
+						<span ng-hide="view.isEditing" ng-bind="view.person.fullName"></span>
+						<input type="text" class="form-control" ng-show="view.isEditing" ng-model="view.editedPerson.firstName"
+							placeholder="First Name"></input>
+						<input type="text" class="form-control" ng-show="view.isEditing" ng-model="view.editedPerson.lastName"
+							placeholder="Last Name"></input>
 					</h1>
+					<!-- Person Address -->
 					<p class="text-muted panel-heading" fit-text="{{ view.person.address.full }}" max-font-size="20">
-						{{ view.person.address.full }}
+						<span ng-hide="view.isEditing" ng-bind="view.person.address.full"></span>
+						<input type="text" class="form-control" ng-show="view.isEditing" ng-model="view.editedPerson.address.street"
+							placeholder="Street Address"></input>
+						<input type="text" class="form-control" ng-show="view.isEditing" ng-model="view.editedPerson.address.city"
+							placeholder="City"></input>
+						<input type="text" class="form-control" ng-show="view.isEditing" ng-model="view.editedPerson.address.state"
+							placeholder="State"></input>
+						<input type="text" class="form-control" ng-show="view.isEditing"
+							ng-model="view.editedPerson.address.zipCode" placeholder="Zip Code"></input>
 					</p>
 					<div>
 						<span class="glyphicon glyphicon-trash tool-icon text-danger" confirm-button="hidePerson()"
 							message="Are you sure you want to delete this person?"></span>
-						<span class="glyphicon glyphicon-edit tool-icon text-info" ng-click="toggleEdit()"></span>
+						<span class="glyphicon glyphicon-edit tool-icon text-info" ng-class="{'active': view.isEditing}"
+							ng-click="toggleEdit()"></span>
 					</div>
 				</div>
 			</div>

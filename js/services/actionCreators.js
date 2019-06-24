@@ -122,6 +122,17 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 					stateService.reduce(action);
 				});
 			},
+			updatePerson: function (person) {
+				gapiService.updatePerson(person).then(function (updatedPerson) {
+					var action = {
+						type: UPDATE_PERSON,
+						payload: {
+							updatedPerson: updatedPerson
+						}
+					};
+					stateService.reduce(action);
+				});
+			},
 			updateCountry: function (person) {
 				gapiService.updateCountry(person).then(function (updatedPerson) {
 					var action = {

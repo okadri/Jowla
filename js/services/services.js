@@ -129,14 +129,45 @@ app.service('gapiService', ['$q', function ($q) {
 			deferred.resolve(updatedPerson);
 		});
 
-		// This makes sure the notes in the meta data cell is removed
-		// Can be removed in the future once no notes are left in the metadata column
-		gapi.client.sheets.spreadsheets.values.update({
-			spreadsheetId: SPREAD_SHEET_ID,
-			range: 'List!A' + (person.id + 2),
-			valueInputOption: 'USER_ENTERED',
-			values: [[updatedPerson.getMetaString()]]
-		}).then(function (response) {
+		return deferred.promise;
+	};
+
+	self.updatePerson = function (person) {
+		var deferred = $q.defer();
+
+		var updatedPerson = angular.copy(person);
+
+		var data = [
+			{
+				range: `List!B${person.id + 2}:G${person.id + 2}`, // Name and address
+				values: [
+					[
+						updatedPerson.firstName,
+						updatedPerson.lastName,
+						updatedPerson.address.street,
+						updatedPerson.address.city,
+						updatedPerson.address.state,
+						updatedPerson.address.zipCode,
+					]
+				]
+			},
+			// { 
+			// 	range: "Sheet1!A1",   // Phone Number
+			// 	values: [
+			// 		["A1"]
+			// 	]
+			// },
+		];
+
+		var batchUpdateValuesRequestBody = {
+			valueInputOption: "USER_ENTERED",
+			data: data
+		};
+
+		gapi.client.sheets.spreadsheets.values.batchUpdate(
+			{ spreadsheetId: SPREAD_SHEET_ID },
+			batchUpdateValuesRequestBody,
+		).then(function (response) {
 			deferred.resolve(updatedPerson);
 		});
 
