@@ -152,7 +152,7 @@ app.directive('fitText', [function () {
 			element.addClass('fit-text');
 			scope.$watch(function () {
 				return element.width();
-			}, function (newWidth) {
+			}, function (oldWidth, newWidth) {
 				if (attr.fitText) {
 					const padding = 10;
 					var calcFontSize = Math.ceil(2 * (newWidth - padding) / attr.fitText.length);
