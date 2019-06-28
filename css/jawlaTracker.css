@@ -185,8 +185,8 @@ span.label-token span.glyphicon-remove {
 	margin: 0 10px 15px;
 }
 
-.tool-icon.active {
-	opacity: 1;
+.form-horizontal {
+	padding-top: 2em;
 }
 
 @media (min-width: 600px) {

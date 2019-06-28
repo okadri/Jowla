@@ -64,9 +64,11 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
             actionCreators.hidePerson($scope.view.person);
         };
 
-        $scope.toggleEdit = function () {
-            if ($scope.view.isEditing) {
+        $scope.toggleEdit = function (doSave) {
+            if ($scope.view.isEditing && doSave) {
                 actionCreators.updatePerson($scope.view.editedPerson);
+            } else {
+                $scope.view.editedPerson = angular.copy(state.people.list[$routeParams.personId]);
             }
             $scope.view.isEditing = !$scope.view.isEditing;
         };
@@ -87,7 +89,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
                 }
 
                 // Update map location if user has been updated
-                if (data.action.type === UPDATE_PERSON) {
+                if (data.action.type === UPDATE_PERSON && $scope.view.person.address.md5 !== MD5($scope.view.person.address.full)) {
                     actionCreators.populateMap($scope.view.state.people, $scope.view.person.id);
                 }
             });
