@@ -1,22 +1,31 @@
 app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location', '$uibModal', 'actionCreators',
     function ($scope, $timeout, $routeParams, $location, $uibModal, actionCreators) {
         var state = actionCreators.getState();
-        $scope.view = {
-            state: state,
-            person: state.people.list[$routeParams.personId],
-            editedPerson: angular.copy(state.people.list[$routeParams.personId]),
-            countries: countries,
-            languages: languages,
-            accIsOpen: [true, false, false, false],
-            isEditing: false,
-        };
-        actionCreators.setPageTitle($scope.view.person.fullName);
 
-        // TODO: Consider moving to a directive
-        if($scope.view.state.ui.isSignedIn) {
-            $timeout(function() {
-                actionCreators.populateMap($scope.view.state.people, $scope.view.person.id);
-            });
+        if ($routeParams.personId) {
+            $scope.view = {
+                state: state,
+                person: state.people.list[$routeParams.personId],
+                editedPerson: angular.copy(state.people.list[$routeParams.personId]),
+                countries: countries,
+                languages: languages,
+                accIsOpen: [true, false, false, false],
+                isEditing: false,
+            };
+            actionCreators.setPageTitle($scope.view.person.fullName);
+
+            // TODO: Consider moving to a directive
+            if($scope.view.state.ui.isSignedIn) {
+                $timeout(function() {
+                    actionCreators.populateMap($scope.view.state.people, $scope.view.person.id);
+                });
+            }
+        } else {
+            $scope.view = {
+                state: state,
+                isEditing: true,
+            };
+            actionCreators.setPageTitle("Add a new person");
         }
 
         $scope.login = function () {
@@ -80,7 +89,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
                 $scope.view.person = data.state.people.list[$routeParams.personId];
 
                 // If initial load of view, populate map
-                if ($scope.view.state.ui.mapIsReady && data.action.type === GET_SHEET_ROWS && $scope.view.state.people.ids.length) {
+                if ($scope.view.person && $scope.view.state.ui.mapIsReady && data.action.type === GET_SHEET_ROWS && $scope.view.state.people.ids.length) {
                     actionCreators.populateMap($scope.view.state.people, $scope.view.person.id);
                 }
                 // If hiding person, navigate to main list

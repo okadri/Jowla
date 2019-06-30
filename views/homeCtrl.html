@@ -1,17 +1,23 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="row">
 		<div class="navbar-header col-xs-6">
-			<a class="navbar-brand" ng-click="view.state.ui.displayMode = 0" ng-bind="view.state.ui.sheet.title" fit-text="{{ view.state.ui.sheet.title }}"></a>
+			<a class="navbar-brand" ng-click="view.state.ui.displayMode = 0" ng-bind="view.state.ui.sheet.title"
+				fit-text="{{ view.state.ui.sheet.title }}"></a>
 		</div>
 		<div class="navbar-header navbar-tools-container col-xs-6" ng-if="view.state.ui.isSignedIn">
 			<div class="col-xs-12 inner-addon right-addon" ng-show="view.navMode === 'search'">
-				<input type="text" class="form-control search-input" placeholder="Search" ng-model="view.state.ui.filters.searchTerm" ng-model-options="{ debounce: 500 }"
-				 ng-change="search()" show-focus="view.navMode === 'search'">
+				<input type="text" class="form-control search-input" placeholder="Search"
+					ng-model="view.state.ui.filters.searchTerm" ng-model-options="{ debounce: 500 }" ng-change="search()"
+					show-focus="view.navMode === 'search'">
 				<i ng-click="clearSearch()" class="glyphicon glyphicon-remove clickable"></i>
 			</div>
 			<div class="col-xs-12" ng-hide="view.navMode">
 				<li>
-					<a ng-click="openFilters()" ng-show="view.state.ui.filterable" class="glyphicon glyphicon-filter nav-btn" ng-class="{ 'active': view.state.ui.filters.isFiltered }"></a>
+					<a ng-click="newPerson()" class="glyphicon glyphicon-plus nav-btn"></a>
+				</li>
+				<li>
+					<a ng-click="openFilters()" ng-show="view.state.ui.filterable" class="glyphicon glyphicon-filter nav-btn"
+						ng-class="{ 'active': view.state.ui.filters.isFiltered }"></a>
 				</li>
 				<li>
 					<a ng-click="view.navMode = 'search';" class="glyphicon glyphicon-search nav-btn"></a>
@@ -22,7 +28,8 @@
 					</a>
 					<ul class="dropdown-menu dropdown-menu-right">
 						<li>
-							<a class="nav-btn clickable" ng-href="https://docs.google.com/spreadsheets/d/{{ view.state.ui.sheet.id }}" target="_blank">
+							<a class="nav-btn clickable" ng-href="https://docs.google.com/spreadsheets/d/{{ view.state.ui.sheet.id }}"
+								target="_blank">
 								<i class="fa fa-table nav-dropdown-icon"></i> Google Sheet
 							</a>
 						</li>
@@ -47,8 +54,8 @@
 <div class="main-container">
 	<div ng-if="view.state.ui.isSignedIn == false">
 		<button class="btn btn-primary btn-block btn-lg btn-sharp" ng-click="login()">
-						Login with Google
-				</button>
+			Login with Google
+		</button>
 	</div>
 
 	<div ng-if="view.state.ui.isSignedIn">
@@ -59,26 +66,29 @@
 				</uib-tab-heading>
 
 				<table class="table table-striped table-jawla">
-					<tr ng-click="goToPerson(personId)" ng-repeat="personId in filteredPeople = (view.state.people.ids | peopleFilter:view.state.people.list) track by personId">
+					<tr ng-click="goToPerson(personId)"
+						ng-repeat="personId in filteredPeople = (view.state.people.ids | peopleFilter:view.state.people.list) track by personId">
 						<td>
 							<div class="row">
 								<div class="col-xs-6">
 									{{ view.state.people.list[personId].firstName }} {{ view.state.people.list[personId].lastName }}
-									<img src="/images/blank.gif" alt="{{ view.state.people.list[personId].country.name }}" ng-if="view.state.people.list[personId].country"
-									 class="flag flag-{{ view.state.people.list[personId].country.code.toLowerCase() }}" />
+									<img src="/images/blank.gif" alt="{{ view.state.people.list[personId].country.name }}"
+										ng-if="view.state.people.list[personId].country"
+										class="flag flag-{{ view.state.people.list[personId].country.code.toLowerCase() }}" />
 								</div>
-								<div class="col-xs-6 text-muted text-right" ng-if="view.state.people.list[personId].visitHistory.length">
+								<div class="col-xs-6 text-muted text-right"
+									ng-if="view.state.people.list[personId].visitHistory.length">
 									<small>
-											<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-											{{ view.state.people.list[personId].visitHistory[0].date | date:shortDate }}
+										<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+										{{ view.state.people.list[personId].visitHistory[0].date | date:shortDate }}
 									</small>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-xs-12 text-muted">
 									<small>
-											<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-											{{ view.state.people.list[personId].address.full }}
+										<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+										{{ view.state.people.list[personId].address.full }}
 									</small>
 								</div>
 							</div>
@@ -99,7 +109,8 @@
 					<div class="progress-container col-xs-offset-1 col-xs-10 text-center">
 						<strong>Populating map data</strong>
 						<div class="progress">
-							<div class="progress-bar" role="progressbar" ng-style="{'width': (100 * view.mapProgress.completed / view.mapProgress.total) + '%'}">
+							<div class="progress-bar" role="progressbar"
+								ng-style="{'width': (100 * view.mapProgress.completed / view.mapProgress.total) + '%'}">
 								{{ view.mapProgress.completed }} / {{ view.mapProgress.total }}
 							</div>
 						</div>

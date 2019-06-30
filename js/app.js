@@ -23,6 +23,15 @@ app.config(['$routeProvider', function ($routeProvider) {
 				}
 			}
 		})
+		.when('/:sheetId/newPerson', {
+			templateUrl: 'views/personCtrl.html',
+			controller: 'PersonCtrl',
+			resolve: {
+				initApis: function (actionCreators, $route) {
+					return actionCreators.initialize($route.current.params.sheetId);
+				}
+			}
+		})
 		.otherwise({
 			redirectTo: '/'
 		});

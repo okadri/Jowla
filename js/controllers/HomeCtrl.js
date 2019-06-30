@@ -25,6 +25,10 @@ app.controller('HomeCtrl', ['$scope', '$log', '$window', '$timeout', '$routePara
 			$location.path('/' + $scope.view.state.ui.sheet.id + '/p/' + personId);
 		};
 
+		$scope.newPerson = function () {
+			$location.path('/' + $scope.view.state.ui.sheet.id + '/newPerson');
+		};
+
 		$scope.switchDisplayMode = function (mode) {
 			actionCreators.switchDisplayMode(mode);
 		};
