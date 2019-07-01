@@ -46,6 +46,7 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 				case ADD_VISIT:
 					people.list[action.payload.updatedPerson.id] = action.payload.updatedPerson;
 					return sortPeople(people);
+				case CREATE_PERSON:
 				case UPDATE_PERSON:
 					action.payload.updatedPerson.fullName = `${action.payload.updatedPerson.firstName} ${action.payload.updatedPerson.lastName}`;
 					action.payload.updatedPerson.address.full = `${action.payload.updatedPerson.address.street}, ${action.payload.updatedPerson.address.city}, ${action.payload.updatedPerson.address.state} ${action.payload.updatedPerson.address.zipCode}`;

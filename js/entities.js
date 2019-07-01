@@ -2,6 +2,12 @@ app.factory('Person', [function () {
 	function Person(personRowData, id) {
 		if (personRowData && Number.isInteger(id)) {
 			this.setData(personRowData, id);
+		} else {
+			angular.extend(this, {
+				visitHistory: [],
+				languages: [],
+				address: {},
+			});
 		}
 	};
 	Person.prototype = {

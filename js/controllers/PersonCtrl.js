@@ -1,5 +1,5 @@
-app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location', '$uibModal', 'actionCreators',
-    function ($scope, $timeout, $routeParams, $location, $uibModal, actionCreators) {
+app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location', '$uibModal', 'actionCreators', 'Person',
+    function ($scope, $timeout, $routeParams, $location, $uibModal, actionCreators, Person) {
         var state = actionCreators.getState();
 
         if ($routeParams.personId) {
@@ -24,6 +24,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
             $scope.view = {
                 state: state,
                 isEditing: true,
+                editedPerson: new Person()
             };
             actionCreators.setPageTitle("Add a new person");
         }
@@ -74,12 +75,23 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
         };
 
         $scope.toggleEdit = function (doSave) {
-            if ($scope.view.isEditing && doSave) {
-                actionCreators.updatePerson($scope.view.editedPerson);
+            if ($scope.view.person.id) {
+                // Editing existing person
+                if ($scope.view.isEditing && doSave) {
+                    actionCreators.updatePerson($scope.view.editedPerson);
+                } else {
+                    $scope.view.editedPerson = angular.copy(state.people.list[$routeParams.personId]);
+                }
+                $scope.view.isEditing = !$scope.view.isEditing;
             } else {
-                $scope.view.editedPerson = angular.copy(state.people.list[$routeParams.personId]);
+                // Creating new person
+                if ($scope.view.isEditing && doSave) {
+                    var newPersonId = actionCreators.createPerson($scope.view.editedPerson);
+                } else {
+                    // Cancel creating new person
+                    $location.path('/' + $scope.view.state.ui.sheet.id);
+                }
             }
-            $scope.view.isEditing = !$scope.view.isEditing;
         };
 
         // State changes listener
@@ -95,6 +107,12 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
                 // If hiding person, navigate to main list
                 if (data.action.type === HIDE_PERSON) {
                     $location.path('/' + $scope.view.state.ui.sheet.id);
+                }
+
+                // If hiding person, navigate to main list
+                if (data.action.type === CREATE_PERSON) {
+                    var newPersonId = Object.keys($scope.view.state.people.list).sort((a,b) => parseInt(a) - parseInt(b)).pop();
+                    $location.path(`/${$scope.view.state.ui.sheet.id}/p/${newPersonId}`);
                 }
 
                 // Update map location if user has been updated

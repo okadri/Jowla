@@ -132,6 +132,47 @@ app.service('gapiService', ['$q', function ($q) {
 		return deferred.promise;
 	};
 
+	self.createPerson = function (person) {
+		var deferred = $q.defer();
+
+		gapi.client.sheets.spreadsheets.values.get({
+			spreadsheetId: SPREAD_SHEET_ID,
+			range: 'List!B:B',
+		}).then(function(response) {
+			person.id = response.result.values.length - 1;
+
+			var data = [
+				{
+					range: `List!B${person.id + 2}:G${person.id + 2}`,
+					values: [
+						[
+							person.firstName,
+							person.lastName,
+							person.address.street,
+							person.address.city,
+							person.address.state,
+							person.address.zipCode,
+						]
+					]
+				},
+			];
+
+			var batchUpdateValuesRequestBody = {
+				valueInputOption: "USER_ENTERED",
+				data: data
+			};
+
+			gapi.client.sheets.spreadsheets.values.batchUpdate(
+				{ spreadsheetId: SPREAD_SHEET_ID },
+				batchUpdateValuesRequestBody,
+			).then(function (response) {
+				deferred.resolve(person);
+			});
+		});
+
+		return deferred.promise;
+	};
+
 	self.updatePerson = function (person) {
 		var deferred = $q.defer();
 
@@ -151,12 +192,6 @@ app.service('gapiService', ['$q', function ($q) {
 					]
 				]
 			},
-			// { 
-			// 	range: "Sheet1!A1",   // Phone Number
-			// 	values: [
-			// 		["A1"]
-			// 	]
-			// },
 		];
 
 		var batchUpdateValuesRequestBody = {
