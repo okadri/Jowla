@@ -67,6 +67,8 @@ app.factory('Person', [function () {
 					lat: metaData.addressLat,
 					lng: metaData.addressLng
 				},
+				phone: personRowData[11],
+				email: personRowData[12],
 				isHidden: metaData.isHidden
 			});
 		},

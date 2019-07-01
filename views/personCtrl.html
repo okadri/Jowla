@@ -111,6 +111,20 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="phone" class="col-sm-3 control-label">Phone</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" ng-model="view.editedPerson.phone" placeholder="Phone Number"
+								id="phone"></input>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="email" class="col-sm-3 control-label">Zip Code</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" ng-model="view.editedPerson.email" placeholder="E-mail"
+								id="email"></input>
+						</div>
+					</div>
+					<div class="form-group">
 						<div class="col-sm-offset-3 col-sm-9">
 							<button type="button" class="btn btn-primary" ng-click="toggleEdit(true)">Save</button>
 							<button type="button" class="btn btn-default" ng-click="toggleEdit()">Cancel</button>

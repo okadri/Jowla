@@ -155,6 +155,15 @@ app.service('gapiService', ['$q', function ($q) {
 						]
 					]
 				},
+				{
+					range: `List!L${person.id + 2}:M${person.id + 2}`,
+					values: [
+						[
+							person.phone,
+							person.email,
+						]
+					]
+				},
 			];
 
 			var batchUpdateValuesRequestBody = {
@@ -192,6 +201,15 @@ app.service('gapiService', ['$q', function ($q) {
 					]
 				]
 			},
+			{
+				range: `L${person.id + 2}:M${person.id + 2}`, // phone and email
+				values: [
+					[
+						updatedPerson.phone,
+						updatedPerson.email,
+					]
+				]
+			},
 		];
 
 		var batchUpdateValuesRequestBody = {
@@ -204,6 +222,8 @@ app.service('gapiService', ['$q', function ($q) {
 			batchUpdateValuesRequestBody,
 		).then(function (response) {
 			deferred.resolve(updatedPerson);
+		}, function(reason) {
+			console.error('error: ' + reason.result.error.message);
 		});
 
 		return deferred.promise;
