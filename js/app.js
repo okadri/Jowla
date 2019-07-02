@@ -1,6 +1,8 @@
 var app = angular.module('jawlaTracker', ['ngRoute', 'ngSanitize', 'ngAnimate', 'ui.bootstrap']);
 
-app.config(['$routeProvider', function ($routeProvider) {
+app.config(['$routeProvider', '$compileProvider', function ($routeProvider, $compileProvider) {
+	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|sms):/);
+
 	$routeProvider
 		.when('/', {
 			templateUrl: 'views/instructions.html'

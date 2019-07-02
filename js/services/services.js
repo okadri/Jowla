@@ -72,7 +72,7 @@ app.service('gapiService', ['$q', function ($q) {
 
 				gapi.client.sheets.spreadsheets.values.get({
 					spreadsheetId: sheetId,
-					range: firstSheet.properties.title + '!A2:K',
+					range: firstSheet.properties.title + '!A2:M',
 				}).then(function (response) {
 					deferred.resolve({
 						title: title,

@@ -58,13 +58,24 @@
 					<!-- Person Name -->
 					<h1 class="page-title panel-heading" fit-text="{{ view.person.fullName }}" ng-bind="view.person.fullName">
 					</h1>
-					<!-- Person Address -->
-					<p class="text-muted panel-heading" fit-text="{{ view.person.address.full }}" max-font-size="20"
-						ng-bind="view.person.address.full"></p>
+					<div class="text-muted panel-heading">
+						<!-- Person Address -->
+						<p fit-text="{{ view.person.address.full }}" max-font-size="20" ng-bind="view.person.address.full"></p>
+						<!-- Phone Number -->
+						<small class="text-muted" ng-bind="view.person.phone" ng-if="view.person.phone"></small>
+						<small class="text-muted" ng-if="view.person.phone && view.person.email">|</small>
+						<!-- E-mail -->
+						<small class="text-muted" ng-bind="view.person.email" ng-if="view.person.email"></small>
+					</div>
+					<!-- Controls -->
 					<div>
-						<span class="glyphicon glyphicon-trash tool-icon text-danger" confirm-button="hidePerson()"
+						<span class="fa fa-trash tool-icon text-danger" confirm-button="hidePerson()"
 							message="Are you sure you want to delete this person?"></span>
-						<span class="glyphicon glyphicon-edit tool-icon text-info" ng-click="toggleEdit()"></span>
+						<span class="fa fa-pencil tool-icon text-info" ng-click="toggleEdit()"></span>
+						<a class="fa fa-comments tool-icon text-info" ng-href="sms:{{ view.person.phone }}"></a>
+						<a class="fa fa-whatsapp tool-icon text-info"
+							ng-href="https://api.whatsapp.com/send?phone={{ view.person.phone }}"></a>
+						<a class="fa fa-envelope tool-icon text-info" ng-href="mailto:{{ view.person.email }}"></a>
 					</div>
 				</div>
 				<div class="col-xs-10 col-xs-offset-1 form-horizontal" ng-show="view.isEditing">
@@ -118,7 +129,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="email" class="col-sm-3 control-label">Zip Code</label>
+						<label for="email" class="col-sm-3 control-label">E-mail</label>
 						<div class="col-sm-9">
 							<input type="text" class="form-control" ng-model="view.editedPerson.email" placeholder="E-mail"
 								id="email"></input>
