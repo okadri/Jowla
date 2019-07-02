@@ -38,8 +38,18 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 						var rowData = action.payload.rows[i];
 						var person = new Person(rowData, i);
 						if (!person.isHidden) {
-							people.list[i] = new Person(rowData, i);
+							people.list[i] = person;
 							people.ids.push(i);
+						}
+					}
+					return sortPeople(people);
+				case GET_SHEET_ROW:
+					var length = action.payload.rows ? action.payload.rows.length : 0;
+					if (length === 1) {
+						var rowData = action.payload.rows[0];
+						var person = new Person(rowData, action.personId);
+						if (!person.isHidden) {
+							people.list[action.personId] = person;
 						}
 					}
 					return sortPeople(people);

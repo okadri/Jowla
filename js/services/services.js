@@ -57,9 +57,10 @@ app.service('gapiService', ['$q', function ($q) {
 		gapi.auth2.getAuthInstance().signOut();
 	};
 
-	self.getSheetRows = function (sheetId) {
+	self.getSheetRows = function (sheetId, personId) {
 		var deferred = $q.defer();
 		sheetId = sheetId || SPREAD_SHEET_ID;
+		var range = personId === undefined ? '!A2:M' : `!A${personId + 2}:M${personId + 2}`;
 
 		if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
 			gapi.client.sheets.spreadsheets.get({
@@ -72,7 +73,7 @@ app.service('gapiService', ['$q', function ($q) {
 
 				gapi.client.sheets.spreadsheets.values.get({
 					spreadsheetId: sheetId,
-					range: firstSheet.properties.title + '!A2:M',
+					range: firstSheet.properties.title + range,
 				}).then(function (response) {
 					deferred.resolve({
 						title: title,

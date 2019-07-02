@@ -21,7 +21,7 @@ app.config(['$routeProvider', '$compileProvider', function ($routeProvider, $com
 			controller: 'PersonCtrl',
 			resolve: {
 				initApis: function (actionCreators, $route) {
-					return actionCreators.initialize($route.current.params.sheetId);
+					return actionCreators.initialize($route.current.params.sheetId, parseInt($route.current.params.personId));
 				}
 			}
 		})

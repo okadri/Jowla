@@ -2,11 +2,11 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 	function ($q, stateService, pageService, gapiService, mapService) {
 		return {
 			isInitialized: false,
-			initialize: function (sheetId) {
+			initialize: function (sheetId, personId) {
 				var self = this;
 				var deferred = $q.defer();
 
-				if (self.isInitialized) {
+				if (self.isInitialized && personId === undefined) {
 					deferred.resolve("Already Initialized");
 				} else {
 					// 1. Start with map api, since the map needs to be ready to be populated with the sheet data later
@@ -38,14 +38,15 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 
 								// 3. Finally, get the sheet data
 								if (isSignedIn) {
-									gapiService.getSheetRows().then(function (payload) {
-										// Uncomment this line to reduce API calls. This will cause the app not to reflect changes live though
-										// self.isInitialized = true; 
+									personId = self.isInitialized ? personId : undefined;
+									gapiService.getSheetRows(sheetId, personId).then(function (payload) {
+										self.isInitialized = personId === undefined ? true : self.isInitialized;
 										deferred.resolve("Successful login and data retieval");
 
 										var action = {
-											type: GET_SHEET_ROWS,
-											payload: payload
+											type: personId ? GET_SHEET_ROW : GET_SHEET_ROWS,
+											payload: payload,
+											personId: personId
 										};
 										stateService.reduce(action);
 									}, function (error) {
