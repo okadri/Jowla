@@ -153,9 +153,10 @@ app.directive('fitText', [function () {
 			scope.$watch(function () {
 				return element.width();
 			}, function (oldWidth, newWidth) {
+				var width = Math.max(oldWidth, newWidth);
 				if (attr.fitText) {
 					const padding = 10;
-					var calcFontSize = Math.ceil(2 * (newWidth - padding) / attr.fitText.length);
+					var calcFontSize = Math.ceil(2 * (width - padding) / attr.fitText.length);
 					var fontSize = calcFontSize < maxFontSize ? calcFontSize > minFontSize ? calcFontSize : minFontSize : maxFontSize;
 					element.css('font-size', fontSize + 'px');
 				}
