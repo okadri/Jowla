@@ -155,6 +155,7 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 				case GET_SHEET_ROWS:
 					ui.sheet.title = action.payload.title;
 					ui.sheet.users = action.payload.users;
+					ui.filters = {};
 					// Set filterable to true if any row has a country code set
 					ui.filterable = action.payload.rows.some(function (r) { return r[9] || r[10]; });
 					return ui;
