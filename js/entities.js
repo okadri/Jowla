@@ -127,7 +127,7 @@ app.factory('PersonDiff', ['Person', function (Person) {
 			var rowNum = this.fromPerson.id + 2;
 			var a = this.toPerson.address;
 			return {
-				range: "List!D" + rowNum + ":G" + rowNum,
+				range: `${FIRST_SHEET_NAME}!D${rowNum}:G${rowNum}`,
 				majorDimension: "COLUMNS",
 				values: [[a.street], [a.city], [a.state], [a.zipCode]]
 			}

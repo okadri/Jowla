@@ -68,12 +68,13 @@ app.service('gapiService', ['$q', function ($q) {
 			}).then(function (response) {
 				var title = response.result.properties.title;
 				var firstSheet = response.result.sheets[0];
+				FIRST_SHEET_NAME = firstSheet.properties.title;
 				var users = firstSheet.protectedRanges[0].editors ?
 					firstSheet.protectedRanges[0].editors.users : [];
 
 				gapi.client.sheets.spreadsheets.values.get({
 					spreadsheetId: sheetId,
-					range: firstSheet.properties.title + range,
+					range: FIRST_SHEET_NAME + range,
 				}).then(function (response) {
 					deferred.resolve({
 						title: title,
@@ -106,7 +107,7 @@ app.service('gapiService', ['$q', function ($q) {
 
 		gapi.client.sheets.spreadsheets.values.update({
 			spreadsheetId: SPREAD_SHEET_ID,
-			range: 'List!A' + (person.id + 2),
+			range: `${FIRST_SHEET_NAME}!A${person.id + 2}`,
 			valueInputOption: 'USER_ENTERED',
 			values: [[updatedPerson.getMetaString()]]
 		}).then(function (response) {
@@ -123,7 +124,7 @@ app.service('gapiService', ['$q', function ($q) {
 
 		gapi.client.sheets.spreadsheets.values.update({
 			spreadsheetId: SPREAD_SHEET_ID,
-			range: 'List!I' + (person.id + 2),
+			range: `${FIRST_SHEET_NAME}!I${person.id + 2}`,
 			valueInputOption: 'USER_ENTERED',
 			values: [[updatedPerson.notes]]
 		}).then(function (response) {
@@ -138,13 +139,13 @@ app.service('gapiService', ['$q', function ($q) {
 
 		gapi.client.sheets.spreadsheets.values.get({
 			spreadsheetId: SPREAD_SHEET_ID,
-			range: 'List!B:B',
+			range: `${FIRST_SHEET_NAME}!B:B`,
 		}).then(function(response) {
 			person.id = response.result.values.length - 1;
 
 			var data = [
 				{
-					range: `List!B${person.id + 2}:G${person.id + 2}`,
+					range: `${FIRST_SHEET_NAME}!B${person.id + 2}:G${person.id + 2}`,
 					values: [
 						[
 							person.firstName,
@@ -157,7 +158,7 @@ app.service('gapiService', ['$q', function ($q) {
 					]
 				},
 				{
-					range: `List!L${person.id + 2}:M${person.id + 2}`,
+					range: `${FIRST_SHEET_NAME}!L${person.id + 2}:M${person.id + 2}`,
 					values: [
 						[
 							person.phone,
@@ -190,7 +191,7 @@ app.service('gapiService', ['$q', function ($q) {
 
 		var data = [
 			{
-				range: `List!B${person.id + 2}:G${person.id + 2}`, // Name and address
+				range: `${FIRST_SHEET_NAME}!B${person.id + 2}:G${person.id + 2}`, // Name and address
 				values: [
 					[
 						updatedPerson.firstName,
@@ -238,7 +239,7 @@ app.service('gapiService', ['$q', function ($q) {
 
 		gapi.client.sheets.spreadsheets.values.update({
 			spreadsheetId: SPREAD_SHEET_ID,
-			range: 'List!J' + (person.id + 2),
+			range: `${FIRST_SHEET_NAME}!J${person.id + 2}`,
 			valueInputOption: 'USER_ENTERED',
 			values: [[newCountryCode]]
 		}).then(function (response) {
@@ -256,7 +257,7 @@ app.service('gapiService', ['$q', function ($q) {
 
 		gapi.client.sheets.spreadsheets.values.update({
 			spreadsheetId: SPREAD_SHEET_ID,
-			range: 'List!K' + (person.id + 2),
+			range: `${FIRST_SHEET_NAME}!K${person.id + 2}`,
 			valueInputOption: 'USER_ENTERED',
 			values: [[newLanguageCodes]]
 		}).then(function (response) {
@@ -276,7 +277,7 @@ app.service('gapiService', ['$q', function ($q) {
 
 		gapi.client.sheets.spreadsheets.values.update({
 			spreadsheetId: SPREAD_SHEET_ID,
-			range: 'List!A' + (person.id + 2),
+			range: `${FIRST_SHEET_NAME}!A${person.id + 2}`,
 			valueInputOption: 'USER_ENTERED',
 			values: [[updatedPerson.getMetaString()]]
 		}).then(function (response) {
@@ -294,7 +295,7 @@ app.service('gapiService', ['$q', function ($q) {
 
 		gapi.client.sheets.spreadsheets.values.update({
 			spreadsheetId: SPREAD_SHEET_ID,
-			range: 'List!A' + (person.id + 2),
+			range: `${FIRST_SHEET_NAME}!A${person.id + 2}`,
 			valueInputOption: 'USER_ENTERED',
 			values: [[updatedPerson.getMetaString()]]
 		}).then(function (response) {
@@ -345,7 +346,7 @@ app.service('gapiService', ['$q', function ($q) {
 
 			var appendParams = {
 				spreadsheetId: SPREAD_SHEET_ID,
-				range: "List!B2:K",
+				range: `${FIRST_SHEET_NAME}!B2:K`,
 				valueInputOption: 'USER_ENTERED',
 				values: appendData
 			};
