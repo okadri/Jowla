@@ -6,8 +6,45 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 				var self = this;
 				var deferred = $q.defer();
 
-				if (self.isInitialized && personId === undefined) {
-					deferred.resolve("Already Initialized");
+				function updateSigninStatus(isSignedIn) {
+					var action = {
+						type: UPDATE_SIGNIN_STATUS,
+						payload: {
+							isSignedIn: isSignedIn,
+							sheetId: sheetId,
+							currentUser: gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile()
+						}
+					};
+					stateService.reduce(action);
+
+					// 3. Finally, get the sheet data
+					if (isSignedIn) {
+						getSheetRows(personId);
+					} else {
+						deferred.resolve("Login failed");
+					}
+				}
+
+				function getSheetRows(personId) {
+					// If the initial load of the app happens to be on a person page, grab all rows
+					personId = self.isInitialized ? personId : undefined;
+					gapiService.getSheetRows(sheetId, personId).then(function (payload) {
+						self.isInitialized = true;
+						deferred.resolve("Successful login and data retieval");
+
+						var action = {
+							type: personId ? GET_SHEET_ROW : GET_SHEET_ROWS,
+							payload: payload,
+							personId: personId
+						};
+						stateService.reduce(action);
+					}, function (error) {
+						deferred.reject(error);
+					});
+				}
+
+				if (self.isInitialized) {
+					getSheetRows(personId);
 				} else {
 					// 1. Start with map api, since the map needs to be ready to be populated with the sheet data later
 					mapService.injectMapApi().then(function () {
@@ -24,38 +61,6 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 
 							// Handle the initial sign-in state.
 							updateSigninStatus(isSignedIn);
-
-							function updateSigninStatus(isSignedIn) {
-								var action = {
-									type: UPDATE_SIGNIN_STATUS,
-									payload: {
-										isSignedIn: isSignedIn,
-										sheetId: sheetId,
-										currentUser: gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile()
-									}
-								};
-								stateService.reduce(action);
-
-								// 3. Finally, get the sheet data
-								if (isSignedIn) {
-									personId = self.isInitialized ? personId : undefined;
-									gapiService.getSheetRows(sheetId, personId).then(function (payload) {
-										self.isInitialized = personId === undefined ? true : self.isInitialized;
-										deferred.resolve("Successful login and data retieval");
-
-										var action = {
-											type: personId ? GET_SHEET_ROW : GET_SHEET_ROWS,
-											payload: payload,
-											personId: personId
-										};
-										stateService.reduce(action);
-									}, function (error) {
-										deferred.reject(error);
-									});
-								} else {
-									deferred.resolve("Login failed");
-								}
-							}
 						});
 					});
 				}
