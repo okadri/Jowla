@@ -568,12 +568,13 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 	self.getCurrentPosition = function () {
 		var deferred = $q.defer();
 
-		if (navigator.geolocation) {
+		if (navigator.geolocation && CURRENT_POSITION === null) {
 			navigator.geolocation.getCurrentPosition(function (position) {
-				deferred.resolve({
+				CURRENT_POSITION = {
 					lat: position.coords.latitude,
 					lng: position.coords.longitude
-				});
+				};
+				deferred.resolve(CURRENT_POSITION);
 			}, function () {
 				console.warn("Could not get current location");
 				deferred.resolve();
@@ -582,6 +583,8 @@ app.service('mapService', ['$q', '$rootScope', 'gapiService', function ($q, $roo
 					, timeout: 5000
 				}
 			);
+		} else if (CURRENT_POSITION) {
+			deferred.resolve(CURRENT_POSITION);
 		} else {
 			console.warn("Browser doesn't support Geolocation");
 			deferred.resolve();
