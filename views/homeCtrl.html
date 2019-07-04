@@ -12,6 +12,11 @@
 				<i ng-click="clearSearch()" class="glyphicon glyphicon-remove clickable"></i>
 			</div>
 			<div class="col-xs-12" ng-hide="view.navMode">
+				<!-- <li ng-if="view.state.ui.filters.isFiltered"> -->
+				<li>
+					<a class="glyphicon glyphicon-comment nav-btn"
+						ng-href="sms:/open?addresses={{ view.state.people.ids | filteredPhones:view.state.people.list }}?&body={{ view.state.ui.textMessage }}"></a>
+				</li>
 				<li>
 					<a ng-click="newPerson()" class="glyphicon glyphicon-plus nav-btn"></a>
 				</li>

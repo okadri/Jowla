@@ -149,6 +149,7 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 				filterable: false,
 				filters: {},
 				sheet: {},
+				textMessage: "Salam, Came by to visit and missed you. We hope to see in in the masjid!",
 				mergeStep: 0
 			}
 			switch (action.type) {

@@ -17,3 +17,13 @@ app.filter('languageCodes', [function () {
 		}
 	};
 }]);
+
+app.filter('filteredPhones', [function () {
+	return function (ids, people) {
+		return ids.filter(function (id) {
+			return !people[id].isFiltered && people[id].phone;
+		}).map(function(id) {
+			return people[id].phone;
+		}).join(",");
+	};
+}]);
