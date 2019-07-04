@@ -75,7 +75,7 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
         };
 
         $scope.toggleEdit = function (doSave) {
-            if ($scope.view.person.id) {
+            if ($scope.view.person) {
                 // Editing existing person
                 if ($scope.view.isEditing && doSave) {
                     actionCreators.updatePerson($scope.view.editedPerson);
