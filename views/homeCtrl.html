@@ -21,10 +21,6 @@
 					<a ng-click="newPerson()" class="glyphicon glyphicon-plus nav-btn"></a>
 				</li>
 				<li>
-					<a ng-click="openFilters()" ng-show="view.state.ui.filterable" class="glyphicon glyphicon-filter nav-btn"
-						ng-class="{ 'active': view.state.ui.filters.isFiltered }"></a>
-				</li>
-				<li>
 					<a ng-click="view.navMode = 'search';" class="glyphicon glyphicon-search nav-btn"></a>
 				</li>
 				<li class="dropdown">
@@ -32,6 +28,12 @@
 						<i class="glyphicon glyphicon-option-vertical"></i>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-right">
+						<li>
+							<a ng-click="openFilters()" ng-show="view.state.ui.filterable" class="nav-btn clickable"
+								ng-class="{ 'active': view.state.ui.filters.isFiltered }">
+								<i class="fa fa-filter nav-dropdown-icon"></i>Filter
+							</a>
+						</li>
 						<li>
 							<a class="nav-btn clickable" ng-href="https://docs.google.com/spreadsheets/d/{{ view.state.ui.sheet.id }}"
 								target="_blank">
