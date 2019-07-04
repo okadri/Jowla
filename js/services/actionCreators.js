@@ -30,7 +30,6 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 					personId = self.isInitialized ? personId : undefined;
 					gapiService.getSheetRows(sheetId, personId).then(function (payload) {
 						self.isInitialized = true;
-						deferred.resolve("Successful login and data retieval");
 
 						var action = {
 							type: personId ? GET_SHEET_ROW : GET_SHEET_ROWS,
@@ -38,13 +37,27 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 							personId: personId
 						};
 						stateService.reduce(action);
+
+						clearTimeout(self.timeout);
+						deferred.resolve();
 					}, function (error) {
-						deferred.reject(error);
+						if (self.isInitialized) {
+							// Resolve anyways if already initialized (offline mode)
+							deferred.resolve();
+						} else {
+							deferred.reject(error);
+						}
 					});
 				}
 
 				if (self.isInitialized) {
 					getSheetRows(personId);
+
+					// If initialized already, ignore server responce if slow
+					self.timeout = setTimeout(function() {
+							console.warn("Server is slow. Giving up!");
+							deferred.resolve();
+					}, 1000);
 				} else {
 					// 1. Start with map api, since the map needs to be ready to be populated with the sheet data later
 					mapService.injectMapApi().then(function () {
