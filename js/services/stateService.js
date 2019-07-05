@@ -142,6 +142,7 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 		_uiReducers: function (action, ui) {
 			var defaultUi = {
 				displayMode: DISPLAY_MODE.LIST,
+				platform: getMobileOperatingSystem(),
 				isSignedIn: false,
 				mapIsReady: false,
 				mapIsPopulated: false,

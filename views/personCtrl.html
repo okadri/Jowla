@@ -72,8 +72,9 @@
 						<span class="fa fa-trash tool-icon text-danger" confirm-button="hidePerson()"
 							message="Are you sure you want to delete this person?"></span>
 						<span class="fa fa-pencil tool-icon text-info" ng-click="toggleEdit()"></span>
-						<a class="fa fa-comments tool-icon text-info" ng-if="view.person.phone"
-							ng-href="sms:/open?addresses={{ view.person.phone }}?&body={{ view.state.ui.textMessage }}"></a>
+						<a class="fa fa-comments tool-icon text-info"
+							ng-if="view.person.phone && view.state.ui.platform !== 'unknown'"
+							ng-href="sms:{{ view.state.ui.platform === 'iOS' ? '/open?addresses=' : '//' }}{{ view.person.phone }}?&body={{ view.state.ui.textMessage }}"></a>
 						<a class="fa fa-whatsapp tool-icon text-info" ng-if="view.person.phone"
 							ng-href="https://api.whatsapp.com/send?phone={{ view.person.phone }}"></a>
 						<a class="fa fa-envelope tool-icon text-info" ng-if="view.person.email"
