@@ -79,7 +79,7 @@ app.service('gapiService', ['$q', function ($q) {
 					deferred.resolve({
 						title: title,
 						users: users,
-						rows: response.result.values
+						rows: response.result.values.filter(row => row.length)
 					});
 				}, function (response) {
 					deferred.reject(response.result.error);
