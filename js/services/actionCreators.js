@@ -38,7 +38,6 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 						};
 						stateService.reduce(action);
 
-						clearTimeout(self.timeout);
 						deferred.resolve();
 					}, function (error) {
 						if (self.isInitialized) {
@@ -52,12 +51,8 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 
 				if (self.isInitialized) {
 					getSheetRows(personId);
-
-					// If initialized already, ignore server responce if slow
-					self.timeout = setTimeout(function() {
-							console.warn("Server is slow. Giving up!");
-							deferred.resolve();
-					}, 1000);
+					// If initialized already, don't wait for response
+					deferred.resolve();
 				} else {
 					// 1. Start with map api, since the map needs to be ready to be populated with the sheet data later
 					mapService.injectMapApi().then(function () {
