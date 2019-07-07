@@ -12,12 +12,14 @@
 				<i ng-click="clearSearch()" class="glyphicon glyphicon-remove clickable"></i>
 			</div>
 			<div class="col-xs-12" ng-hide="view.navMode">
-				<li ng-if="view.state.ui.filters.isFiltered && view.state.ui.platform !== 'unknown'">
+				<li ng-if="view.state.ui.platform !== 'unknown' && view.state.ui.filters.isFiltered">
 					<a class="glyphicon glyphicon-comment nav-btn"
 						ng-href="sms:{{ view.state.ui.platform === 'iOS' ? '/open?addresses=' : '//' }}{{ view.state.people.ids | filteredPhones:view.state.people.list }}?&body={{ view.state.ui.textMessage }}"></a>
 				</li>
 				<li>
-					<a ng-click="newPerson()" class="glyphicon glyphicon-plus nav-btn"></a>
+					<a ng-click="openFilters()" class="fa fa-filter nav-dropdown-icon nav-btn"
+						ng-class="{ 'active': view.state.ui.filters.isFiltered }" ng-show="view.state.ui.filterable">
+					</a>
 				</li>
 				<li>
 					<a ng-click="view.navMode = 'search';" class="glyphicon glyphicon-search nav-btn"></a>
@@ -28,10 +30,7 @@
 					</a>
 					<ul class="dropdown-menu dropdown-menu-right">
 						<li>
-							<a ng-click="openFilters()" ng-show="view.state.ui.filterable" class="nav-btn clickable"
-								ng-class="{ 'active': view.state.ui.filters.isFiltered }">
-								<i class="fa fa-filter nav-dropdown-icon"></i>Filter
-							</a>
+							<a ng-click="newPerson()"><i class="glyphicon glyphicon-plus nav-btn"></i>New Person</a>
 						</li>
 						<li>
 							<a class="nav-btn clickable" ng-href="https://docs.google.com/spreadsheets/d/{{ view.state.ui.sheet.id }}"
