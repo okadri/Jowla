@@ -125,6 +125,17 @@ app.service('actionCreators', ['$q', 'stateService', 'pageService', 'gapiService
 					stateService.reduce(action);
 				});
 			},
+			setIsVisitingDate: function (person) {
+				gapiService.setIsVisitingDate(person).then(function (updatedPerson) {
+					var action = {
+						type: SET_VISITING_FLAG,
+						payload: {
+							updatedPerson: updatedPerson
+						}
+					};
+					stateService.reduce(action);
+				});
+			},
 			updateNotes: function (person) {
 				gapiService.updateNotes(person).then(function (updatedPerson) {
 					var action = {

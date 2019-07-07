@@ -104,6 +104,29 @@ app.service('gapiService', ['$q', function ($q) {
 			reportedBy: gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName(),
 			notes: notes
 		});
+		// Unset isVisiting Flag
+		updatedPerson.isVisiting = {};
+
+		gapi.client.sheets.spreadsheets.values.update({
+			spreadsheetId: SPREAD_SHEET_ID,
+			range: `${FIRST_SHEET_NAME}!A${person.id + 2}`,
+			valueInputOption: 'USER_ENTERED',
+			values: [[updatedPerson.getMetaString()]]
+		}).then(function (response) {
+			deferred.resolve(updatedPerson);
+		});
+
+		return deferred.promise;
+	};
+
+	self.setIsVisitingDate = function (person) {
+		var deferred = $q.defer();
+
+		var updatedPerson = angular.copy(person);
+		updatedPerson.isVisiting = {
+			date: new Date(),
+			by: gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName()
+		};
 
 		gapi.client.sheets.spreadsheets.values.update({
 			spreadsheetId: SPREAD_SHEET_ID,

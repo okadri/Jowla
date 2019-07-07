@@ -62,6 +62,10 @@ app.controller('PersonCtrl', ['$scope', '$timeout', '$routeParams', '$location',
             actionCreators.updateNotes($scope.view.person);
         };
 
+        $scope.setIsVisitingDate = function () {
+            actionCreators.setIsVisitingDate($scope.view.person);
+        };
+
         $scope.updateCountry = function () {
             actionCreators.updateCountry($scope.view.person);
         };

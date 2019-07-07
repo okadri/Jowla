@@ -19,6 +19,7 @@ app.factory('Person', [function () {
 
 			var metaData = {};
 			var visitHistory = [];
+			var isVisiting = {};
 			var compinedNotes = personRowData[8];
 
 			try {
@@ -30,6 +31,12 @@ app.factory('Person', [function () {
 							return s;
 						})
 						.sort(function (a, b) { return b.date - a.date; });
+					if (metaData.isVisiting) {
+						isVisiting = {
+							date: new Date(metaData.isVisiting.date),
+							by: metaData.isVisiting.by,
+						};
+					}
 					// This appends the notes from the meta data column with the notes column, to avoid any data loss
 					// Can be removed in the future once no notes are left in the metadata column
 					compinedNotes = [metaData.notes, personRowData[8]].filter(function (c) { return c; }).join('\n');
@@ -51,6 +58,7 @@ app.factory('Person', [function () {
 			angular.extend(this, {
 				id: id,
 				visitHistory: visitHistory,
+				isVisiting: isVisiting,
 				firstName: personRowData[1],
 				lastName: personRowData[2],
 				fullName: personRowData[1] + ' ' + personRowData[2],
@@ -104,6 +112,7 @@ app.factory('Person', [function () {
 				addressLat: this.address.lat,
 				addressLng: this.address.lng,
 				visitHistory: this.visitHistory,
+				isVisiting: this.isVisiting,
 				isHidden: this.isHidden
 			});
 		}

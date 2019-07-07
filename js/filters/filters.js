@@ -27,3 +27,11 @@ app.filter('filteredPhones', [function () {
 		}).join(",");
 	};
 }]);
+
+app.filter('isVisiting', [function () {
+	return function (person) {
+		var visitWaitTime = 30 * 60 * 1000; // half an hour in milliseconds
+		var diff = person.isVisiting.date ? new Date() - new Date(person.isVisiting.date) : visitWaitTime;
+		return diff < visitWaitTime;
+	};
+}]);

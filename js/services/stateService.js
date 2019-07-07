@@ -54,6 +54,7 @@ app.service('stateService', function ($rootScope, $log, Person, PersonDiff) {
 					}
 					return sortPeople(people);
 				case ADD_VISIT:
+				case SET_VISITING_FLAG:
 					people.list[action.payload.updatedPerson.id] = action.payload.updatedPerson;
 					return sortPeople(people);
 				case CREATE_PERSON:
