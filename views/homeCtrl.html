@@ -30,7 +30,9 @@
 					</a>
 					<ul class="dropdown-menu dropdown-menu-right">
 						<li>
-							<a ng-click="newPerson()"><i class="glyphicon glyphicon-plus nav-btn"></i>New Person</a>
+							<a class="nav-btn clickable" ng-click="newPerson()">
+								<i class="fa fa-plus nav-dropdown-icon"></i> New Person
+							</a>
 						</li>
 						<li>
 							<a class="nav-btn clickable" ng-href="https://docs.google.com/spreadsheets/d/{{ view.state.ui.sheet.id }}"
