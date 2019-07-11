@@ -1,0 +1,38 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="row">
+        <div class="navbar-header col-xs-6">
+            <a class="navbar-brand" ng-href="/#/{{ view.sheetId }}">Instructions</a>
+        </div>
+        <div class="navbar-header navbar-tools-container col-xs-6">
+            <div class="col-xs-12 inner-addon right-addon">
+                <input type="text" class="form-control search-input" placeholder="Search" ng-model="view.searchTerm"
+                    ng-model-options="{ debounce: 500 }">
+                <i ng-click="view.searchTerm = ''" class="glyphicon glyphicon-remove clickable"></i>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="main-container">
+
+    <div class="col-sm-12" style="padding: 1em;">
+
+        <div class="media panel panel-default" style="padding: 1em;"
+            ng-repeat="helpItem in view.helpItems | filter:view.searchTerm track by $index">
+            <div class="media-body">
+                <h4 class="media-heading" ng-bind="helpItem.title"></h4>
+                <span ng-bind-html="helpItem.content"></span>
+            </div>
+            <div class="media-right media-middle">
+                <a ng-href="https://youtu.be/{{helpItem.youtubeId}}" ng-if="helpItem.youtubeId">
+                    <img class="media-object" style="width: 100px;"
+                        ng-src="https://img.youtube.com/vi/{{helpItem.youtubeId}}/3.jpg">
+                </a>
+                <a ng-if="helpItem.image" ng-click="openImage(helpItem)">
+                    <img class="media-object" style="width: 100px;" ng-src="/images/{{ helpItem.image }}">
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>

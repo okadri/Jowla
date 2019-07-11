@@ -5,7 +5,14 @@ app.config(['$routeProvider', '$compileProvider', function ($routeProvider, $com
 
 	$routeProvider
 		.when('/', {
-			templateUrl: 'views/instructions.html'
+			templateUrl: 'views/invalid.html'
+		})
+		.when('/error', {
+			templateUrl: 'views/error.html'
+		})
+		.when('/:sheetId/help', {
+			templateUrl: 'views/help.html',
+			controller: 'HelpCtrl'
 		})
 		.when('/:sheetId', {
 			templateUrl: 'views/homeCtrl.html',
@@ -52,7 +59,7 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
 
 	$rootScope.$on('$routeChangeError', function (a, b, c) {
 		$rootScope.loading = false;
-		$location.path('/');
+		$location.path('/error');
 	});
 }]);
 
