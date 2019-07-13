@@ -49,7 +49,7 @@ app.controller('HelpCtrl', ['$scope', '$routeParams', '$uibModal',
 					youtubeId: "E4RL9yqUFpM",
 				},
 				{
-					title: "Creating a new list and granting access to other maintainers",
+					title: "Creating a new list and granting access to other maintainers (Admin)",
 					content: `<p>To create a new list, start by copying this <a href=\"https://docs.google.com/spreadsheets/d/1n8wdE3bu25I7i8QPuulZmG7uq1HE5xmSfNhXcjw8eLo/edit?usp=sharing\">template spread sheet</a></p>
 										<p>Enter the sheet title and data, then copy the sheet ID from the address bar</p>
 										<p>Append this ID to the Jawla URL in this format:<a href="http://jawlatracker.obadakadri.com/#/1n8wdE3bu25I7i8QPuulZmG7uq1HE5xmSfNhXcjw8eLo">jawlatracker.obadakadri.com/#/&lt;Spread_Sheet_ID&gt;</a></p>`,
