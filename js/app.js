@@ -59,7 +59,9 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
 
 	$rootScope.$on('$routeChangeError', function (a, b, c) {
 		$rootScope.loading = false;
-		$location.path('/error');
+		// If the sheet ID length is valid (characters), then something unknown is wrong. Otherwise redirect to home
+		let newPath = $location.path().length === 45 ? '/error' : '/';
+		$location.path(newPath);
 	});
 }]);
 
