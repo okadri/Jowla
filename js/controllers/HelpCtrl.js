@@ -14,6 +14,15 @@ app.controller('HelpCtrl', ['$scope', '$routeParams', '$uibModal',
 					image: "person.png",
 				},
 				{
+					title: "Location Access",
+					content: `<p>In order to be able to see your current location on the map, you need to allow location access on your browser:
+										<ul>
+											<li><a href="https://m.wikihow.com/Enable-Location-Services-on-Google-Chrome" target="_blank">Android</a></li>
+											<li><a href="https://www.wikihow.com/Turn-On-Location-Services-on-an-iPhone-or-iPad" target="_blank">iPhone or iPad</a></li>
+										</ul></p>`,
+					image: "locationAccess.jpg",
+				},
+				{
 					title: "Navigation",
 					content: "The \"Navigate to...\" button starts the Google maps app. Once clicked, it turns <b>red</b> so that multiple users don't end up visiting the same person. The color goes back to normal once a visit has been reported, or after half an hour.",
 					youtubeId: "5rMLMcLpvVg",
@@ -52,7 +61,8 @@ app.controller('HelpCtrl', ['$scope', '$routeParams', '$uibModal',
 					title: "Creating a new list and granting access to other maintainers (Admin)",
 					content: `<p>To create a new list, start by copying this <a href=\"https://docs.google.com/spreadsheets/d/1n8wdE3bu25I7i8QPuulZmG7uq1HE5xmSfNhXcjw8eLo/edit?usp=sharing\">template spread sheet</a></p>
 										<p>Enter the sheet title and data, then copy the sheet ID from the address bar</p>
-										<p>Append this ID to the Jawla URL in this format:<a href="http://jawlatracker.obadakadri.com/#/1n8wdE3bu25I7i8QPuulZmG7uq1HE5xmSfNhXcjw8eLo">jawlatracker.obadakadri.com/#/&lt;Spread_Sheet_ID&gt;</a></p>`,
+										<p>Append this ID to the Jawla URL in this format:<a href="http://jawlatracker.obadakadri.com/#/1n8wdE3bu25I7i8QPuulZmG7uq1HE5xmSfNhXcjw8eLo">jawlatracker.obadakadri.com/#/&lt;Spread_Sheet_ID&gt;</a></p>
+										<p>Refer to the video for more details and step-by-step instructions</p>`,
 					youtubeId: "RUjSia7xq8A",
 				},
 				{
