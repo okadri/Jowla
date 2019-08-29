@@ -5,7 +5,10 @@ app.config(['$routeProvider', '$compileProvider', function ($routeProvider, $com
 
 	$routeProvider
 		.when('/', {
-			templateUrl: 'views/invalid.html'
+			templateUrl: 'views/home.html'
+		})
+		.when('/privacy', {
+			templateUrl: 'views/privacy.html'
 		})
 		.when('/error', {
 			templateUrl: 'views/error.html'
