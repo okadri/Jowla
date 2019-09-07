@@ -189,6 +189,11 @@ span.label-token span.glyphicon-remove {
 	padding-top: 2em;
 }
 
+.login-btn {
+	display: block;
+	margin: 3em auto;
+}
+
 @media (min-width: 600px) {
 	body {
 		max-width: 600px;

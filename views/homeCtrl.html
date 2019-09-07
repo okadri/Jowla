@@ -65,9 +65,7 @@
 
 <div class="main-container">
 	<div ng-if="view.state.ui.isSignedIn == false">
-		<button class="btn btn-primary btn-block btn-lg btn-sharp" ng-click="login()">
-			Login with Google
-		</button>
+		<img src="/images/googleLogin.png" alt="Sign in with Google" class="login-btn" ng-click="login()" />
 	</div>
 
 	<div ng-if="view.state.ui.isSignedIn">
